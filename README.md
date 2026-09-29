@@ -2,6 +2,8 @@
 
 # IsekaiPlayer
 
+[![Get it on Google Play](https://img.shields.io/badge/Google_Play-Get_it_on_Google_Play-410099?style=for-the-badge&logo=google-play&logoColor=white)](https://play.google.com/store/apps/details?id=com.fiepi.media.app)
+
 > ### *Apocalypse Zero: Genesis Stream*
 > 
 > *“Darker than the terminal twilight, sharper than the primeval blade.  
