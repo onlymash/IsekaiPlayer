@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="500" viewBox="0 0 1024 500">
+
+    <defs>
+        <!-- Background Linear Gradient -->
+        <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#080512"/>
+            <stop offset="50%" stop-color="#140B2D"/>
+            <stop offset="100%" stop-color="#090E20"/>
+        </linearGradient>
+
+        <!-- Title Text Gradient -->
+        <linearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#FFFFFF"/>
+            <stop offset="60%" stop-color="#E2C4FF"/>
+            <stop offset="100%" stop-color="#80E5FF"/>
+        </linearGradient>
+
+        <!-- Magic Glow Radial Gradients -->
+        <radialGradient id="magicGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#7C4DFF" stop-opacity="0.35"/>
+            <stop offset="50%" stop-color="#00E5FF" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="#080512" stop-opacity="0"/>
+        </radialGradient>
+
+        <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.6"/>
+            <stop offset="30%" stop-color="#B388FF" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="#00E5FF" stop-opacity="0"/>
+        </radialGradient>
+
+        <!-- Soft Drop Shadow Filter -->
+        <filter id="glowFilter" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="8" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+        </filter>
+
+        <filter id="textGlow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#7C4DFF" flood-opacity="0.6"/>
+        </filter>
+    </defs>
+    
+<rect width="1024" height="500" fill="url(#bgGrad)"/>
+<circle cx="720" cy="250" r="336" fill="url(#magicGlow)"/>
+<circle cx="720" cy="250" r="168" fill="url(#centerGlow)"/>
+<g transform="translate(720, 250)">
+<circle r="210" fill="none" stroke="#7C4DFF" stroke-width="3.5" opacity="0.8"/>
+<circle r="222" fill="none" stroke="#00E5FF" stroke-width="1.5" opacity="0.4"/>
+<circle r="142" fill="none" stroke="#7C4DFF" stroke-width="2" opacity="0.6"/>
+<circle r="84" fill="none" stroke="#00E5FF" stroke-width="1.5" opacity="0.5"/>
+<path d="M 60.88 167.27 A 178 178 0 0 1 -15.51 177.32" fill="none" stroke="#00E5FF" stroke-width="4" stroke-linecap="round" opacity="0.85"/>
+<path d="M -60.88 167.27 A 178 178 0 0 1 -125.87 125.87" fill="none" stroke="#00E5FF" stroke-width="4" stroke-linecap="round" opacity="0.85"/>
+<path d="M -167.27 60.88 A 178 178 0 0 1 -177.32 -15.51" fill="none" stroke="#00E5FF" stroke-width="4" stroke-linecap="round" opacity="0.85"/>
+<path d="M -167.27 -60.88 A 178 178 0 0 1 -125.87 -125.87" fill="none" stroke="#00E5FF" stroke-width="4" stroke-linecap="round" opacity="0.85"/>
+<path d="M -60.88 -167.27 A 178 178 0 0 1 15.51 -177.32" fill="none" stroke="#00E5FF" stroke-width="4" stroke-linecap="round" opacity="0.85"/>
+<path d="M 60.88 -167.27 A 178 178 0 0 1 125.87 -125.87" fill="none" stroke="#00E5FF" stroke-width="4" stroke-linecap="round" opacity="0.85"/>
+<path d="M 167.27 -60.88 A 178 178 0 0 1 177.32 15.51" fill="none" stroke="#00E5FF" stroke-width="4" stroke-linecap="round" opacity="0.85"/>
+<path d="M 167.27 60.88 A 178 178 0 0 1 125.87 125.87" fill="none" stroke="#00E5FF" stroke-width="4" stroke-linecap="round" opacity="0.85"/>
+<line x1="201.60" y1="0.00" x2="218.40" y2="0.00" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="198.54" y1="35.01" x2="215.08" y2="37.92" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="189.44" y1="68.95" x2="205.23" y2="74.70" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="174.59" y1="100.80" x2="189.14" y2="109.20" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="154.43" y1="129.59" x2="167.30" y2="140.38" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="129.59" y1="154.43" x2="140.38" y2="167.30" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="100.80" y1="174.59" x2="109.20" y2="189.14" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="68.95" y1="189.44" x2="74.70" y2="205.23" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="35.01" y1="198.54" x2="37.92" y2="215.08" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="0.00" y1="201.60" x2="0.00" y2="218.40" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="-35.01" y1="198.54" x2="-37.92" y2="215.08" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="-68.95" y1="189.44" x2="-74.70" y2="205.23" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="-100.80" y1="174.59" x2="-109.20" y2="189.14" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="-129.59" y1="154.43" x2="-140.38" y2="167.30" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="-154.43" y1="129.59" x2="-167.30" y2="140.38" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="-174.59" y1="100.80" x2="-189.14" y2="109.20" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="-189.44" y1="68.95" x2="-205.23" y2="74.70" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="-198.54" y1="35.01" x2="-215.08" y2="37.92" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="-201.60" y1="0.00" x2="-218.40" y2="0.00" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="-198.54" y1="-35.01" x2="-215.08" y2="-37.92" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="-189.44" y1="-68.95" x2="-205.23" y2="-74.70" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="-174.59" y1="-100.80" x2="-189.14" y2="-109.20" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="-154.43" y1="-129.59" x2="-167.30" y2="-140.38" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="-129.59" y1="-154.43" x2="-140.38" y2="-167.30" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="-100.80" y1="-174.59" x2="-109.20" y2="-189.14" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="-68.95" y1="-189.44" x2="-74.70" y2="-205.23" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="-35.01" y1="-198.54" x2="-37.92" y2="-215.08" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="-0.00" y1="-201.60" x2="-0.00" y2="-218.40" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="35.01" y1="-198.54" x2="37.92" y2="-215.08" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="68.95" y1="-189.44" x2="74.70" y2="-205.23" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="100.80" y1="-174.59" x2="109.20" y2="-189.14" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="129.59" y1="-154.43" x2="140.38" y2="-167.30" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="154.43" y1="-129.59" x2="167.30" y2="-140.38" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="174.59" y1="-100.80" x2="189.14" y2="-109.20" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="189.44" y1="-68.95" x2="205.23" y2="-74.70" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<line x1="198.54" y1="-35.01" x2="215.08" y2="-37.92" stroke="#00E5FF" stroke-width="1.2" opacity="0.5"/>
+<polygon points="242.00,0.00 210.00,10.00 197.20,0.00 210.00,-10.00" fill="#00E5FF" opacity="0.9"/>
+<polygon points="0.00,242.00 -10.00,210.00 0.00,197.20 10.00,210.00" fill="#00E5FF" opacity="0.9"/>
+<polygon points="-242.00,0.00 -210.00,-10.00 -197.20,0.00 -210.00,10.00" fill="#00E5FF" opacity="0.9"/>
+<polygon points="-0.00,-242.00 10.00,-210.00 -0.00,-197.20 -10.00,-210.00" fill="#00E5FF" opacity="0.9"/>
+<polygon points="161.22,161.22 144.96,152.03 144.25,144.25 152.03,144.96" fill="#B388FF" opacity="0.75"/>
+<polygon points="-161.22,161.22 -152.03,144.96 -144.25,144.25 -144.96,152.03" fill="#B388FF" opacity="0.75"/>
+<polygon points="-161.22,-161.22 -144.96,-152.03 -144.25,-144.25 -152.03,-144.96" fill="#B388FF" opacity="0.75"/>
+<polygon points="161.22,-161.22 152.03,-144.96 144.25,-144.25 144.96,-152.03" fill="#B388FF" opacity="0.75"/>
+<polygon points="-121.80,0.00 60.90,105.48 60.90,-105.48" fill="none" stroke="#7C4DFF" stroke-width="2.5" opacity="0.7"/>
+<polygon points="109.20,0.00 -54.60,94.57 -54.60,-94.57" fill="#B388FF" fill-opacity="0.18" stroke="#00E5FF" stroke-width="3" opacity="0.9"/>
+<polygon points="49.14,0.00 -24.57,42.56 -24.57,-42.56" fill="#FFFFFF" opacity="0.85"/>
+</g>
+<g transform="translate(180, 100)">
+<circle r="85" fill="none" stroke="#7C4DFF" stroke-width="1.5" opacity="0.25"/>
+<circle r="63" fill="none" stroke="#00E5FF" stroke-width="1" opacity="0.2"/>
+<circle cx="85.00" cy="0.00" r="2.5" fill="#00E5FF" opacity="0.4"/>
+<circle cx="0.00" cy="85.00" r="2.5" fill="#00E5FF" opacity="0.4"/>
+<circle cx="-85.00" cy="0.00" r="2.5" fill="#00E5FF" opacity="0.4"/>
+<circle cx="-0.00" cy="-85.00" r="2.5" fill="#00E5FF" opacity="0.4"/>
+</g>
+<circle cx="120" cy="380" r="2.5" fill="#00E5FF" opacity="0.6"/>
+<circle cx="340" cy="90" r="3.0" fill="#B388FF" opacity="0.5"/>
+<circle cx="460" cy="420" r="2.0" fill="#FFFFFF" opacity="0.7"/>
+<circle cx="520" cy="70" r="3.5" fill="#00E5FF" opacity="0.8"/>
+<circle cx="920" cy="100" r="2.0" fill="#B388FF" opacity="0.4"/>
+<circle cx="950" cy="410" r="3.0" fill="#00E5FF" opacity="0.6"/>
+<circle cx="620" cy="440" r="2.5" fill="#FFFFFF" opacity="0.5"/>
+<circle cx="80" cy="280" r="2.0" fill="#7C4DFF" opacity="0.4"/>
+<g transform="translate(104, 175)"><circle r="30" fill="#1E1238" stroke="#7C4DFF" stroke-width="2"/><circle r="22" fill="none" stroke="#00E5FF" stroke-width="1.5" opacity="0.8"/><polygon points="12,0 -8,-11 -8,11" fill="#B388FF"/><polygon points="5,0 -4,-5 -4,5" fill="#FFFFFF"/></g>
+<text x="152" y="192" font-family="Roboto, System-UI, sans-serif" font-weight="800" font-size="54" fill="url(#titleGrad)" filter="url(#textGlow)" letter-spacing="1">IsekaiPlayer</text>
+<text x="72" y="248" font-family="Roboto, System-UI, sans-serif" font-weight="500" font-size="19" fill="#CBB2FF" opacity="0.9" letter-spacing="0.5">Sovereign above myriad realms • Shatter every mortal cipher</text>
+<rect x="72" y="310" width="307.5" height="36" rx="18" fill="#1F123B" fill-opacity="0.75" stroke="#7C4DFF" stroke-width="1.5" stroke-opacity="0.8"/>
+<text x="88" y="333" font-family="Roboto, System-UI, sans-serif" font-weight="600" font-size="14" fill="#FFFFFF" opacity="0.95">⚡ MPV + ExoPlayer Dual Engine</text>
+<rect x="393.5" y="310" width="241.0" height="36" rx="18" fill="#0C2338" fill-opacity="0.75" stroke="#00E5FF" stroke-width="1.5" stroke-opacity="0.8"/>
+<text x="409.5" y="333" font-family="Roboto, System-UI, sans-serif" font-weight="600" font-size="14" fill="#FFFFFF" opacity="0.95">🌐 SMB / WebDAV / Local</text>
+<rect x="648.5" y="310" width="269.5" height="36" rx="18" fill="#281033" fill-opacity="0.75" stroke="#E040FB" stroke-width="1.5" stroke-opacity="0.8"/>
+<text x="664.5" y="333" font-family="Roboto, System-UI, sans-serif" font-weight="600" font-size="14" fill="#FFFFFF" opacity="0.95">✨ Material 3 / Modern MVI</text>
+</svg>
