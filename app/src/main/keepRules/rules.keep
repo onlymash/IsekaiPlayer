@@ -1,0 +1,24 @@
+# Add project specific R8 rules here.
+# AGP will combine all keep rule files in src/main/keepRules to pass to R8
+#
+# For more details, see
+#   https://d.android.com/r/tools/r8/keep-rules
+
+# dav4jvm / XmlPullParser conflict resolution
+-dontwarn org.xmlpull.v1.XmlPullParserFactory
+-dontwarn org.xmlpull.mxp1.MXParser
+-dontwarn org.xmlpull.mxp1_serializer.MXSerializer
+
+# SMBJ / mbassy optional dependencies not present on Android
+-dontwarn javax.el.**
+-dontwarn org.ietf.jgss.**
+
+# Ktor's IntellijIdeaDebugDetector references JMX which is not available on Android
+-dontwarn java.lang.management.**
+
+# If your project uses WebView with JS, uncomment the following
+# and specify the fully qualified class name to the JavaScript interface
+# class:
+#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
+#   public *;
+#}

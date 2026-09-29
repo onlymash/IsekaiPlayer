@@ -1,0 +1,28 @@
+<!--
+  ~ IsekaiPlayer - Sovereign above myriad realms; shatter every mortal cipher.
+  ~ Copyright (C) 2026 onlymash
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:tint="?attr/colorControlNormal"
+    android:viewportWidth="960"
+    android:viewportHeight="960">
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M220,680L220,280Q220,263 231.5,251.5Q243,240 260,240Q277,240 288.5,251.5Q300,263 300,280L300,680Q300,697 288.5,708.5Q277,720 260,720Q243,720 231.5,708.5Q220,697 220,680ZM678,679L430,513Q421,507 416.5,498.5Q412,490 412,480Q412,470 416.5,461.5Q421,453 430,447L678,281Q683,277 689,276Q695,275 700,275Q716,275 728,286Q740,297 740,315L740,645Q740,663 728,674Q716,685 700,685Q695,685 689,684Q683,683 678,679Z" />
+</vector>

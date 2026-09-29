@@ -1,0 +1,96 @@
+name: "🐛 Bug Report"
+description: "Report crashes, playback freezing, UI glitches, or audio/video issues"
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a bug! Please fill out as much detail as possible to help us reproduce and resolve the issue quickly.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Problem Description"
+      description: "A clear and concise description of the bug."
+      placeholder: "When playing certain MKV videos, switching audio tracks causes the video frame to freeze..."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: engine
+    attributes:
+      label: "Player Engine"
+      description: "Which player engine was active when the bug occurred?"
+      options:
+        - "Mpv Engine (libmpv)"
+        - "ExoPlayer Engine (Media3)"
+        - "Both Engines"
+        - "Uncertain / Irrelevant"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: media-source
+    attributes:
+      label: "Media Source / Protocol"
+      description: "Storage location or network protocol of the video file"
+      options:
+        - "Local Storage / SD Card"
+        - "SMB Network Share"
+        - "WebDAV"
+        - "FTP / SFTP"
+        - "HTTP / HTTPS Stream"
+        - "Other"
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: "Reproduction Steps"
+      description: "Steps to reproduce the behavior:"
+      placeholder: |
+        1. Open the app and navigate to SMB network folder
+        2. Tap to play 4K HDR video file.mkv
+        3. Seek forward to 10:00 position
+        4. Observe error: Video frame freezes while audio continues
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-actual
+    attributes:
+      label: "Expected vs Actual Behavior"
+      description: "What did you expect to happen, and what actually happened?"
+      placeholder: "Expected: Smooth seeking and continuous playback. Actual: Screen freezes while audio keeps playing."
+
+  - type: input
+    id: device-info
+    attributes:
+      label: "Device & Operating System"
+      description: "e.g., Google Pixel 8 Pro / Android 14 (API 34)"
+      placeholder: "e.g., Google Pixel 8 Pro / Android 14"
+    validations:
+      required: true
+
+  - type: textarea
+    id: media-info
+    attributes:
+      label: "Media Format / Sample Info"
+      description: "Video/audio codec details (e.g., HEVC/AV1/VP9, EAC3/FLAC), container format (MKV/MP4), or sample URL."
+      placeholder: "e.g., 4K HEVC 10-bit MKV, Dolby Vision, EAC3 5.1"
+
+  - type: textarea
+    id: logcat
+    attributes:
+      label: "Logs / Logcat (Optional)"
+      description: "If you have crash logs or ADB logcat output, please paste them here."
+      render: shell
+      placeholder: "Paste logcat output or mpv debug log here..."
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: "Additional Context / Screenshots / Recordings"
+      description: "Add any other context, screenshots, or screen recordings about the problem here."

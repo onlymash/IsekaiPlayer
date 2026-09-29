@@ -1,0 +1,959 @@
+[
+  {
+    "id": "zh_hans",
+    "name": "Chinese (Simplified) / 简体中文 / 简体中文",
+    "english": "Chinese (Simplified)",
+    "native": "简体中文",
+    "chinese": "简体中文",
+    "codes": [
+      "zh-Hans",
+      "zh-CN",
+      "zh-SG",
+      "chs",
+      "sc",
+      "gb",
+      "zh-hans",
+      "zh-cn",
+      "zh",
+      "chi",
+      "zho"
+    ]
+  },
+  {
+    "id": "zh_hant",
+    "name": "Chinese (Traditional) / 繁體中文 / 繁体中文",
+    "english": "Chinese (Traditional)",
+    "native": "繁體中文",
+    "chinese": "繁体中文",
+    "codes": [
+      "zh-Hant",
+      "zh-TW",
+      "zh-HK",
+      "zh-MO",
+      "cht",
+      "tc",
+      "big5",
+      "zh-hant",
+      "zh-tw",
+      "zh-hk",
+      "zh",
+      "chi",
+      "zho"
+    ]
+  },
+  {
+    "id": "zh_yue",
+    "name": "Cantonese / 粵語 / 粤语",
+    "english": "Cantonese",
+    "native": "粵語 / 廣東話",
+    "chinese": "粤语",
+    "codes": [
+      "yue",
+      "yue-Hant",
+      "yue-Hans",
+      "zh-yue",
+      "cantonese"
+    ]
+  },
+  {
+    "id": "eng",
+    "name": "English / English / 英语",
+    "english": "English",
+    "native": "English",
+    "chinese": "英语",
+    "codes": [
+      "en",
+      "eng",
+      "en-US",
+      "en-GB",
+      "en-CA",
+      "en-AU",
+      "english"
+    ]
+  },
+  {
+    "id": "eng_sdh",
+    "name": "English (CC/SDH) / English (CC/SDH) / 英语(听障/双语说明)",
+    "english": "English (CC/SDH)",
+    "native": "English (CC/SDH)",
+    "chinese": "英语(听障/双语说明)",
+    "codes": [
+      "en-SDH",
+      "eng-SDH",
+      "en-CC",
+      "eng-CC",
+      "sdh",
+      "cc"
+    ]
+  },
+  {
+    "id": "jpn",
+    "name": "Japanese / 日本語 / 日语",
+    "english": "Japanese",
+    "native": "日本語",
+    "chinese": "日语",
+    "codes": [
+      "ja",
+      "jpn",
+      "ja-JP",
+      "japanese"
+    ]
+  },
+  {
+    "id": "kor",
+    "name": "Korean / 한국어 / 韩语",
+    "english": "Korean",
+    "native": "한국어 / 조선말",
+    "chinese": "韩语",
+    "codes": [
+      "ko",
+      "kor",
+      "ko-KR",
+      "korean"
+    ]
+  },
+  {
+    "id": "spa",
+    "name": "Spanish / Español / 西班牙语",
+    "english": "Spanish",
+    "native": "Español",
+    "chinese": "西班牙语",
+    "codes": [
+      "es",
+      "spa",
+      "es-ES",
+      "es-419",
+      "es-MX",
+      "spanish"
+    ]
+  },
+  {
+    "id": "fre",
+    "name": "French / Français / 法语",
+    "english": "French",
+    "native": "Français",
+    "chinese": "法语",
+    "codes": [
+      "fr",
+      "fre",
+      "fra",
+      "fr-FR",
+      "fr-CA",
+      "french"
+    ]
+  },
+  {
+    "id": "ger",
+    "name": "German / Deutsch / 德语",
+    "english": "German",
+    "native": "Deutsch",
+    "chinese": "德语",
+    "codes": [
+      "de",
+      "ger",
+      "deu",
+      "de-DE",
+      "german"
+    ]
+  },
+  {
+    "id": "rus",
+    "name": "Russian / Русский / 俄语",
+    "english": "Russian",
+    "native": "Русский",
+    "chinese": "俄语",
+    "codes": [
+      "ru",
+      "rus",
+      "ru-RU",
+      "russian"
+    ]
+  },
+  {
+    "id": "ita",
+    "name": "Italian / Italiano / 意大利语",
+    "english": "Italian",
+    "native": "Italiano",
+    "chinese": "意大利语",
+    "codes": [
+      "it",
+      "ita",
+      "it-IT",
+      "italian"
+    ]
+  },
+  {
+    "id": "por",
+    "name": "Portuguese / Português / 葡萄牙语",
+    "english": "Portuguese",
+    "native": "Português",
+    "chinese": "葡萄牙语",
+    "codes": [
+      "pt",
+      "por",
+      "pt-PT",
+      "portuguese"
+    ]
+  },
+  {
+    "id": "por_br",
+    "name": "Portuguese (Brazil) / Português (Brasil) / 巴西葡萄牙语",
+    "english": "Portuguese (Brazil)",
+    "native": "Português (Brasil)",
+    "chinese": "巴西葡萄牙语",
+    "codes": [
+      "pt-BR",
+      "pob",
+      "pt-br",
+      "pt",
+      "por"
+    ]
+  },
+  {
+    "id": "ara",
+    "name": "Arabic / العربية / 阿拉伯语",
+    "english": "Arabic",
+    "native": "العربية",
+    "chinese": "阿拉伯语",
+    "codes": [
+      "ar",
+      "ara",
+      "ar-SA",
+      "arabic"
+    ]
+  },
+  {
+    "id": "hin",
+    "name": "Hindi / हिन्दी / 印地语",
+    "english": "Hindi",
+    "native": "हिन्दी",
+    "chinese": "印地语",
+    "codes": [
+      "hi",
+      "hin",
+      "hi-IN",
+      "hindi"
+    ]
+  },
+  {
+    "id": "ind",
+    "name": "Indonesian / Bahasa Indonesia / 印尼语",
+    "english": "Indonesian",
+    "native": "Bahasa Indonesia",
+    "chinese": "印尼语",
+    "codes": [
+      "id",
+      "ind",
+      "id-ID",
+      "indonesian"
+    ]
+  },
+  {
+    "id": "tha",
+    "name": "Thai / ไทย / 泰语",
+    "english": "Thai",
+    "native": "ไทย",
+    "chinese": "泰语",
+    "codes": [
+      "th",
+      "tha",
+      "th-TH",
+      "thai"
+    ]
+  },
+  {
+    "id": "vie",
+    "name": "Vietnamese / Tiếng Việt / 越南语",
+    "english": "Vietnamese",
+    "native": "Tiếng Việt",
+    "chinese": "越南语",
+    "codes": [
+      "vi",
+      "vie",
+      "vi-VN",
+      "vietnamese"
+    ]
+  },
+  {
+    "id": "tur",
+    "name": "Turkish / Türkçe / 土耳其语",
+    "english": "Turkish",
+    "native": "Türkçe",
+    "chinese": "土耳其语",
+    "codes": [
+      "tr",
+      "tur",
+      "tr-TR",
+      "turkish"
+    ]
+  },
+  {
+    "id": "pol",
+    "name": "Polish / Polski / 波兰语",
+    "english": "Polish",
+    "native": "Polski",
+    "chinese": "波兰语",
+    "codes": [
+      "pl",
+      "pol",
+      "pl-PL",
+      "polish"
+    ]
+  },
+  {
+    "id": "dut",
+    "name": "Dutch / Nederlands / 荷兰语",
+    "english": "Dutch",
+    "native": "Nederlands",
+    "chinese": "荷兰语",
+    "codes": [
+      "nl",
+      "dut",
+      "nld",
+      "nl-NL",
+      "dutch",
+      "flemish"
+    ]
+  },
+  {
+    "id": "ukr",
+    "name": "Ukrainian / Українська / 乌克兰语",
+    "english": "Ukrainian",
+    "native": "Українська",
+    "chinese": "乌克兰语",
+    "codes": [
+      "uk",
+      "ukr",
+      "uk-UA",
+      "ukrainian"
+    ]
+  },
+  {
+    "id": "swe",
+    "name": "Swedish / Svenska / 瑞典语",
+    "english": "Swedish",
+    "native": "Svenska",
+    "chinese": "瑞典语",
+    "codes": [
+      "sv",
+      "swe",
+      "sv-SE",
+      "swedish"
+    ]
+  },
+  {
+    "id": "dan",
+    "name": "Danish / Dansk / 丹麦语",
+    "english": "Danish",
+    "native": "Dansk",
+    "chinese": "丹麦语",
+    "codes": [
+      "da",
+      "dan",
+      "da-DK",
+      "danish"
+    ]
+  },
+  {
+    "id": "fin",
+    "name": "Finnish / Suomi / 芬兰语",
+    "english": "Finnish",
+    "native": "Suomi",
+    "chinese": "芬兰语",
+    "codes": [
+      "fi",
+      "fin",
+      "fi-FI",
+      "finnish"
+    ]
+  },
+  {
+    "id": "nor",
+    "name": "Norwegian / Norsk / 挪威语",
+    "english": "Norwegian",
+    "native": "Norsk",
+    "chinese": "挪威语",
+    "codes": [
+      "no",
+      "nor",
+      "nb",
+      "nob",
+      "nn",
+      "nno",
+      "no-NO",
+      "norwegian"
+    ]
+  },
+  {
+    "id": "nob",
+    "name": "Norwegian Bokmål / Norsk bokmål / 挪威博克马尔语",
+    "english": "Norwegian Bokmål",
+    "native": "Norsk bokmål",
+    "chinese": "挪威博克马尔语",
+    "codes": [
+      "nb",
+      "nob",
+      "nb-NO"
+    ]
+  },
+  {
+    "id": "nno",
+    "name": "Norwegian Nynorsk / Norsk nynorsk / 新挪威语",
+    "english": "Norwegian Nynorsk",
+    "native": "Norsk nynorsk",
+    "chinese": "新挪威语",
+    "codes": [
+      "nn",
+      "nno",
+      "nn-NO"
+    ]
+  },
+  {
+    "id": "cze",
+    "name": "Czech / Čeština / 捷克语",
+    "english": "Czech",
+    "native": "Čeština",
+    "chinese": "捷克语",
+    "codes": [
+      "cs",
+      "cze",
+      "ces",
+      "cs-CZ",
+      "czech"
+    ]
+  },
+  {
+    "id": "hun",
+    "name": "Hungarian / Magyar / 匈牙利语",
+    "english": "Hungarian",
+    "native": "Magyar",
+    "chinese": "匈牙利语",
+    "codes": [
+      "hu",
+      "hun",
+      "hu-HU",
+      "hungarian"
+    ]
+  },
+  {
+    "id": "gre",
+    "name": "Greek / Ελληνικά / 希腊语",
+    "english": "Greek",
+    "native": "Ελληνικά",
+    "chinese": "希腊语",
+    "codes": [
+      "el",
+      "gre",
+      "ell",
+      "el-GR",
+      "greek"
+    ]
+  },
+  {
+    "id": "heb",
+    "name": "Hebrew / עברית / 希伯来语",
+    "english": "Hebrew",
+    "native": "עברית",
+    "chinese": "希伯来语",
+    "codes": [
+      "he",
+      "heb",
+      "he-IL",
+      "hebrew"
+    ]
+  },
+  {
+    "id": "rum",
+    "name": "Romanian / Română / 罗马尼亚语",
+    "english": "Romanian",
+    "native": "Română",
+    "chinese": "罗马尼亚语",
+    "codes": [
+      "ro",
+      "rum",
+      "ron",
+      "ro-RO",
+      "romanian",
+      "moldavian"
+    ]
+  },
+  {
+    "id": "bul",
+    "name": "Bulgarian / Български / 保加利亚语",
+    "english": "Bulgarian",
+    "native": "Български",
+    "chinese": "保加利亚语",
+    "codes": [
+      "bg",
+      "bul",
+      "bg-BG",
+      "bulgarian"
+    ]
+  },
+  {
+    "id": "hrv",
+    "name": "Croatian / Hrvatski / 克罗地亚语",
+    "english": "Croatian",
+    "native": "Hrvatski",
+    "chinese": "克罗地亚语",
+    "codes": [
+      "hr",
+      "hrv",
+      "hr-HR",
+      "croatian"
+    ]
+  },
+  {
+    "id": "srp",
+    "name": "Serbian / Српски / 塞尔维亚语",
+    "english": "Serbian",
+    "native": "Српски / Srpski",
+    "chinese": "塞尔维亚语",
+    "codes": [
+      "sr",
+      "srp",
+      "sr-Cyrl",
+      "sr-Latn",
+      "sr-RS",
+      "serbian"
+    ]
+  },
+  {
+    "id": "srp_cyrl",
+    "name": "Serbian (Cyrillic) / Српски (ћирилица) / 塞尔维亚语(西里尔文)",
+    "english": "Serbian (Cyrillic)",
+    "native": "Српски (ћирилица)",
+    "chinese": "塞尔维亚语(西里尔文)",
+    "codes": [
+      "sr-Cyrl",
+      "sr-Cyrl-RS"
+    ]
+  },
+  {
+    "id": "srp_latn",
+    "name": "Serbian (Latin) / Srpski (latinica) / 塞尔维亚语(拉丁文)",
+    "english": "Serbian (Latin)",
+    "native": "Srpski (latinica)",
+    "chinese": "塞尔维亚语(拉丁文)",
+    "codes": [
+      "sr-Latn",
+      "sr-Latn-RS"
+    ]
+  },
+  {
+    "id": "slo",
+    "name": "Slovak / Slovenčina / 斯洛伐克语",
+    "english": "Slovak",
+    "native": "Slovenčina",
+    "chinese": "斯洛伐克语",
+    "codes": [
+      "sk",
+      "slo",
+      "slk",
+      "sk-SK",
+      "slovak"
+    ]
+  },
+  {
+    "id": "slv",
+    "name": "Slovenian / Slovenščina / 斯洛文尼亚语",
+    "english": "Slovenian",
+    "native": "Slovenščina",
+    "chinese": "斯洛文尼亚语",
+    "codes": [
+      "sl",
+      "slv",
+      "sl-SI",
+      "slovenian"
+    ]
+  },
+  {
+    "id": "may",
+    "name": "Malay / Bahasa Melayu / 马来语",
+    "english": "Malay",
+    "native": "Bahasa Melayu",
+    "chinese": "马来语",
+    "codes": [
+      "ms",
+      "may",
+      "msa",
+      "ms-MY",
+      "malay"
+    ]
+  },
+  {
+    "id": "fil",
+    "name": "Filipino / Tagalog / 菲律宾语",
+    "english": "Filipino",
+    "native": "Wikang Tagalog",
+    "chinese": "菲律宾语",
+    "codes": [
+      "fil",
+      "tl",
+      "tgl",
+      "fil-PH",
+      "tl-PH",
+      "tagalog",
+      "filipino"
+    ]
+  },
+  {
+    "id": "tam",
+    "name": "Tamil / தமிழ் / 泰米尔语",
+    "english": "Tamil",
+    "native": "தமிழ்",
+    "chinese": "泰米尔语",
+    "codes": [
+      "ta",
+      "tam",
+      "ta-IN",
+      "tamil"
+    ]
+  },
+  {
+    "id": "tel",
+    "name": "Telugu / తెలుగు / 泰卢固语",
+    "english": "Telugu",
+    "native": "తెలుగు",
+    "chinese": "泰卢固语",
+    "codes": [
+      "te",
+      "tel",
+      "te-IN",
+      "telugu"
+    ]
+  },
+  {
+    "id": "ben",
+    "name": "Bengali / বাংলা / 孟加拉语",
+    "english": "Bengali",
+    "native": "বাংলা",
+    "chinese": "孟加拉语",
+    "codes": [
+      "bn",
+      "ben",
+      "bn-BD",
+      "bn-IN",
+      "bengali"
+    ]
+  },
+  {
+    "id": "urd",
+    "name": "Urdu / اردو / 乌尔都语",
+    "english": "Urdu",
+    "native": "اردو",
+    "chinese": "乌尔都语",
+    "codes": [
+      "ur",
+      "urd",
+      "ur-PK",
+      "urdu"
+    ]
+  },
+  {
+    "id": "fas",
+    "name": "Persian / فارسی / 波斯语",
+    "english": "Persian",
+    "native": "فارسی",
+    "chinese": "波斯语",
+    "codes": [
+      "fa",
+      "per",
+      "fas",
+      "fa-IR",
+      "persian",
+      "farsi"
+    ]
+  },
+  {
+    "id": "cat",
+    "name": "Catalan / Català / 加泰罗尼亚语",
+    "english": "Catalan",
+    "native": "Català",
+    "chinese": "加泰罗尼亚语",
+    "codes": [
+      "ca",
+      "cat",
+      "ca-ES",
+      "catalan",
+      "valencian"
+    ]
+  },
+  {
+    "id": "baq",
+    "name": "Basque / Euskara / 巴斯克语",
+    "english": "Basque",
+    "native": "Euskara",
+    "chinese": "巴斯克语",
+    "codes": [
+      "eu",
+      "baq",
+      "eus",
+      "eu-ES",
+      "basque"
+    ]
+  },
+  {
+    "id": "glg",
+    "name": "Galician / Galego / 加利西亚语",
+    "english": "Galician",
+    "native": "Galego",
+    "chinese": "加利西亚语",
+    "codes": [
+      "gl",
+      "glg",
+      "gl-ES",
+      "galician"
+    ]
+  },
+  {
+    "id": "est",
+    "name": "Estonian / Eesti / 爱沙尼亚语",
+    "english": "Estonian",
+    "native": "Eesti",
+    "chinese": "爱沙尼亚语",
+    "codes": [
+      "et",
+      "est",
+      "et-EE",
+      "estonian"
+    ]
+  },
+  {
+    "id": "lav",
+    "name": "Latvian / Latviešu / 拉脱维亚语",
+    "english": "Latvian",
+    "native": "Latviešu",
+    "chinese": "拉脱维亚语",
+    "codes": [
+      "lv",
+      "lav",
+      "lv-LV",
+      "latvian"
+    ]
+  },
+  {
+    "id": "lit",
+    "name": "Lithuanian / Lietuvių / 立陶宛语",
+    "english": "Lithuanian",
+    "native": "Lietuvių",
+    "chinese": "立陶宛语",
+    "codes": [
+      "lt",
+      "lit",
+      "lt-LT",
+      "lithuanian"
+    ]
+  },
+  {
+    "id": "isl",
+    "name": "Icelandic / Íslenska / 冰岛语",
+    "english": "Icelandic",
+    "native": "Íslenska",
+    "chinese": "冰岛语",
+    "codes": [
+      "is",
+      "ice",
+      "isl",
+      "is-IS",
+      "icelandic"
+    ]
+  },
+  {
+    "id": "kaz",
+    "name": "Kazakh / Қазақ тілі / 哈萨克语",
+    "english": "Kazakh",
+    "native": "Қазақ тілі",
+    "chinese": "哈萨克语",
+    "codes": [
+      "kk",
+      "kaz",
+      "kk-KZ",
+      "kazakh"
+    ]
+  },
+  {
+    "id": "uzb",
+    "name": "Uzbek / Oʻzbek / 乌兹别克语",
+    "english": "Uzbek",
+    "native": "Oʻzbek",
+    "chinese": "乌兹别克语",
+    "codes": [
+      "uz",
+      "uzb",
+      "uz-UZ",
+      "uzbek"
+    ]
+  },
+  {
+    "id": "aze",
+    "name": "Azerbaijani / Azərbaycan / 阿塞拜疆语",
+    "english": "Azerbaijani",
+    "native": "Azərbaycan",
+    "chinese": "阿塞拜疆语",
+    "codes": [
+      "az",
+      "aze",
+      "az-AZ",
+      "azerbaijani"
+    ]
+  },
+  {
+    "id": "kat",
+    "name": "Georgian / ქართული / 格鲁吉亚语",
+    "english": "Georgian",
+    "native": "ქართული",
+    "chinese": "格鲁吉亚语",
+    "codes": [
+      "ka",
+      "geo",
+      "kat",
+      "ka-GE",
+      "georgian"
+    ]
+  },
+  {
+    "id": "arm",
+    "name": "Armenian / Հայերեն / 亚美尼亚语",
+    "english": "Armenian",
+    "native": "Հայերեն",
+    "chinese": "亚美尼亚语",
+    "codes": [
+      "hy",
+      "arm",
+      "hye",
+      "hy-AM",
+      "armenian"
+    ]
+  },
+  {
+    "id": "mon",
+    "name": "Mongolian / Монгол / 蒙古语",
+    "english": "Mongolian",
+    "native": "Монгол",
+    "chinese": "蒙古语",
+    "codes": [
+      "mn",
+      "mon",
+      "mn-MN",
+      "mongolian"
+    ]
+  },
+  {
+    "id": "mya",
+    "name": "Burmese / မြန်မာစာ / 缅甸语",
+    "english": "Burmese",
+    "native": "မြန်မာစာ",
+    "chinese": "缅甸语",
+    "codes": [
+      "my",
+      "bur",
+      "mya",
+      "my-MM",
+      "burmese"
+    ]
+  },
+  {
+    "id": "khm",
+    "name": "Khmer / ភាសាខ្មែរ / 高棉语",
+    "english": "Khmer",
+    "native": "ភាសាខ្មែរ",
+    "chinese": "高棉语",
+    "codes": [
+      "km",
+      "khm",
+      "km-KH",
+      "khmer"
+    ]
+  },
+  {
+    "id": "lao",
+    "name": "Lao / ພາສາລາວ / 老挝语",
+    "english": "Lao",
+    "native": "ພາສາລາວ",
+    "chinese": "老挝语",
+    "codes": [
+      "lo",
+      "lao",
+      "lo-LA",
+      "lao"
+    ]
+  },
+  {
+    "id": "sin",
+    "name": "Sinhala / සිංහල / 僧伽罗语",
+    "english": "Sinhala",
+    "native": "සිංහල",
+    "chinese": "僧伽罗语",
+    "codes": [
+      "si",
+      "sin",
+      "si-LK",
+      "sinhala"
+    ]
+  },
+  {
+    "id": "nep",
+    "name": "Nepali / नेपाली / 尼泊尔语",
+    "english": "Nepali",
+    "native": "नेपाली",
+    "chinese": "尼泊尔语",
+    "codes": [
+      "ne",
+      "nep",
+      "ne-NP",
+      "nepali"
+    ]
+  },
+  {
+    "id": "swa",
+    "name": "Swahili / Kiswahili / 斯瓦希里语",
+    "english": "Swahili",
+    "native": "Kiswahili",
+    "chinese": "斯瓦希里语",
+    "codes": [
+      "sw",
+      "swa",
+      "sw-KE",
+      "sw-TZ",
+      "swahili"
+    ]
+  },
+  {
+    "id": "afr",
+    "name": "Afrikaans / Afrikaans / 南非荷兰语",
+    "english": "Afrikaans",
+    "native": "Afrikaans",
+    "chinese": "南非荷兰语",
+    "codes": [
+      "af",
+      "afr",
+      "af-ZA",
+      "afrikaans"
+    ]
+  },
+  {
+    "id": "epo",
+    "name": "Esperanto / Esperanto / 世界语",
+    "english": "Esperanto",
+    "native": "Esperanto",
+    "chinese": "世界语",
+    "codes": [
+      "eo",
+      "epo",
+      "esperanto"
+    ]
+  },
+  {
+    "id": "lat",
+    "name": "Latin / Latine / 拉丁语",
+    "english": "Latin",
+    "native": "Latine",
+    "chinese": "拉丁语",
+    "codes": [
+      "la",
+      "lat",
+      "latin"
+    ]
+  }
+]

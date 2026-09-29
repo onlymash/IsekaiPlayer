@@ -1,0 +1,5 @@
+# Ignore sensitive keystore directories and signing files for AI agents
+keystore/release/
+*.jks
+*.keystore
+local.properties

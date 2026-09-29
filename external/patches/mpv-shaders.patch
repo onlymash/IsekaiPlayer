@@ -1,0 +1,378 @@
+diff --git a/video/csputils.c b/video/csputils.c
+index bd942ce4c7..7ab22b0eea 100644
+--- a/video/csputils.c
++++ b/video/csputils.c
+@@ -402,6 +402,56 @@ void mp_get_csp_matrix(struct mp_csp_params *params, struct pl_transform3x3 *m)
+             m->mat.m[i][1] = huecos * u - huesin * v;
+             m->mat.m[i][2] = huesin * u + huecos * v;
+         }
++    } else if (colorspace == PL_COLOR_SYSTEM_RGB && !params->gray &&
++               (params->saturation != 1 || params->hue != 0)) {
++        // The source is already RGB (e.g. the Android MediaCodec hardware
++        // decoder, whose output surface yields RGB), so saturation and hue
++        // would normally be silently ignored: they are only ever folded into a
++        // YUV->RGB conversion matrix, which does not exist for RGB input.
++        // (Brightness and contrast still work above because they are a plain
++        // scale+offset that is valid in any colorspace.)
++        //
++        // Apply sat/hue here by round-tripping through a YCbCr representation:
++        //   m_rgb = (Yuv2Rgb with sat/hue) * inverse(Yuv2Rgb)
++        // i.e. rgb -> yuv, scale/rotate the chroma exactly as the YUV branch
++        // above does, then yuv -> rgb. BT.709 luma weights are used since that
++        // is the standard for the HD/4K content these hardware surfaces carry.
++        // The uniform contrast scale and brightness offset applied below commute
++        // with this matrix (for RGB, levels_in == -1 makes ymul == cmul), so the
++        // existing brightness/contrast behaviour is preserved.
++        float huecos = params->saturation * cos(params->hue);
++        float huesin = params->saturation * sin(params->hue);
++        
++        // YUV to RGB (BT.709)
++        float Y00 = 1.0f, Y01 = 0.0f,       Y02 = 1.5748f;
++        float Y10 = 1.0f, Y11 = -0.187327f, Y12 = -0.468124f;
++        float Y20 = 1.0f, Y21 = 1.8556f,    Y22 = 0.0f;
++        
++        // RGB to YUV (BT.709 inverse)
++        float I00 = 0.2126f,    I01 = 0.7152f,    I02 = 0.0722f;
++        float I10 = -0.114572f, I11 = -0.385428f, I12 = 0.5000f;
++        float I20 = 0.5000f,    I21 = -0.454153f, I22 = -0.045847f;
++
++        // Apply hue/saturation to U and V columns of YUV2RGB
++        float T01 = Y01 * huecos - Y02 * huesin;
++        float T02 = Y01 * huesin + Y02 * huecos;
++        float T11 = Y11 * huecos - Y12 * huesin;
++        float T12 = Y11 * huesin + Y12 * huecos;
++        float T21 = Y21 * huecos - Y22 * huesin;
++        float T22 = Y21 * huesin + Y22 * huecos;
++
++        // Final matrix = (Y * H) * I
++        m->mat.m[0][0] = Y00 * I00 + T01 * I10 + T02 * I20;
++        m->mat.m[0][1] = Y00 * I01 + T01 * I11 + T02 * I21;
++        m->mat.m[0][2] = Y00 * I02 + T01 * I12 + T02 * I22;
++
++        m->mat.m[1][0] = Y10 * I00 + T11 * I10 + T12 * I20;
++        m->mat.m[1][1] = Y10 * I01 + T11 * I11 + T12 * I21;
++        m->mat.m[1][2] = Y10 * I02 + T11 * I12 + T12 * I22;
++
++        m->mat.m[2][0] = Y20 * I00 + T21 * I10 + T22 * I20;
++        m->mat.m[2][1] = Y20 * I01 + T21 * I11 + T22 * I21;
++        m->mat.m[2][2] = Y20 * I02 + T21 * I12 + T22 * I22;
+     }
+ 
+     // The values below are written in 0-255 scale - thus bring s into range.
+diff --git a/video/out/gpu/video_shaders.c b/video/out/gpu/video_shaders.c
+index b763989344..06975423d8 100644
+--- a/video/out/gpu/video_shaders.c
++++ b/video/out/gpu/video_shaders.c
+@@ -1019,21 +1019,151 @@ void pass_sample_deband(struct gl_shader_cache *sc, struct deband_opts *opts,
+     GLSLF("}\n");
+ }
+ 
+-// Assumes the texture was hooked
++// Anime4K-Ultra-inspired adaptive sharpening + line art darkening.
++// 9-tap (3x3) extended FSR RCAS with diagonal sensitivity.
++//
++// Extends the 5-tap RCAS cross to a full 3x3 neighborhood:
++//   - Cardinal neighbors (top/left/right/bottom): weight 1.0
++//   - Diagonal neighbors (corners): weight 0.5 (sqrt(2) distance compensation)
++//   - Combined weight = 4*1.0 + 4*0.5 = 6.0 -> safe RCAS limit = 1/6 ~0.1667
++//
++// Benefits over 5-tap:
++//   1. Diagonal (45-degree) edges sharpen properly -- no more staircase artifacts.
++//   2. 8-neighbor min/max gives tighter anti-ringing clamp on all edge angles.
++//   3. Noise suppression uses full 8-neighbor average for better grain detection.
++//   4. Valley Darken sees all 8 neighbors for more accurate ink valley detection.
++//
++// Cost: 4 extra texture fetches (9 vs 5). On tile-based mobile GPUs (Adreno/
++// Mali), this is ~1-2% additional memory bandwidth -- negligible in practice.
++//
++// ALGORITHMS PORTED FROM Anime4K-Ultra_DbH_Sharp.glsl:
++//   - Luma-Sharp USM  (Step 4.5): GLSL lines 519-529   [LUMA_SHARP_AMOUNT 1.5]
++//   - FSR RCAS        (Step 2):   GLSL lines 443-501
++//   - Valley Darken   (Step 5):   GLSL lines 936-996   [DARKEN_STRENGTH 0.60]
++//
++// Effective 2x sharpening vs original single-pass design (at param=5):
++//   RCAS lobe:      *1.0 vs GLSL *exp2(-0.8)~0.574 -> already 1.74x GLSL RCAS
++//   Luma-Sharp USM: strength 1.5  -> matches GLSL LUMA_SHARP_AMOUNT 1.5
++//   Valley Darken:  p*0.12 -> 0.60 -> matches GLSL DARKEN_STRENGTH 0.60
++//
++// param range: 0 (off) to 5 (maximum Anime4K-like quality).
++//   Texture color data: mediump (FP16) for bandwidth efficiency.
++//   RCAS lobe math:     highp    (required -- near-zero denominators in
++//                                 hitMaxL cause NaN/inf at mediump precision).
++//   Luma-Sharp USM:     highp blur9/detail; applied as luma-only RGB scale.
++//
++// THIRD-PARTY NOTICE:
++//   FSR RCAS algorithm: Copyright (c) 2021 Advanced Micro Devices, Inc. (MIT)
++//   Anime4K techniques: Copyright (c) 2019-2021 bloc97 (MIT)
++//   Anime4K-Ultra compilation: Copyright (c) 2026 Th-Underscore (MIT)
+ void pass_sample_unsharp(struct gl_shader_cache *sc, float param) {
++    if (param == 0.0f) {
++        GLSLF("{\n");
++        GLSL(color = HOOKED_tex(HOOKED_pos);)
++        GLSLF("}\n");
++        return;
++    }
++    if (param < 0.0f) {
++        GLSLF("{\n");
++        GLSL(float st1 = 1.2;)
++        GLSL(vec4 p = HOOKED_tex(HOOKED_pos);)
++        GLSL(vec4 sum1 = HOOKED_texOff(st1 * vec2(+1, +1))
++                       + HOOKED_texOff(st1 * vec2(+1, -1))
++                       + HOOKED_texOff(st1 * vec2(-1, +1))
++                       + HOOKED_texOff(st1 * vec2(-1, -1));)
++        GLSL(float st2 = 1.5;)
++        GLSL(vec4 sum2 = HOOKED_texOff(st2 * vec2(+1,  0))
++                       + HOOKED_texOff(st2 * vec2( 0, +1))
++                       + HOOKED_texOff(st2 * vec2(-1,  0))
++                       + HOOKED_texOff(st2 * vec2( 0, -1));)
++        GLSL(vec4 t = p * 0.859375 + sum2 * -0.1171875 + sum1 * -0.09765625;)
++        GLSLF("color = p + t * %f;\n", param);
++        GLSLF("}\n");
++        return;
++    }
++
++    float p = MPCLAMP(param, 0.0f, 5.0f);
+     GLSLF("{\n");
+-    GLSL(float st1 = 1.2;)
+-    GLSL(vec4 p = HOOKED_tex(HOOKED_pos);)
+-    GLSL(vec4 sum1 = HOOKED_texOff(st1 * vec2(+1, +1))
+-                   + HOOKED_texOff(st1 * vec2(+1, -1))
+-                   + HOOKED_texOff(st1 * vec2(-1, +1))
+-                   + HOOKED_texOff(st1 * vec2(-1, -1));)
+-    GLSL(float st2 = 1.5;)
+-    GLSL(vec4 sum2 = HOOKED_texOff(st2 * vec2(+1,  0))
+-                   + HOOKED_texOff(st2 * vec2( 0, +1))
+-                   + HOOKED_texOff(st2 * vec2(-1,  0))
+-                   + HOOKED_texOff(st2 * vec2( 0, -1));)
+-    GLSL(vec4 t = p * 0.859375 + sum2 * -0.1171875 + sum1 * -0.09765625;)
+-    GLSLF("color = p + t * %f;\n", param);
++
++    // -- Step 1: 9-tap 3x3 grid -- full RGB (mediump) + luma (highp) ------
++    GLSL(mediump vec4 base = HOOKED_tex(HOOKED_pos);)
++    GLSL(mediump vec4 tc   = HOOKED_texOff(vec2( 0.0, -1.0));)  // cardinal top
++    GLSL(mediump vec4 ml   = HOOKED_texOff(vec2(-1.0,  0.0));)  // cardinal left
++    GLSL(mediump vec4 mr   = HOOKED_texOff(vec2( 1.0,  0.0));)  // cardinal right
++    GLSL(mediump vec4 bc   = HOOKED_texOff(vec2( 0.0,  1.0));)  // cardinal bottom
++    GLSL(mediump vec4 tl   = HOOKED_texOff(vec2(-1.0, -1.0));)  // diagonal top-left
++    GLSL(mediump vec4 tr   = HOOKED_texOff(vec2( 1.0, -1.0));)  // diagonal top-right
++    GLSL(mediump vec4 bl   = HOOKED_texOff(vec2(-1.0,  1.0));)  // diagonal bot-left
++    GLSL(mediump vec4 br   = HOOKED_texOff(vec2( 1.0,  1.0));)  // diagonal bot-right
++
++    // Rec.601 luma (highp) for all 9 taps.
++    GLSL(const highp vec3 luma_coeff = vec3(0.299, 0.587, 0.114);)
++    GLSL(highp float e  = dot(base.rgb, luma_coeff);)  // center
++    GLSL(highp float b  = dot(tc.rgb,   luma_coeff);)  // top
++    GLSL(highp float d  = dot(ml.rgb,   luma_coeff);)  // left
++    GLSL(highp float f  = dot(mr.rgb,   luma_coeff);)  // right
++    GLSL(highp float h  = dot(bc.rgb,   luma_coeff);)  // bottom
++    GLSL(highp float g1 = dot(tl.rgb,   luma_coeff);)  // top-left
++    GLSL(highp float g2 = dot(tr.rgb,   luma_coeff);)  // top-right
++    GLSL(highp float g3 = dot(bl.rgb,   luma_coeff);)  // bot-left
++    GLSL(highp float g4 = dot(br.rgb,   luma_coeff);)  // bot-right
++
++    // -- Step 2: FSR RCAS adaptive lobe -- extended to 8-neighbor ----------
++    GLSL(highp float mn_c = min(min(b, d), min(f, h));)
++    GLSL(highp float mx_c = max(max(b, d), max(f, h));)
++    GLSL(highp float mn_d = min(min(g1, g2), min(g3, g4));)
++    GLSL(highp float mx_d = max(max(g1, g2), max(g3, g4));)
++    GLSL(highp float mn1  = min(mn_c, mn_d);)
++    GLSL(highp float mx1  = max(mx_c, mx_d);)
++
++    // RCAS limiter math uses cardinal-only. Denominator corrected to 6.0 for 9-tap.
++    GLSL(highp float hitMinL = min(mn1, e) / (6.0 * mx1 + 1e-5);)
++    GLSL(highp float hitMaxL = (1.0 - max(mx1, e)) / (6.0 * mn1 - 6.0 + 1e-5);)
++    GLSL(highp float lobeL   = max(-hitMinL, hitMaxL);)
++
++    // Safe RCAS limit for 6.0 total weight clamped to -0.125 to cap contrast amp to 4x.
++    GLSLF("highp float lobe = max(-0.125, min(lobeL, 0.0)) * %f;\n",
++          (double)MPCLAMP(p * 0.2f, 0.0f, 1.0f));
++
++    // -- Step 3: Noise suppression -- 8-neighbor average -------------------
++    GLSL(highp float avg8 = (b + d + f + h + g1 + g2 + g3 + g4) * 0.125;)
++    GLSL(highp float nz = avg8 - e;)
++    GLSL(highp float nz_range = mx1 - mn1;)
++    GLSL(nz = clamp(abs(nz) / (nz_range + 1e-5), 0.0, 1.0);)
++    GLSL(nz = -0.5 * nz + 1.0;)
++    GLSL(lobe *= nz;)
++
++    // -- Step 4: RCAS color resolve -- weighted 8-neighbor -----------------
++    GLSL(mediump float rcpL = float(1.0 / (6.0 * lobe + 1.0));)
++    GLSL(mediump vec3 card_sum = tc.rgb + ml.rgb + mr.rgb + bc.rgb;)
++    GLSL(mediump vec3 diag_sum = tl.rgb + tr.rgb + bl.rgb + br.rgb;)
++    GLSL(color.rgb = clamp(
++        (float(lobe) * (card_sum + 0.5 * diag_sum) + base.rgb) * rcpL,
++        0.0, 1.0);)
++
++    // -- Step 4.5: Luma-Sharp inline USM (zero extra texture reads) ---------
++    // Mirrors Anime4K_Thin_AA_Deblur-Heavy.glsl "Luma-Sharp" pass:
++    //   sharp_luma = luma_rcas + (e - blur9) * USM_STRENGTH
++    // Box-blur uses the 9 pre-RCAS luma taps already in registers.
++    // USM_STRENGTH scales 0.0->1.5 as param goes 0->5 (LUMA_SHARP_AMOUNT 1.5).
++    // Applied luma-only via uniform RGB scale to preserve chroma.
++    GLSL(highp float blur9 = (b + d + f + h + g1 + g2 + g3 + g4 + e) * (1.0/9.0);)
++    GLSL(highp float usm_detail = e - blur9;)
++    GLSLF("mediump float usm_str = %f;\n", (double)(p * 0.3f));
++    GLSL(mediump float rcas_luma = dot(color.rgb, vec3(0.299, 0.587, 0.114));)
++    GLSL(mediump float sharp_luma = clamp(rcas_luma + float(usm_detail) * usm_str, 0.0, 1.0);)
++    GLSL(color.rgb = (rcas_luma > 1e-3) ? clamp(color.rgb * (sharp_luma / rcas_luma), 0.0, 1.0) : color.rgb;)
++
++    // -- Step 5: Valley Darken -- 8-neighbor ink valley detection -----------
++    GLSL(mediump float mid_luma = float((mn1 + mx1) * 0.5);)
++    GLSL(mediump float valley   = clamp(
++             (mid_luma - float(e)) * 8.0 / max(float(mx1), 0.1),
++             0.0, 1.0);)
++    GLSL(mediump float luma_gate = 1.0 - smoothstep(0.08, 0.88, float(e));)
++    GLSLF("mediump float delta = min(%f * valley * float(e) * luma_gate,"
++          " float(e) * 0.35);\n", (double)(p * 0.12f));
++    GLSL(color.rgb *= clamp((float(e) - delta) / max(float(e), 1e-5), 0.0, 1.0);)
++    GLSL(color.a = base.a;)
++
+     GLSLF("}\n");
+ }
+diff --git a/video/out/vo_gpu_next.c b/video/out/vo_gpu_next.c
+index 4ed76a61dd..cb5d278352 100644
+--- a/video/out/vo_gpu_next.c
++++ b/video/out/vo_gpu_next.c
+@@ -159,6 +159,10 @@ struct priv {
+     const struct pl_hook **hooks; // storage for `params.hooks`
+     enum pl_color_levels output_levels;
+ 
++    // Cached sharpen hook for gpu-next (mirrors vo=gpu pass_sample_unsharp)
++    const struct pl_hook *sharpen_hook;
++    float last_sharpen_param;
++
+     struct pl_icc_params icc_params;
+     char *icc_path;
+     pl_icc_object icc_profile;
+@@ -2646,6 +2650,7 @@ static void uninit(struct vo *vo)
+         pl_tex_destroy(p->gpu, &p->sub_tex[i]);
+     for (int i = 0; i < p->num_user_hooks; i++)
+         pl_mpv_user_shader_destroy(&p->user_hooks[i].hook);
++    pl_mpv_user_shader_destroy(&p->sharpen_hook);
+ 
+     timer_pool_destroy(p->sw_upload_timer);
+ 
+@@ -3154,6 +3159,123 @@ AV_NOWARN_DEPRECATED(
+     update_icc_opts(p, opts->icc_opts);
+ 
+     pars->params.num_hooks = 0;
++
++    // ── gpu-next sharpen: mirror vo=gpu pass_sample_unsharp via GLSL hook ──
++    // Rebuilds only when the parameter changes to avoid unnecessary recompiles.
++    const struct gl_video_opts *gl_opts = p->opts_cache->opts;
++    float sp = gl_opts->unsharp;
++    if (sp != p->last_sharpen_param) {
++        pl_mpv_user_shader_destroy(&p->sharpen_hook);
++        p->last_sharpen_param = sp;
++        if (sp != 0.0f) {
++            // Build an mpv-format GLSL hook string implementing the 9-tap
++            // RCAS + Luma-Sharp USM + Valley Darken algorithm (same as the
++            // pass_sample_unsharp patch in video_shaders.c).
++            //
++            // For negative values: classic USM (matches the negative-branch
++            // in pass_sample_unsharp). For positive [0,5]: full Anime4K RCAS.
++            char shader[8192];
++            if (sp < 0.0f) {
++                // Classic USM unsharp mask (negative range).
++                snprintf(shader, sizeof(shader),
++                    "//!HOOK OUTPUT\n"
++                    "//!BIND HOOKED\n"
++                    "//!DESC sharpen (classic USM, param=%.4f)\n"
++                    "vec4 hook() {\n"
++                    "    float st1 = 1.2;\n"
++                    "    vec4 p = HOOKED_tex(HOOKED_pos);\n"
++                    "    vec4 sum1 = HOOKED_texOff(st1 * vec2(+1, +1))\n"
++                    "              + HOOKED_texOff(st1 * vec2(+1, -1))\n"
++                    "              + HOOKED_texOff(st1 * vec2(-1, +1))\n"
++                    "              + HOOKED_texOff(st1 * vec2(-1, -1));\n"
++                    "    float st2 = 1.5;\n"
++                    "    vec4 sum2 = HOOKED_texOff(st2 * vec2(+1,  0))\n"
++                    "              + HOOKED_texOff(st2 * vec2( 0, +1))\n"
++                    "              + HOOKED_texOff(st2 * vec2(-1,  0))\n"
++                    "              + HOOKED_texOff(st2 * vec2( 0, -1));\n"
++                    "    vec4 t = p * 0.859375 + sum2 * -0.1171875 + sum1 * -0.09765625;\n"
++                    "    return p + t * %.6f;\n"
++                    "}\n",
++                    (double)sp, (double)sp);
++            } else {
++                // Positive range [0,5]: 9-tap FSR RCAS + Luma-Sharp USM +
++                // Valley Darken (Anime4K-Ultra-inspired, same as gpu patch).
++                float p_clamped = MPCLAMP(sp, 0.0f, 5.0f);
++                float lobe_scale = MPCLAMP(p_clamped * 0.2f, 0.0f, 1.0f);
++                float usm_str   = p_clamped * 0.3f;
++                float dk_str    = p_clamped * 0.12f;
++                snprintf(shader, sizeof(shader),
++                    "//!HOOK OUTPUT\n"
++                    "//!BIND HOOKED\n"
++                    "//!DESC sharpen (9-tap RCAS+USM+VD, param=%.4f)\n"
++                    "vec4 hook() {\n"
++                    "    mediump vec4 base = HOOKED_tex(HOOKED_pos);\n"
++                    "    mediump vec4 tc   = HOOKED_texOff(vec2( 0.0, -1.0));\n"
++                    "    mediump vec4 ml   = HOOKED_texOff(vec2(-1.0,  0.0));\n"
++                    "    mediump vec4 mr   = HOOKED_texOff(vec2( 1.0,  0.0));\n"
++                    "    mediump vec4 bc   = HOOKED_texOff(vec2( 0.0,  1.0));\n"
++                    "    mediump vec4 tl   = HOOKED_texOff(vec2(-1.0, -1.0));\n"
++                    "    mediump vec4 tr   = HOOKED_texOff(vec2( 1.0, -1.0));\n"
++                    "    mediump vec4 bl   = HOOKED_texOff(vec2(-1.0,  1.0));\n"
++                    "    mediump vec4 br   = HOOKED_texOff(vec2( 1.0,  1.0));\n"
++                    "    const highp vec3 lc = vec3(0.299, 0.587, 0.114);\n"
++                    "    highp float e  = dot(base.rgb, lc);\n"
++                    "    highp float b  = dot(tc.rgb,   lc);\n"
++                    "    highp float d  = dot(ml.rgb,   lc);\n"
++                    "    highp float f  = dot(mr.rgb,   lc);\n"
++                    "    highp float h  = dot(bc.rgb,   lc);\n"
++                    "    highp float g1 = dot(tl.rgb,   lc);\n"
++                    "    highp float g2 = dot(tr.rgb,   lc);\n"
++                    "    highp float g3 = dot(bl.rgb,   lc);\n"
++                    "    highp float g4 = dot(br.rgb,   lc);\n"
++                    "    highp float mn_c = min(min(b,d),min(f,h));\n"
++                    "    highp float mx_c = max(max(b,d),max(f,h));\n"
++                    "    highp float mn_d = min(min(g1,g2),min(g3,g4));\n"
++                    "    highp float mx_d = max(max(g1,g2),max(g3,g4));\n"
++                    "    highp float mn1  = min(mn_c,mn_d);\n"
++                    "    highp float mx1  = max(mx_c,mx_d);\n"
++                    "    highp float hitMinL = min(mn1,e)/(6.0*mx1+1e-5);\n"
++                    "    highp float hitMaxL = (1.0-max(mx1,e))/(6.0*mn1-6.0+1e-5);\n"
++                    "    highp float lobeL   = max(-hitMinL,hitMaxL);\n"
++                    "    highp float lobe = max(-0.125, min(lobeL,0.0)) * %.6f;\n"
++                    "    highp float avg8 = (b+d+f+h+g1+g2+g3+g4)*0.125;\n"
++                    "    highp float nz = avg8 - e;\n"
++                    "    highp float nz_range = mx1 - mn1;\n"
++                    "    nz = clamp(abs(nz)/(nz_range+1e-5),0.0,1.0);\n"
++                    "    nz = -0.5*nz+1.0;\n"
++                    "    lobe *= nz;\n"
++                    "    mediump float rcpL = float(1.0/(6.0*lobe+1.0));\n"
++                    "    mediump vec3 card_sum = tc.rgb+ml.rgb+mr.rgb+bc.rgb;\n"
++                    "    mediump vec3 diag_sum = tl.rgb+tr.rgb+bl.rgb+br.rgb;\n"
++                    "    mediump vec4 color;\n"
++                    "    color.rgb = clamp((float(lobe)*(card_sum+0.5*diag_sum)+base.rgb)*rcpL,0.0,1.0);\n"
++                    "    highp float blur9 = (b+d+f+h+g1+g2+g3+g4+e)*(1.0/9.0);\n"
++                    "    highp float usm_detail = e - blur9;\n"
++                    "    mediump float usm_str = %.6f;\n"
++                    "    mediump float rcas_luma = dot(color.rgb, vec3(0.299,0.587,0.114));\n"
++                    "    mediump float sharp_luma = clamp(rcas_luma+float(usm_detail)*usm_str,0.0,1.0);\n"
++                    "    color.rgb = (rcas_luma>1e-3) ? clamp(color.rgb*(sharp_luma/rcas_luma),0.0,1.0) : color.rgb;\n"
++                    "    mediump float mid_luma = float((mn1+mx1)*0.5);\n"
++                    "    mediump float valley = clamp((mid_luma-float(e))*8.0/max(float(mx1),0.1),0.0,1.0);\n"
++                    "    mediump float luma_gate = 1.0-smoothstep(0.08,0.88,float(e));\n"
++                    "    mediump float delta = min(%.6f*valley*float(e)*luma_gate, float(e)*0.35);\n"
++                    "    color.rgb *= clamp((float(e)-delta)/max(float(e),1e-5),0.0,1.0);\n"
++                    "    color.a = base.a;\n"
++                    "    return color;\n"
++                    "}\n",
++                    (double)sp, (double)lobe_scale,
++                    (double)usm_str, (double)dk_str);
++            }
++            p->sharpen_hook = pl_mpv_user_shader_parse(
++                p->gpu, shader, strlen(shader));
++            if (!p->sharpen_hook)
++                MP_WARN(vo, "gpu-next: failed to compile sharpen hook\n");
++        }
++    }
++    if (p->sharpen_hook)
++        MP_TARRAY_APPEND(p, p->hooks, pars->params.num_hooks, p->sharpen_hook);
++    // ────────────────────────────────────────────────────────────────────────
++
+     const struct pl_hook *hook;
+     for (int i = 0; opts->user_shaders && opts->user_shaders[i]; i++) {
+         if ((hook = load_hook(p, opts->user_shaders[i]))) {

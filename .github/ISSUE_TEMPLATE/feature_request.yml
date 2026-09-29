@@ -1,0 +1,46 @@
+name: "💡 Feature Request"
+description: "Suggest a new feature, UI improvement, or playback enhancement"
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting an improvement! Please describe the request clearly.
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: "Feature Summary"
+      description: "What feature or enhancement would you like to see?"
+      placeholder: "Support loading custom font files for ASS subtitle rendering..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: "Motivation & Problem"
+      description: "Why is this feature needed? What problem does it solve?"
+      placeholder: "When playing anime MKV files with embedded ASS subtitles, missing custom fonts leads to fallback font rendering issues..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: "Proposed Solution"
+      description: "How would you like this feature to work or be designed?"
+      placeholder: "Add a 'Custom Subtitle Font Folder' setting option that automatically loads .ttf / .otf fonts from a designated folder..."
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "Alternatives Considered"
+      description: "Any alternative solutions or features you've considered?"
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: "Additional Context / Design References"
+      description: "Attach screenshots, mockups, or reference links from other players (e.g. mpv/vlc/potplayer)."

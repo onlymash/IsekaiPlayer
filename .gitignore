@@ -1,0 +1,17 @@
+*.iml
+.gradle
+/local.properties
+/.idea/*
+!/.idea/dictionaries/
+!/.idea/copyright/
+!/.idea/vcs.xml
+/.artifacts
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+/.kotlin
+# Native build environment
+cross_file.txt

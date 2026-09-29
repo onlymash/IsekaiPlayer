@@ -1,0 +1,707 @@
+<!--
+  ~ IsekaiPlayer - Sovereign above myriad realms; shatter every mortal cipher.
+  ~ Copyright (C) 2026 onlymash
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="app_name">Isekai Player</string>
+    <string name="app_slogan_short">Sovereign above myriad realms; shatter every mortal cipher.</string>
+
+    <string name="settings_category_appearance">Appearance</string>
+    <string name="settings_category_appearance_summary">Customize theme, dark mode, and high contrast settings</string>
+    <string name="settings_category_player">Player</string>
+    <string name="settings_category_player_summary">Configure playback behavior, UI layout, and button effects</string>
+    <string name="settings_category_gestures">Gestures</string>
+    <string name="settings_category_gestures_summary">Manage swipe and tap actions for seeking, volume, and brightness</string>
+    <string name="settings_category_decoder">Decoder</string>
+    <string name="settings_category_decoder_summary">Adjust hardware acceleration, video output, and scaling algorithms</string>
+    <string name="settings_category_audio">Audio</string>
+    <string name="settings_category_audio_summary">Manage audio tracks, output priority, and night mode normalization</string>
+    <string name="settings_category_subtitle">Subtitle</string>
+    <string name="settings_category_subtitle_summary">Customize subtitle language, appearance, and encoding</string>
+    <string name="settings_category_advanced">Advanced</string>
+    <string name="settings_category_advanced_summary">Configure buffer sizes, forward and backward caching, network connections, and security</string>
+    <string name="settings_category_general">General</string>
+    <string name="settings_category_general_summary">Change app language, haptic feedback, and navigation</string>
+    <string name="settings_category_about">About</string>
+    <string name="settings_category_about_summary">View app version, open source licenses, and social links</string>
+
+    <string name="settings_appearance_header_theme">Theme</string>
+
+    <string name="settings_appearance_theme_mode">Theme mode</string>
+    <string name="settings_appearance_theme_mode_system">System</string>
+    <string name="settings_appearance_theme_mode_light">Light</string>
+    <string name="settings_appearance_theme_mode_dark">Dark</string>
+    <string name="settings_appearance_theme_high_contrast">High contrast dark theme</string>
+    <string name="settings_appearance_theme_high_contrast_summary">Deepen the dark theme for higher contrast</string>
+
+    <string name="settings_general_header_general">General</string>
+    <string name="settings_general_app_language">App language</string>
+    <string name="settings_general_app_language_summary">Change the language of the app</string>
+    <string name="settings_general_header_navigation">Navigation</string>
+
+    <string name="settings_general_haptics">Haptics feedback</string>
+    <string name="settings_general_haptics_summary">Enable touch feedback</string>
+    <string name="settings_general_intercept_back">Back button navigation</string>
+    <string name="settings_general_intercept_back_summary">When enabled, back gesture navigates up the directory tree before exiting</string>
+
+    <!-- Backup & Restore -->
+    <string name="settings_general_header_backup">Backup &amp; Restore</string>
+    <string name="settings_general_export_settings">Export settings backup</string>
+    <string name="settings_general_export_settings_summary">Save all current settings into a JSON backup file</string>
+    <string name="settings_general_import_settings">Import settings backup</string>
+    <string name="settings_general_import_settings_summary">Restore settings from a JSON backup file</string>
+    <string name="settings_backup_export_success">Settings exported successfully</string>
+    <string name="settings_backup_export_failed">Failed to export settings</string>
+    <string name="settings_backup_import_success">Settings restored successfully</string>
+    <string name="settings_backup_import_failed">Failed to import settings. Please check the backup file format</string>
+
+    <string name="settings_gestures_header_drag">Sliding controls</string>
+    <string name="settings_gestures_header_tap">Tapping controls</string>
+    <string name="settings_gestures_horizontal_drag">Seeking</string>
+    <string name="settings_gestures_horizontal_drag_summary">Enable horizontal swipe to seek</string>
+    <string name="settings_gestures_vertical_drag_volume">Volume</string>
+    <string name="settings_gestures_vertical_drag_volume_summary">Enable vertical swipe on left side to adjust volume</string>
+    <string name="settings_gestures_vertical_drag_brightness">Brightness</string>
+    <string name="settings_gestures_vertical_drag_brightness_summary">Enable vertical swipe on right side to adjust brightness</string>
+    <string name="settings_gestures_double_tap_seek">Double tap to seek</string>
+    <string name="settings_gestures_double_tap_seek_summary">Enable double tap on sides to seek forward or backward</string>
+    <string name="settings_gestures_double_tap_play_pause">Double tap to play/pause</string>
+    <string name="settings_gestures_double_tap_play_pause_summary">Enable double tap on center to play or pause playback</string>
+    <string name="settings_gestures_long_press">Long press</string>
+    <string name="settings_gestures_long_press_summary">Enable long press to fast forward</string>
+    <string name="settings_gestures_long_press_speed">Fast forward speed</string>
+    <string name="settings_gestures_long_press_speed_summary">Adjust the speed when long pressing</string>
+    <string name="settings_gestures_double_tap_seek_duration">Double tap seek duration</string>
+    <string name="settings_gestures_double_tap_seek_duration_summary">Adjust the time jumped when double tapping: %d seconds</string>
+
+    <string name="browser_view_options_title">View Options</string>
+    <string name="browser_view_options_sort_by">Sort by</string>
+    <string name="browser_view_options_sort_type_name">Name</string>
+    <string name="browser_view_options_sort_type_date">Date</string>
+    <string name="browser_view_options_sort_type_size">Size</string>
+    <string name="browser_view_options_sort_type_duration">Duration</string>
+    <string name="browser_view_options_order">Order</string>
+    <string name="browser_view_options_order_ascending">Ascending</string>
+    <string name="browser_view_options_order_descending">Descending</string>
+    <string name="browser_view_options_folders_first">Folders First</string>
+    <string name="browser_view_options_show_hidden">Show hidden files</string>
+    <string name="browser_view_options_show_subtitles">Show subtitles</string>
+    <string name="browser_view_options_filters">Filters</string>
+    <string name="browser_view_options_fields">Fields</string>
+    <string name="browser_view_options_field_thumbnail">Thumbnail</string>
+    <string name="browser_view_options_field_item_count">Item count</string>
+    <string name="browser_view_options_field_size">Size</string>
+    <string name="browser_view_options_field_duration">Duration</string>
+    <string name="browser_view_options_field_resolution">Resolution</string>
+    <string name="browser_view_options_field_date">Date</string>
+    <string name="browser_view_options_field_extension">Extension</string>
+
+    <string name="browser_view_options_order_name_asc">A-Z</string>
+    <string name="browser_view_options_order_name_desc">Z-A</string>
+    <string name="browser_view_options_order_date_asc">Old-New</string>
+    <string name="browser_view_options_order_date_desc">New-Old</string>
+    <string name="browser_view_options_order_size_asc">Small-Large</string>
+    <string name="browser_view_options_order_size_desc">Large-Small</string>
+    <string name="browser_view_options_order_duration_asc">Short-Long</string>
+    <string name="browser_view_options_order_duration_desc">Long-Short</string>
+    <string name="browser_view_options_done">Done</string>
+
+    <string name="source_editor_title_add">Add Source</string>
+    <string name="source_editor_title_edit">Edit Source</string>
+    <string name="source_editor_save">Save</string>
+    <string name="source_editor_label_name">Display name</string>
+    <string name="source_editor_label_protocol">Protocol</string>
+    <string name="source_editor_label_host">Host / IP</string>
+    <string name="source_editor_label_port">Port (Optional)</string>
+    <string name="source_editor_label_path_default">Initial path</string>
+    <string name="source_editor_label_path_smb">Share Name</string>
+    <string name="source_editor_label_https">Use HTTPS</string>
+    <string name="source_editor_label_username">Username (Optional)</string>
+    <string name="source_editor_label_password">Password (Optional)</string>
+    <string name="source_editor_error_required">Name and Host are required</string>
+    <string name="source_editor_error_smb_share_required">Share Name is required for SMB</string>
+
+    <!-- Common Strings -->
+    <string name="common_close">Close</string>
+    <string name="common_more">More</string>
+    <string name="common_expand">Expand</string>
+    <string name="common_collapse">Collapse</string>
+    <string name="common_edit">Edit</string>
+    <string name="common_delete">Delete</string>
+    <string name="common_back">Back</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_retry">Retry</string>
+    <string name="common_refresh">Refresh</string>
+    <string name="common_settings">Settings</string>
+    <string name="common_replay">Replay</string>
+    <string name="common_move_up">Move up</string>
+    <string name="common_move_down">Move down</string>
+    <string name="common_none">None</string>
+    <string name="common_all">All</string>
+    <string name="common_reset">Reset</string>
+    <string name="common_on">On</string>
+    <string name="common_off">Off</string>
+    <string name="common_preview">Preview</string>
+
+    <!-- Browser Screen -->
+    <string name="browser_menu_sources">Sources</string>
+    <string name="browser_menu_sort">Sort</string>
+    <string name="browser_menu_search">Search</string>
+    <string name="browser_permission_grant">Grant Storage Permission</string>
+    <string name="browser_permission_required">Storage permission is required to browse local media files</string>
+    <string name="browser_media_list_empty">No videos found</string>
+    <string name="browser_search_placeholder_collapsed">Search</string>
+    <string name="browser_search_placeholder_expanded">Search within current folder</string>
+    <string name="browser_search_prompt">Enter keywords to search</string>
+    <string name="browser_media_items_count">%1$d items</string>
+    <string name="browser_subtitle_no_matching_video">No matching video file found</string>
+    <string name="browser_fab_menu_add_source">Add remote source</string>
+    <string name="browser_fab_menu_play_network_stream">Play network link</string>
+    <string name="browser_fab_toggle_menu_content_description">Toggle menu</string>
+    <string name="browser_fab_toggle_menu_expanded_description">Expanded</string>
+    <string name="browser_fab_toggle_menu_collapsed_description">Collapsed</string>
+    <string name="browser_fab_toggle_menu_close_action_label">Close menu</string>
+
+    <string name="network_stream_title">Network Stream</string>
+    <string name="network_stream_input_label">Stream URL</string>
+    <string name="network_stream_input_placeholder">Enter URL (http://, https://, etc.)</string>
+    <string name="network_stream_play_button">Play</string>
+    <string name="network_stream_history_title">Stream History</string>
+    <string name="network_stream_history_empty">No stream history yet</string>
+    <string name="network_stream_clear_history">Clear History</string>
+    <string name="network_stream_invalid_url">Please enter a valid URL</string>
+    <string name="network_stream_copy_link">Copy link</string>
+    <string name="network_stream_link_copied">Link copied to clipboard</string>
+    <string name="network_stream_delete_single_dialog_title">Delete Record</string>
+    <string name="network_stream_delete_single_dialog_message">Are you sure you want to delete this playback record?</string>
+    <string name="network_stream_clear_all_dialog_title">Clear All Records</string>
+    <string name="network_stream_clear_all_dialog_message">Are you sure you want to clear all network stream records? This action cannot be undone.</string>
+
+    <!-- Source -->
+    <string name="source_selection_devices_list_title">Storage Devices</string>
+    <string name="source_selection_manage">Manage Sources</string>
+    <string name="source_storage_usage">%1$s available, %2$s total</string>
+    <string name="source_local_internal_desc">Local device files</string>
+    <string name="source_local_external_desc">External Storage</string>
+    <string name="source_remote_header">Remote Sources</string>
+    <string name="source_internal_storage_name">Internal Storage</string>
+    <string name="source_manager_title">Manage Sources</string>
+    <string name="source_manager_empty">No remote sources added</string>
+    <string name="source_manager_add">Add remote source</string>
+    <string name="source_manager_delete_title">Delete Source</string>
+    <string name="source_manager_delete_message">Are you sure you want to delete \"%1$s\"? This action cannot be undone.</string>
+
+    <!-- Drawer Categories & History & Playlist -->
+    <string name="drawer_library_section_title">Library</string>
+    <string name="playlist_title">Playlists</string>
+    <string name="playlist_subtitle">Custom media collections</string>
+    <string name="playlist_create_dialog_title">New Playlist</string>
+    <string name="playlist_create_dialog_placeholder">Playlist title</string>
+    <string name="playlist_create_option_blank">Create a blank playlist</string>
+    <string name="playlist_create_option_m3u_link">Add M3U playlist via link</string>
+    <string name="playlist_create_option_m3u_file">Add M3U playlist via M3U file</string>
+    <string name="playlist_create_title_blank">New Playlist</string>
+    <string name="playlist_create_title_m3u_link">Import M3U Playlist via Link</string>
+    <string name="playlist_create_title_m3u_file">Import M3U Playlist via File</string>
+    <string name="playlist_create_m3u_url_placeholder">Link URL (http://, https://&#8230;)</string>
+    <string name="playlist_create_m3u_file_select">Select M3U File</string>
+    <string name="playlist_create_m3u_file_selected">Selected file: %s</string>
+    <string name="playlist_create_import_button">Import</string>
+    <string name="playlist_create_next_button">Next</string>
+    <string name="playlist_create_previous_button">Previous</string>
+    <string name="playlist_import_error_invalid_url">Please enter a valid HTTP or HTTPS link</string>
+    <string name="playlist_import_error_network">Failed to fetch playlist. Please check network or URL</string>
+    <string name="playlist_import_error_parse">Failed to parse M3U content. Please check file format</string>
+    <string name="playlist_import_error_title_empty">Playlist title cannot be empty</string>
+    <string name="playlist_type_m3u_link">M3U Link</string>
+    <string name="playlist_type_m3u_file">M3U File</string>
+    <string name="playlist_move_up">Move Up</string>
+    <string name="playlist_move_down">Move Down</string>
+    <string name="playlist_rename_dialog_title">Rename Playlist</string>
+    <string name="playlist_empty">No playlists created yet</string>
+    <string name="playlist_items_empty">No videos in this playlist</string>
+    <string name="playlist_play_all">Play All</string>
+    <string name="playlist_item_count">%d items</string>
+    <string name="playlist_delete_dialog_title">Delete Playlist</string>
+    <string name="playlist_delete_dialog_message">Are you sure you want to delete \"%s\"?</string>
+    <string name="playback_history_title">Playback History</string>
+    <string name="playback_history_subtitle">Watch progress &amp; history</string>
+    <string name="playback_history_search_placeholder_expanded">Search playback history</string>
+    <string name="playlist_search_placeholder_expanded">Search videos in playlist</string>
+    <string name="playback_history_empty">No playback history yet</string>
+    <string name="playback_history_clear_all">Clear History</string>
+    <string name="playback_history_clear_dialog_title">Clear Playback History</string>
+    <string name="playback_history_clear_dialog_message">Are you sure you want to clear all video playback history records? This action cannot be undone.</string>
+    <string name="playback_history_delete_dialog_title">Delete History Record</string>
+    <string name="playback_history_delete_dialog_message">Are you sure you want to delete this playback history record?</string>
+
+    <!-- Multi-Selection & Action Toolbar -->
+    <string name="browser_selection_count">%d selected</string>
+    <string name="browser_selection_select_all">Select All</string>
+    <string name="browser_selection_deselect_all">Invert Selection</string>
+    <string name="browser_selection_exit">Exit selection mode</string>
+    <string name="playlist_add_to">Add to Playlist</string>
+    <string name="playlist_select_target_title">Add to Playlist</string>
+    <string name="playlist_added_toast">Added %1$d item(s) to \"%2$s\"</string>
+    <string name="playlist_readonly">Read-only</string>
+
+    <!-- Player Quick Controls -->
+    <string name="player_control_brightness">Brightness</string>
+    <string name="player_control_system_volume">System volume</string>
+    <string name="player_control_player_volume">Player volume</string>
+    <string name="player_control_rewind">Rewind %d seconds</string>
+    <string name="player_control_forward">Forward %d seconds</string>
+    <string name="player_control_previous">Previous</string>
+    <string name="player_control_next">Next</string>
+    <string name="player_control_play_pause">Play/Pause</string>
+    <string name="player_control_play">Play</string>
+    <string name="player_control_pause">Pause</string>
+    <string name="player_control_playback_speed">Playback speed</string>
+    <string name="player_control_adjust_temporary">Temporary adjustment</string>
+    <string name="player_audio_delay">Audio delay</string>
+    <string name="player_subtitle_delay">Subtitle delay</string>
+    <string name="settings_player_playback_speed_summary">Adjust the default playback speed for all videos</string>
+    <string name="player_control_screenshot">Screenshot</string>
+    <string name="player_control_frame_step_forward">Next frame</string>
+    <string name="player_control_frame_step_backward">Previous frame</string>
+    <string name="player_control_lock">Lock controls</string>
+    <string name="player_control_unlock">Unlock controls</string>
+    <string name="player_control_enter_pip">Enter PiP</string>
+    <string name="player_control_osd">OSD</string>
+    <string name="player_osd_none">Off</string>
+    <string name="player_osd_stats_general">General Stats (P1)</string>
+    <string name="player_osd_stats_timings">Frame Timings (P2)</string>
+    <string name="player_osd_stats_cache">Input/Cache Stats (P3)</string>
+    <string name="player_osd_stats_key_bindings">Active Key Bindings (P4)</string>
+    <string name="player_osd_stats_tracks">Selected Tracks Info (P5)</string>
+    <string name="player_status_seek_forward">+%ds</string>
+    <string name="player_status_seek_backward">-%ds</string>
+    <string name="player_status_fast_forwarding">%1$.1fX Forwarding</string>
+    <string name="player_settings_player">Player settings</string>
+    <string name="player_settings_decoder">Decoder settings</string>
+    <string name="player_settings_audio">Audio settings</string>
+    <string name="player_settings_subtitle">Subtitle settings</string>
+    <string name="player_settings_gestures">Gestures settings</string>
+    <string name="player_settings_advanced">Advanced settings</string>
+
+    <!-- Player Tracks Drawer -->
+    <string name="player_drawer_tracks_title">Tracks</string>
+    <string name="player_drawer_playlist_title">Playlist</string>
+    <string name="player_drawer_audio_tracks">Audio</string>
+    <string name="player_drawer_subtitle_tracks">Subtitles</string>
+    <string name="player_add_external_subtitle">Add external subtitle</string>
+    <string name="player_error_unsupported_subtitle">Unsupported subtitle format</string>
+    <string name="player_error_load_failed">Failed to load media. Please check network or server host</string>
+    <string name="player_drawer_video_tracks">Video</string>
+    <string name="player_drawer_tracks_button">Track selection</string>
+    <string name="player_drawer_playlist_button">Playlist</string>
+
+    <!-- Player Settings -->
+    <string name="settings_search_empty">No settings found</string>
+    <string name="settings_player_header_controls">Controls</string>
+    <string name="settings_player_seek_duration">Seek duration</string>
+    <string name="settings_player_seek_duration_summary">Adjust the time jumped when using seek buttons: %d seconds</string>
+    <string name="settings_player_auto_hide_duration">Auto-hide controls timeout</string>
+    <string name="settings_player_auto_hide_duration_summary">Hide controls after %1$d seconds of inactivity</string>
+    <string name="settings_player_enable_pip">Picture-in-Picture</string>
+    <string name="settings_player_enable_pip_summary">Enable PiP mode when leaving the player while playing</string>
+    <string name="settings_player_screenshot_format">Screenshot format</string>
+    <string name="settings_player_screenshot_format_jpg">JPEG (.jpg)</string>
+    <string name="settings_player_screenshot_format_png">PNG (.png)</string>
+    <string name="settings_player_screenshot_format_webp">WebP (.webp)</string>
+
+    <string name="settings_player_header_ui">Interface</string>
+    <string name="settings_player_always_full_screen">Always full screen</string>
+    <string name="settings_player_always_full_screen_summary">Hide system bars even when playback controls are visible</string>
+
+    <string name="settings_player_layout">Player layout</string>
+    <string name="settings_player_layout_summary">Customize action buttons in the corners</string>
+    <string name="settings_player_layout_show_title_bar">Show title bar</string>
+    <string name="settings_player_layout_all_buttons">All buttons</string>
+
+    <string name="settings_player_scale_mode">Scale mode</string>
+    <string name="settings_player_scale_mode_fit">Fit to screen</string>
+    <string name="settings_player_scale_mode_fill">Fill screen</string>
+    <string name="settings_player_scale_mode_original">Original size</string>
+
+    <string name="settings_player_button_effects">Button effects</string>
+    <string name="settings_player_button_effects_summary">Customize the appearance and interactive animations of player buttons</string>
+    <string name="settings_player_button_effects_blur">Blur effect</string>
+    <string name="settings_player_button_effects_blur_summary">Enable frosted glass blur effect</string>
+    <string name="settings_player_button_effects_lens">Lens effect</string>
+    <string name="settings_player_button_effects_lens_summary">Enable edge distortion lens effect</string>
+    <string name="settings_player_button_effects_alpha">Opacity</string>
+    <string name="settings_player_button_effects_alpha_summary">Adjust the transparency of the button</string>
+    <string name="settings_player_button_effects_show_border">Show border</string>
+    <string name="settings_player_button_effects_show_border_summary">Show stroke highlight border on buttons</string>
+    <string name="settings_player_button_effects_border_style">Highlight style</string>
+    <string name="settings_player_button_effects_border_style_directional">Directional</string>
+    <string name="settings_player_button_effects_border_style_ambient">Ambient</string>
+    <string name="settings_player_button_effects_border_style_plain">Plain</string>
+    <string name="settings_player_button_effects_use_texture_view">Use TextureView container</string>
+    <string name="settings_player_button_effects_use_texture_view_summary">Use TextureView for video rendering to achieve zero-latency blur and lens effects</string>
+    <string name="settings_player_button_effects_note" formatted="false">Container options &amp; Trade-offs\n• SurfaceView + PixelCopy (Default)\nVideo runs in hardware composer mode (HWC) for maximum power efficiency and zero battery burden. However, background capture for liquid glass has minor frame delay.\n• TextureView\nEnables zero-latency real-time liquid glass blur/refraction, but increases GPU load during video playback.\n• ExoPlayer engine note\nExoPlayer\'s SurfaceView relies on layout constraints for scaling and aspect ratio control, preventing PixelCopy from capturing correct pixel coordinates for real-time blur and lens distortion. Therefore, under ExoPlayer, blur and lens distortion effects are disabled unless TextureView is enabled.</string>
+    <string name="settings_player_seek_bar_style">SeekBar style</string>
+    <string name="settings_player_seek_bar_style_wavy">Wavy</string>
+    <string name="settings_player_seek_bar_style_straight">Straight</string>
+
+    <string name="settings_player_resume_playback">Resume playback</string>
+    <string name="settings_player_resume_playback_summary">Automatically resume from the last saved position</string>
+
+    <string name="settings_player_loop_mode">Loop mode</string>
+    <string name="settings_player_loop_mode_none">None</string>
+    <string name="settings_player_loop_mode_current">Repeat current</string>
+    <string name="settings_player_loop_mode_sequential">Sequential</string>
+    <string name="settings_player_loop_mode_list">Repeat list</string>
+    <string name="settings_player_loop_mode_shuffle">Shuffle</string>
+    <string name="settings_player_loop_mode_shuffle_repeat">Shuffle loop</string>
+
+    <string name="settings_player_remember_brightness">Remember brightness</string>
+    <string name="settings_player_remember_brightness_summary">Use the brightness from the previous session</string>
+
+    <string name="settings_player_orientation">Screen orientation</string>
+    <string name="settings_player_orientation_default">System default</string>
+    <string name="settings_player_orientation_default_summary">Follow the system screen rotation setting</string>
+    <string name="settings_player_orientation_sensor">Sensor</string>
+    <string name="settings_player_orientation_sensor_summary">Always rotate based on device sensors</string>
+    <string name="settings_player_orientation_landscape">Landscape</string>
+    <string name="settings_player_orientation_landscape_summary">Lock to landscape mode (sensor-aware)</string>
+    <string name="settings_player_orientation_portrait">Portrait</string>
+    <string name="settings_player_orientation_portrait_summary">Lock to portrait mode (sensor-aware)</string>
+    <string name="settings_player_orientation_video">Match video</string>
+    <string name="settings_player_orientation_video_summary">Automatically switch based on video aspect ratio</string>
+
+    <string name="settings_audio_header_playback">Playback behavior</string>
+    <string name="settings_audio_header_exoplayer">ExoPlayer audio</string>
+    <string name="settings_audio_header_mpv">mpv Audio</string>
+    <string name="settings_audio_request_focus">Request audio focus</string>
+    <string name="settings_audio_request_focus_summary">Pause playback when other apps play audio</string>
+    <string name="settings_audio_enable_background_audio">Background audio</string>
+    <string name="settings_audio_enable_background_audio_summary">Continue playing audio when the app is in the background</string>
+    <string name="settings_audio_exo_volume">Player volume</string>
+    <string name="settings_audio_exo_volume_summary">Set ExoPlayer player volume (0–100%%)</string>
+    <string name="settings_audio_mpv_volume">Player volume</string>
+    <string name="settings_audio_mpv_volume_summary">Set mpv player volume (0–200%%)</string>
+    <string name="settings_audio_preferred_language">Preferred audio language</string>
+    <string name="settings_audio_preferred_language_summary">Select the default audio track language</string>
+    <string name="settings_audio_delay">Audio delay</string>
+    <string name="settings_audio_delay_summary">Adjust the default audio delay to compensate for sync issues</string>
+    <string name="settings_audio_output_order">Audio output priority</string>
+    <string name="settings_audio_output_order_summary">Adjust the priority of audio output backends</string>
+    <string name="settings_audio_dynamic_normalize">Dynamic range compression</string>
+    <string name="settings_audio_dynamic_normalize_summary">Normalize volume to enhance dialogue and suppress loud sounds (Night Mode)</string>
+    <string name="settings_audio_pitch_correction">Pitch correction</string>
+    <string name="settings_audio_pitch_correction_summary">Maintain the original pitch when changing playback speed</string>
+
+    <string name="settings_subtitle_header_selection">Selection</string>
+    <string name="settings_subtitle_header_rendering">Rendering &amp; Appearance</string>
+    <string name="settings_subtitle_preferred_language">Preferred subtitle language</string>
+    <string name="settings_subtitle_preferred_language_summary">Select the default subtitle track language</string>
+    <string name="settings_subtitle_fallback">Automatic subtitle selection</string>
+    <string name="settings_subtitle_fallback_summary">Automatically select the first available subtitle if preferred language is not found</string>
+
+    <string name="settings_subtitle_header_mpv">mpv Subtitle</string>
+    <string name="settings_subtitle_mpv_style">Subtitle style</string>
+    <string name="settings_subtitle_mpv_style_summary">Customize font size, text color, outline, and background</string>
+
+    <string name="settings_subtitle_header_exo">ExoPlayer subtitle</string>
+    <string name="settings_subtitle_exo_style">Subtitle style</string>
+    <string name="settings_subtitle_exo_style_summary">Customize font size, text color, and bottom margin</string>
+    <string name="settings_subtitle_exo_preview_sample">This is a sample ExoPlayer subtitle</string>
+
+    <string name="settings_subtitle_mpv_ass_override">ASS subtitle override</string>
+    <string name="settings_subtitle_mpv_ass_override_summary">Control whether user style settings override embedded ASS subtitle styles</string>
+    <string name="settings_subtitle_mpv_ass_override_scale">Scale only (Recommended)</string>
+    <string name="settings_subtitle_mpv_ass_override_scale_summary">Applies basic user-defined style overrides and scaling while keeping most of the subtitle script\'s original design</string>
+    <string name="settings_subtitle_mpv_ass_override_yes">Basic overrides</string>
+    <string name="settings_subtitle_mpv_ass_override_yes_summary">Applies basic user-defined style overrides while keeping most of the subtitle script\'s original design</string>
+    <string name="settings_subtitle_mpv_ass_override_no">Do not override ASS styles</string>
+    <string name="settings_subtitle_mpv_ass_override_no_summary">Renders ASS subtitles using the exact styles and positioning defined in the subtitle file without any changes</string>
+    <string name="settings_subtitle_mpv_ass_override_force">Force user styles</string>
+    <string name="settings_subtitle_mpv_ass_override_force_summary">Overrides the script\'s formatting completely by forcing standard global mpv subtitle styles</string>
+    <string name="settings_subtitle_mpv_ass_override_strip">Strip ASS tags (Plain text)</string>
+    <string name="settings_subtitle_mpv_ass_override_strip_summary">Radically removes all ASS styling tags and custom fonts, turning the text into plain subtitles</string>
+    <string name="settings_subtitle_mpv_preview_sample">This is a sample mpv subtitle</string>
+
+    <string name="settings_subtitle_font_size">Subtitle font size</string>
+    <string name="settings_subtitle_font_size_summary">Adjust the display size of subtitles (sp)</string>
+    <string name="settings_subtitle_text_color">Text color</string>
+    <string name="settings_subtitle_bg_color">Background color</string>
+    <string name="settings_subtitle_bg_opacity">Background opacity</string>
+    <string name="settings_subtitle_bg_opacity_summary">Adjust subtitle background box translucency</string>
+    <string name="settings_subtitle_bottom_padding">Subtitle bottom margin</string>
+    <string name="settings_subtitle_bottom_padding_summary">Adjust vertical distance from screen bottom (dp)</string>
+    <string name="settings_subtitle_font_weight">Font weight</string>
+    <string name="settings_subtitle_outline_color">Outline color</string>
+    <string name="settings_subtitle_outline_width">Outline width</string>
+    <string name="settings_subtitle_shadow_color">Shadow color</string>
+    <string name="settings_subtitle_shadow_offset">Shadow offset</string>
+    <string name="settings_subtitle_bottom_margin">Subtitle bottom margin</string>
+    <string name="settings_subtitle_bottom_margin_summary">Adjust vertical distance from screen bottom</string>
+    <string name="settings_subtitle_bold">Bold text</string>
+    <string name="settings_subtitle_bold_summary">Enable bold styling for subtitles</string>
+    <string name="settings_subtitle_italic">Italic text</string>
+    <string name="settings_subtitle_italic_summary">Enable italic styling for subtitles</string>
+    <string name="settings_subtitle_font">Subtitle font</string>
+    <string name="settings_subtitle_font_summary">Select font family for mpv subtitle rendering</string>
+    <string name="settings_subtitle_font_default">System default (sans-serif)</string>
+    <string name="settings_subtitle_font_permission_required">All files access permission required</string>
+    <string name="settings_subtitle_font_permission_summary">Grant permission to scan font files in /Fonts directory</string>
+    <string name="settings_subtitle_font_grant_permission">Grant Permission</string>
+    <string name="settings_subtitle_font_no_fonts_found">No custom fonts found</string>
+    <string name="settings_subtitle_font_no_fonts_summary">Place .ttf or .otf font files in %s directory</string>
+    <string name="settings_subtitle_font_directory_hint">Tip: Place custom .ttf or .otf font files into the %s directory, and they will automatically appear in the list above.</string>
+
+    <string name="settings_decoder_header_engine">Engine</string>
+    <string name="settings_decoder_player_engine_type">Player engine</string>
+    <string name="settings_decoder_player_engine_mpv">mpv Engine</string>
+    <string name="settings_decoder_player_engine_mpv_summary">Powerful &amp; Feature-rich. Supports advanced ASS/SSA stylized subtitles, software audio gain, full format decoding, and custom Shader filters.</string>
+    <string name="settings_decoder_player_engine_exo">ExoPlayer (Media3) Engine</string>
+    <string name="settings_decoder_player_engine_exo_summary">Native Hardware Decoding. Powered by Android MediaCodec &amp; disk caching. Power-efficient, smooth, and stable for standard video playback.</string>
+
+    <string name="settings_decoder_header_rendering">Core engine</string>
+    <string name="settings_decoder_header_performance">Hardware &amp; Performance</string>
+    <string name="settings_decoder_header_processing">Video processing</string>
+    <string name="settings_decoder_profile">mpv Profile</string>
+    <string name="settings_decoder_profile_summary">General configuration preset for mpv</string>
+    <string name="settings_decoder_profile_fast">Fast</string>
+    <string name="settings_decoder_profile_fast_summary">Prioritize performance and lower power consumption. Recommended for most mobile devices.</string>
+    <string name="settings_decoder_profile_default">Default</string>
+    <string name="settings_decoder_profile_default_summary">The default mpv configuration. Balanced settings for most content.</string>
+    <string name="settings_decoder_profile_high_quality">High Quality</string>
+    <string name="settings_decoder_profile_high_quality_summary">Enable high-quality scaling and debanding filters. May increase power consumption and heat.</string>
+    <string name="settings_decoder_profile_gpu_hq">GPU High Quality</string>
+    <string name="settings_decoder_profile_gpu_hq_summary">An alias for high-quality, specifically tuned for modern GPUs.</string>
+    <string name="settings_decoder_profile_low_latency">Low Latency</string>
+    <string name="settings_decoder_profile_low_latency_summary">Optimize for minimal playback delay. Ideal for live streams or gaming content.</string>
+    <string name="settings_decoder_profile_sw_fast">Software Fast</string>
+    <string name="settings_decoder_profile_sw_fast_summary">Fastest software decoding profile. Use if hardware acceleration is unavailable.</string>
+
+    <string name="settings_decoder_override_profile">Override profile settings</string>
+    <string name="settings_decoder_override_profile_summary">Manually configure scaling and debanding instead of using profile presets</string>
+
+    <string name="settings_decoder_vo">Video output (VO)</string>
+    <string name="settings_decoder_vo_summary">The output driver used for video rendering</string>
+    <string name="settings_decoder_vo_gpu">GPU (Legacy)</string>
+    <string name="settings_decoder_vo_gpu_summary">Standard GPU renderer. Highly stable and compatible.</string>
+    <string name="settings_decoder_vo_gpu_next">GPU Next (Modern)</string>
+    <string name="settings_decoder_vo_gpu_next_summary">New experimental renderer based on libplacebo. Supports more advanced features.</string>
+
+    <string name="settings_decoder_gpu_api">GPU API</string>
+    <string name="settings_decoder_gpu_api_summary">Graphics API used by the renderer</string>
+    <string name="settings_decoder_gpu_api_opengl">OpenGL ES</string>
+    <string name="settings_decoder_gpu_api_opengl_summary">Default graphics API. Fast and widely supported.</string>
+    <string name="settings_decoder_gpu_api_vulkan">Vulkan</string>
+    <string name="settings_decoder_gpu_api_vulkan_summary">Modern, low-overhead graphics API. May provide better performance on supported hardware.</string>
+
+    <string name="settings_decoder_hwdec">Hardware decoding</string>
+    <string name="settings_decoder_hwdec_summary">Policy for hardware accelerated video decoding</string>
+    <string name="settings_decoder_hwdec_mediacodec">MediaCodec (Surface)</string>
+    <string name="settings_decoder_hwdec_mediacodec_summary">Directly render frames to an Android Surface. Best performance and efficiency.</string>
+    <string name="settings_decoder_hwdec_mediacodec_copy">MediaCodec Copy (RAM)</string>
+    <string name="settings_decoder_hwdec_mediacodec_copy_summary">Copy decoded frames back to system memory. Allows post-processing by mpv but is slower.</string>
+    <string name="settings_decoder_hwdec_no">Disabled (Software)</string>
+    <string name="settings_decoder_hwdec_no_summary">Use the CPU for decoding. Slowest, but avoids hardware bugs.</string>
+
+    <string name="settings_decoder_video_sync">Video sync mode</string>
+    <string name="settings_decoder_video_sync_summary">How the player synchronizes audio and video</string>
+    <string name="settings_decoder_video_sync_audio">Audio</string>
+    <string name="settings_decoder_video_sync_audio_summary">Time video frames to audio. Robust mode with no display assumptions; may drop or repeat frames.</string>
+    <string name="settings_decoder_video_sync_display_resample">Display Resample</string>
+    <string name="settings_decoder_video_sync_display_resample_summary">Resample audio to match display refresh rate, automatically compensating for drift.</string>
+    <string name="settings_decoder_video_sync_display_resample_vdrop">Display Resample V-Drop</string>
+    <string name="settings_decoder_video_sync_display_resample_vdrop_summary">Resample audio and drop video frames to compensate for drift.</string>
+    <string name="settings_decoder_video_sync_display_resample_desync">Display Resample Desync</string>
+    <string name="settings_decoder_video_sync_display_resample_desync_summary">Resample audio without A/V compensation.</string>
+    <string name="settings_decoder_video_sync_display_tempo">Display Tempo</string>
+    <string name="settings_decoder_video_sync_display_tempo_summary">Like Display Resample, but apply speed changes to audio filters to avoid pitch changes.</string>
+    <string name="settings_decoder_video_sync_display_vdrop">Display V-Drop</string>
+    <string name="settings_decoder_video_sync_display_vdrop_summary">Drop or repeat video frames to compensate for desyncing video.</string>
+    <string name="settings_decoder_video_sync_display_adrop">Display A-Drop</string>
+    <string name="settings_decoder_video_sync_display_adrop_summary">Drop or repeat audio data to compensate for desyncing video.</string>
+    <string name="settings_decoder_video_sync_display_desync">Display Desync</string>
+    <string name="settings_decoder_video_sync_display_desync_summary">Sync video to display and let audio play independently.</string>
+
+    <string name="settings_decoder_scale">Upscaling algorithm (scale)</string>
+    <string name="settings_decoder_scale_summary">Algorithm used for upscaling video</string>
+    <string name="settings_decoder_dscale">Downscaling algorithm (dscale)</string>
+    <string name="settings_decoder_dscale_summary">Algorithm used for downscaling video</string>
+    <string name="settings_decoder_cscale">Chroma scaler (cscale)</string>
+    <string name="settings_decoder_cscale_summary">Algorithm used for chroma scaling</string>
+    <string name="settings_decoder_scale_antiring">Anti-ringing strength (scale-antiring)</string>
+    <string name="settings_decoder_scale_antiring_summary">Reduces ringing and halo artifacts during scaling</string>
+    <string name="settings_decoder_scale_bilinear">Bilinear</string>
+    <string name="settings_decoder_scale_bilinear_summary">Bilinear hardware texture filtering (fastest, very low quality). Default for fast profile.</string>
+    <string name="settings_decoder_scale_spline36">Spline36</string>
+    <string name="settings_decoder_scale_spline36_summary">Spline36 scaling. High-quality mid-range algorithm, sharp and reasonably fast.</string>
+    <string name="settings_decoder_scale_ewa_lanczos">EWA Lanczos (Jinc)</string>
+    <string name="settings_decoder_scale_ewa_lanczos_summary">Elliptic weighted average Lanczos scaling. Relatively slow, but very good quality.</string>
+    <string name="settings_decoder_scale_lanczos">Lanczos</string>
+    <string name="settings_decoder_scale_lanczos_summary">Lanczos scaling. Provides good balance between quality and performance.</string>
+    <string name="settings_decoder_scale_ewa_lanczos_sharp">EWA Lanczos Sharp</string>
+    <string name="settings_decoder_scale_ewa_lanczos_sharp_summary">A slightly sharpened version of EWA Lanczos. Default for high-quality profile.</string>
+    <string name="settings_decoder_scale_ewa_lanczos_4sharpest">EWA Lanczos 4Sharpest</string>
+    <string name="settings_decoder_scale_ewa_lanczos_4sharpest_summary">Very sharp scaler, prone to ringing. Enables built-in anti-ringing on gpu-next.</string>
+    <string name="settings_decoder_scale_mitchell">Mitchell-Netravali</string>
+    <string name="settings_decoder_scale_mitchell_summary">Piecewise cubic filter. Provides a balanced compromise of all scaling artifacts.</string>
+    <string name="settings_decoder_scale_hermite">Hermite</string>
+    <string name="settings_decoder_scale_hermite_summary">Hermite spline. Very fast but prone to blocking.</string>
+    <string name="settings_decoder_scale_catmull_rom">Catmull-Rom</string>
+    <string name="settings_decoder_scale_catmull_rom_summary">Sharper than Mitchell, but prone to ringing.</string>
+    <string name="settings_decoder_scale_oversample">Oversample</string>
+    <string name="settings_decoder_scale_oversample_summary">Naively oversamples pixels to remove judder artifacts, adding some blur.</string>
+
+    <string name="settings_decoder_deband">Debanding</string>
+    <string name="settings_decoder_deband_summary">Reduce color banding artifacts in the video</string>
+    <string name="settings_decoder_deband_iterations">Iterations</string>
+    <string name="settings_decoder_deband_iterations_summary">The number of debanding steps to perform per sample. Higher values reduce more banding but cost more performance. (Default 1)</string>
+    <string name="settings_decoder_deband_threshold">Threshold</string>
+    <string name="settings_decoder_deband_threshold_summary">The filter\'s cut-off threshold. Higher values increase strength but diminish details. (Default 48)</string>
+    <string name="settings_decoder_deband_range">Range</string>
+    <string name="settings_decoder_deband_range_summary">The filter\'s initial radius. Higher radius finds more gradients, lower radius smooths more aggressively. (Default 16)</string>
+    <string name="settings_decoder_deband_grain">Grain</string>
+    <string name="settings_decoder_deband_grain_summary">Add extra noise to cover up remaining artifacts. (Default 32)</string>
+
+    <string name="settings_decoder_hdr_settings">HDR settings</string>
+    <string name="settings_decoder_hdr_settings_summary">Configure HDR hardware passthrough, tone mapping, max boost, and gamut mapping</string>
+    <string name="settings_decoder_hdr_passthrough">HDR hardware passthrough</string>
+    <string name="settings_decoder_hdr_passthrough_summary">Sends native HDR signals directly to display Surface for hardware peak brightness. When enabled, software tone mapping below is bypassed.</string>
+    <string name="settings_decoder_tone_mapping">Tone mapping algorithm</string>
+    <string name="settings_decoder_tone_mapping_auto">Auto</string>
+    <string name="settings_decoder_tone_mapping_auto_summary">Automatically select the best mapping for the content</string>
+    <string name="settings_decoder_tone_mapping_bt2446a">BT.2446a</string>
+    <string name="settings_decoder_tone_mapping_bt2446a_summary">Modern reference mapping standard for HDR-to-SDR conversion</string>
+    <string name="settings_decoder_tone_mapping_spline">Spline</string>
+    <string name="settings_decoder_tone_mapping_spline_summary">Smooth curve mapping. Preserves more highlight detail</string>
+    <string name="settings_decoder_tone_mapping_reinhard">Reinhard</string>
+    <string name="settings_decoder_tone_mapping_reinhard_summary">Classic tone mapping algorithm. Good at preventing highlight clipping</string>
+    <string name="settings_decoder_tone_mapping_max_boost">Tone mapping max boost</string>
+    <string name="settings_decoder_tone_mapping_max_boost_summary">Allows specular highlights to overshoot tone curve for punchier contrast. (Default 1.50)</string>
+    <string name="settings_decoder_gamut_mapping_mode">Gamut mapping mode</string>
+    <string name="settings_decoder_gamut_mapping_mode_summary">Strategy for mapping wide HDR color space (BT.2020) to SDR displays</string>
+    <string name="settings_decoder_gamut_mapping_perceptual">Perceptual</string>
+    <string name="settings_decoder_gamut_mapping_perceptual_summary">Preserves relative color relationships for natural, saturated gradients</string>
+    <string name="settings_decoder_gamut_mapping_clip">Clip</string>
+    <string name="settings_decoder_gamut_mapping_clip_summary">Hard-clips out-of-gamut colors to SDR boundary</string>
+    <string name="settings_decoder_gamut_mapping_relative">Relative colorimetric</string>
+    <string name="settings_decoder_gamut_mapping_relative_summary">Scales colors based on white point matching</string>
+    <string name="settings_decoder_gamut_mapping_saturation">Saturation</string>
+    <string name="settings_decoder_gamut_mapping_saturation_summary">Prioritizes vivid color saturation</string>
+    <string name="settings_decoder_gamut_mapping_desaturate">Desaturate</string>
+    <string name="settings_decoder_gamut_mapping_desaturate_summary">Desaturates highlight colors towards white to fit gamut</string>
+
+    <string name="settings_decoder_framedrop">Framedrop policy</string>
+    <string name="settings_decoder_framedrop_summary">Strategy for handling performance bottlenecks</string>
+    <string name="settings_decoder_framedrop_vo">VO (Recommended)</string>
+    <string name="settings_decoder_framedrop_vo_summary">Drop frames at the video output stage. Best balance for performance and sync.</string>
+    <string name="settings_decoder_framedrop_decoder">Decoder (Aggressive)</string>
+    <string name="settings_decoder_framedrop_decoder_summary">Drop frames at the decoding stage. Most effective but can cause visual artifacts.</string>
+    <string name="settings_decoder_framedrop_no">Disabled</string>
+    <string name="settings_decoder_framedrop_no_summary">Never drop frames. Recommended only for high-end devices to avoid audio desync.</string>
+
+    <string name="settings_decoder_header_info">Information</string>
+    <string name="settings_decoder_codec_info">Codec information</string>
+    <string name="settings_decoder_codec_info_summary">View device supported audio/video decoders and hardware decoding capabilities</string>
+    <string name="settings_decoder_codec_group_all">All</string>
+    <string name="settings_decoder_codec_group_video">Video</string>
+    <string name="settings_decoder_codec_group_audio">Audio</string>
+    <string name="settings_decoder_codec_group_hardware">Hardware</string>
+    <string name="settings_decoder_hw_decoding">Hardware</string>
+    <string name="settings_decoder_sw_decoding">Software</string>
+    <string name="settings_decoder_codec_count">%1$d decoders</string>
+    <string name="settings_decoder_codec_empty">No matching decoders found</string>
+
+    <string name="settings_subtitle_codepage">Subtitle encoding</string>
+    <string name="settings_subtitle_codepage_summary">Character encoding for external subtitle files</string>
+    <string name="settings_subtitle_codepage_auto">Auto (Universal)</string>
+    <string name="settings_subtitle_codepage_auto_summary">Automatically detect encoding (UTF-8/Universal). Works for most files.</string>
+    <string name="settings_subtitle_codepage_utf8">UTF-8</string>
+    <string name="settings_subtitle_codepage_utf8_summary">The modern standard encoding. Use if subrip files fail to load correctly.</string>
+    <string name="settings_subtitle_codepage_gbk">GBK (Simplified Chinese)</string>
+    <string name="settings_subtitle_codepage_gbk_summary">Common encoding for older Simplified Chinese subtitles.</string>
+    <string name="settings_subtitle_codepage_big5">BIG5 (Traditional Chinese)</string>
+    <string name="settings_subtitle_codepage_big5_summary">Standard encoding for Traditional Chinese (Taiwan/HK) subtitles.</string>
+
+    <string name="settings_audio_output_aaudio_summary">Modern Android low-latency audio API.</string>
+    <string name="settings_audio_output_audiotrack_summary">Standard Android Java-based audio output. Reliable and compatible.</string>
+    <string name="settings_audio_output_opensles_summary">Legacy low-level C API. Use if other backends cause issues.</string>
+
+    <string name="settings_lang_preferred_language_none">Default (None)</string>
+    <string name="settings_lang_add_language">Add language</string>
+    <string name="settings_lang_select_language">Select language</string>
+    <string name="settings_lang_all_languages">All languages</string>
+
+    <string name="settings_about_version">Version</string>
+    <string name="settings_about_description">A powerful, modern media player for Android designed to bridge the gap between local storage and remote networks.</string>
+
+    <string name="settings_about_header_legal">Legal</string>
+    <string name="settings_about_libraries">Libraries &amp; Licenses</string>
+    <string name="settings_about_libraries_summary">View core engine libraries, versions, and open-source licenses</string>
+    <string name="settings_about_copyright">Copyright notice</string>
+    <string name="settings_about_copyright_summary">View application copyright and license terms</string>
+
+    <string name="settings_about_header_links">Links</string>
+    <string name="settings_about_developer">Developer</string>
+    <string name="settings_about_developer_summary">Visit developer\'s GitHub profile</string>
+    <string name="settings_about_github">GitHub repository</string>
+    <string name="settings_about_github_summary">View source code, report issues, and contribute to the project</string>
+    <string name="settings_about_telegram">Telegram channel</string>
+    <string name="settings_about_telegram_summary">Join our community for updates and discussion</string>
+
+    <string name="settings_advanced_header_security">mpv Security</string>
+    <string name="settings_advanced_tls_verify">TLS verification</string>
+    <string name="settings_advanced_tls_verify_summary">Verify TLS/SSL certificates for HTTPS connections. Disable if using self-signed certificates in local networks.</string>
+
+    <string name="settings_advanced_header_connection">Network connection</string>
+    <string name="settings_advanced_user_agent">User-Agent</string>
+    <string name="settings_advanced_user_agent_summary">Custom User-Agent string for HTTP requests</string>
+    <string name="settings_advanced_user_agent_empty_error">User-Agent cannot be empty</string>
+    <string name="settings_advanced_timeout">Connection timeout</string>
+    <string name="settings_advanced_timeout_summary">Maximum time in seconds to wait for a network response</string>
+
+    <string name="settings_advanced_header_cache">mpv Buffer &amp; Cache</string>
+    <string name="settings_advanced_cache_secs">Forward cache duration</string>
+    <string name="settings_advanced_cache_secs_summary">Seconds of unplayed video to pre-fetch into buffer</string>
+    <string name="settings_advanced_cache_back_secs">Backward cache duration</string>
+    <string name="settings_advanced_cache_back_secs_summary">Seconds of played video kept in buffer</string>
+    <string name="settings_advanced_demuxer_max_bytes">Forward buffer size</string>
+    <string name="settings_advanced_demuxer_max_bytes_summary">Maximum memory for unplayed content buffer</string>
+    <string name="settings_advanced_demuxer_max_back_bytes">Backward buffer size</string>
+    <string name="settings_advanced_demuxer_max_back_bytes_summary">Maximum memory for played content buffer</string>
+
+    <!-- Storage and Cache -->
+    <string name="settings_advanced_header_storage_cache">Storage &amp; Cache</string>
+    <string name="settings_advanced_clear_thumbnails">Thumbnail cache</string>
+    <string name="settings_advanced_clear_thumbnails_summary">Clear cached video preview frames</string>
+    <string name="settings_advanced_clear_video_cache">Video stream cache</string>
+    <string name="settings_advanced_clear_video_cache_summary">Clear network video stream buffer files</string>
+    <string name="settings_advanced_clear_history">Clear playback history</string>
+    <string name="settings_advanced_clear_history_summary">Delete all saved watch progress and history records</string>
+    <string name="settings_advanced_history_count_format">%d items</string>
+    <string name="settings_advanced_history_cleared">Playback history cleared</string>
+    <string name="settings_cache_cleared">Cache cleared successfully</string>
+
+    <!-- Notification -->
+    <string name="notification_playback_channel_name">Playback Controls</string>
+    <string name="notification_playback_channel_description">Controls for background media playback</string>
+
+    <string name="notification_screenshot_channel_name">Screenshots</string>
+    <string name="notification_screenshot_channel_description">Notifications for saved screenshots</string>
+    <string name="notification_screenshot_saved">Screenshot saved</string>
+
+    <string name="error_permission_denied_storage">Permission denied: External storage access required</string>
+</resources>
