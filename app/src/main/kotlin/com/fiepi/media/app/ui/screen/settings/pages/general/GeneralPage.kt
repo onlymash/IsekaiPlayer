@@ -180,7 +180,7 @@ fun GeneralPageContent(
                             onClick = {
                                 val dateTimeStr = LocalDateTime.now()
                                     .format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmm"))
-                                exportLauncher.launch("${AppConstants.APP_NAME}_Backup_$dateTimeStr.json")
+                                exportLauncher.launch("${AppConstants.APP_NAME}_backup_$dateTimeStr.json")
                             },
                             icon = {
                                 Icon(

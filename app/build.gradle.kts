@@ -100,7 +100,7 @@ android {
 
 base {
     archivesName =
-        "${rootProject.name}-${android.defaultConfig.versionName}${android.defaultConfig.versionNameSuffix}"
+        "${rootProject.name}-v${android.defaultConfig.versionName}${android.defaultConfig.versionNameSuffix}"
 }
 
 kotlin {
