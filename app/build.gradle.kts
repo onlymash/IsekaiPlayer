@@ -8,6 +8,10 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+// Disable ABI splits when executing bundle tasks to avoid shrunk resource conflicts during App Bundle creation.
+val isBuildingBundle =
+    project.gradle.startParameter.taskNames.any { it.contains("bundle", ignoreCase = true) }
+
 android {
     namespace = "com.fiepi.media.app"
 
@@ -34,7 +38,7 @@ android {
 
     splits {
         abi {
-            isEnable = true
+            isEnable = !isBuildingBundle
             isUniversalApk = false
             reset()
             listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64").onEach { abiName ->
@@ -73,6 +77,7 @@ android {
                 if (releaseSigning?.storeFile != null && releaseSigning.storeFile?.exists() == true) {
                     releaseSigning
                 } else {
+                    println("Release signing not found, using debug signing instead.")
                     signingConfigs.getByName("debug")
                 }
         }
