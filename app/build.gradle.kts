@@ -34,6 +34,16 @@ android {
         versionNameSuffix = "." + providers.of(GitHashValueSource::class.java) {}.getOrElse("nogit")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            if (isBuildingBundle) {
+                listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64").onEach { abiName ->
+                    if (File(rootProject.projectDir, "external/prebuilt/$abiName").exists()) {
+                        abiFilters.add(abiName)
+                    }
+                }
+            }
+        }
     }
 
     splits {
