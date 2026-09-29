@@ -161,8 +161,8 @@
     <string name="browser_menu_sources">Sources</string>
     <string name="browser_menu_sort">Sort</string>
     <string name="browser_menu_search">Search</string>
-    <string name="browser_permission_grant">Grant Storage Permission</string>
-    <string name="browser_permission_required">Storage permission is required to browse local media files</string>
+    <string name="browser_permission_grant">Grant All Files Access Permission</string>
+    <string name="browser_permission_required">All files access permission is required to scan local videos and automatically load external subtitles</string>
     <string name="browser_media_list_empty">No videos found</string>
     <string name="browser_search_placeholder_collapsed">Search</string>
     <string name="browser_search_placeholder_expanded">Search within current folder</string>

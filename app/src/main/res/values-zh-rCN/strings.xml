@@ -161,8 +161,8 @@
     <string name="browser_menu_sources">数据源</string>
     <string name="browser_menu_sort">排序</string>
     <string name="browser_menu_search">搜索</string>
-    <string name="browser_permission_grant">授予媒体权限</string>
-    <string name="browser_permission_required">浏览本地媒体文件需要存储权限</string>
+    <string name="browser_permission_grant">授予全部文件访问权限</string>
+    <string name="browser_permission_required">扫描本地视频并自动加载外挂字幕需要全部文件访问权限</string>
     <string name="browser_media_list_empty">未找到视频</string>
     <string name="browser_search_placeholder_collapsed">搜索</string>
     <string name="browser_search_placeholder_expanded">在当前文件夹中搜索</string>
