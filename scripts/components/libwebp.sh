@@ -20,7 +20,7 @@ build_libwebp() {
         -DCMAKE_INSTALL_PREFIX="$DEPS_PREFIX"
     make -j"$NPROC" install
     if [ -f "$DEPS_PREFIX/lib/pkgconfig/libwebp.pc" ]; then
-        sed -i 's/Libs: -L\${libdir} -lwebp/Libs: -L\${libdir} -lwebp -lsharpyuv/' "$DEPS_PREFIX/lib/pkgconfig/libwebp.pc"
+        sed -i.bak 's/Libs: -L\${libdir} -lwebp/Libs: -L\${libdir} -lwebp -lsharpyuv/' "$DEPS_PREFIX/lib/pkgconfig/libwebp.pc" && rm -f "$DEPS_PREFIX/lib/pkgconfig/libwebp.pc.bak"
     fi
     popd > /dev/null
 }
