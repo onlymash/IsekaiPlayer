@@ -42,6 +42,7 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
@@ -81,6 +82,7 @@ import com.fiepi.media.app.ui.screen.browser.components.BrowserDialogHost
 import com.fiepi.media.app.ui.screen.browser.components.BrowserFloatingActionButton
 import com.fiepi.media.app.ui.screen.browser.components.BrowserSearchBar
 import com.fiepi.media.app.ui.screen.browser.components.HistorySourceFilterBar
+import com.fiepi.media.app.ui.screen.browser.components.FileSelectionFloatingToolbar
 import com.fiepi.media.app.ui.screen.browser.components.MediaBreadcrumbsBar
 import com.fiepi.media.app.ui.screen.browser.components.ModalBrowserDrawer
 import com.fiepi.media.app.ui.screen.browser.components.PlaylistBreadcrumbsBar
@@ -327,6 +329,11 @@ fun BrowserScreenContent(
             } else {
                 ScaffoldDefaults.contentWindowInsets
             },
+            floatingActionButtonPosition = if (state.selection.isActive && state.capabilities.canModifyFiles) {
+                FabPosition.Center
+            } else {
+                FabPosition.End
+            },
             topBar = {
                 AnimatedContent(
                     targetState = state.selection.isActive,
@@ -334,7 +341,7 @@ fun BrowserScreenContent(
                 ) { isSelecting ->
                     if (isSelecting) {
                         SelectionTopAppBar(
-                            selectedCount = state.selection.selectedPaths.size,
+                            selectedCount = state.selectedCount,
                             onExitSelection = {
                                 actions.onIntent(
                                     BrowserIntent.Selection.SetActive(
@@ -361,18 +368,43 @@ fun BrowserScreenContent(
             },
             floatingActionButton = {
                 AnimatedContent(
-                    targetState = state.selection.isActive,
+                    targetState = state.selection.isActive to state.capabilities.canModifyFiles,
                     label = "FloatingActionButtonSelectionTransition"
-                ) { isSelectionActive ->
+                ) { (isSelectionActive, canModify) ->
                     if (isSelectionActive) {
-                        SelectionFloatingActionButton(
-                            modifier = Modifier.padding(16.dp),
-                            isVisible = true,
-                            isAddToPlaylistEnabled = state.isAddToPlaylistEnabled,
-                            onAddToPlaylistClick = {
-                                actions.onIntent(BrowserIntent.Selection.OpenAddToPlaylist)
-                            }
-                        )
+                        if (canModify) {
+                            FileSelectionFloatingToolbar(
+                                modifier = Modifier.padding(16.dp),
+                                selectedCount = state.selectedCount,
+                                isAddToPlaylistEnabled = state.isAddToPlaylistEnabled,
+                                onCopyClick = {
+                                    actions.onIntent(BrowserIntent.FileAction.StartCopy(state.selectedMediaFiles))
+                                },
+                                onMoveClick = {
+                                    actions.onIntent(BrowserIntent.FileAction.StartMove(state.selectedMediaFiles))
+                                },
+                                onRenameClick = {
+                                    state.selectedMediaFiles.firstOrNull()?.let { file ->
+                                        actions.onIntent(BrowserIntent.FileAction.ShowRename(file))
+                                    }
+                                },
+                                onDeleteClick = {
+                                    actions.onIntent(BrowserIntent.FileAction.ShowDelete)
+                                },
+                                onAddToPlaylistClick = {
+                                    actions.onIntent(BrowserIntent.Selection.OpenAddToPlaylist)
+                                }
+                            )
+                        } else {
+                            SelectionFloatingActionButton(
+                                modifier = Modifier.padding(16.dp),
+                                isVisible = true,
+                                isAddToPlaylistEnabled = state.isAddToPlaylistEnabled,
+                                onAddToPlaylistClick = {
+                                    actions.onIntent(BrowserIntent.Selection.OpenAddToPlaylist)
+                                }
+                            )
+                        }
                     } else {
                         BrowserFloatingActionButton(
                             isVisible = isFabVisible,

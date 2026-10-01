@@ -32,7 +32,9 @@ import android.net.Uri
 import androidx.core.app.NotificationCompat
 import androidx.core.content.FileProvider
 import com.fiepi.media.app.R
+import com.fiepi.media.app.activity.MainActivity
 import com.fiepi.media.app.activity.PlayerActivity
+import com.fiepi.media.domain.model.media.FileOperationType
 import com.fiepi.media.domain.player.model.MediaPlaybackState
 import java.io.File
 
@@ -43,9 +45,11 @@ class NotificationController(
     companion object {
         private const val CHANNEL_ID_PLAYBACK = "playback_channel"
         private const val CHANNEL_ID_SCREENSHOT = "screenshot_channel"
+        const val CHANNEL_ID_FILE_OPERATION = "file_operation_channel"
 
         const val NOTIFICATION_ID_PLAYBACK = 1001
         const val NOTIFICATION_ID_SCREENSHOT = 2001
+        const val NOTIFICATION_ID_FILE_OPERATION = 3001
     }
 
     private val manager: NotificationManager by lazy {
@@ -78,8 +82,62 @@ class NotificationController(
         ).apply {
             description = context.getString(R.string.notification_screenshot_channel_description)
         }
+        // File operation notification channel
+        val fileOperationChannel = NotificationChannel(
+            CHANNEL_ID_FILE_OPERATION,
+            context.getString(R.string.file_operation_notification_channel_name),
+            NotificationManager.IMPORTANCE_LOW
+        ).apply {
+            description = context.getString(R.string.file_operation_notification_channel_desc)
+        }
         manager.createNotificationChannel(playbackChannel)
         manager.createNotificationChannel(screenshotChannel)
+        manager.createNotificationChannel(fileOperationChannel)
+    }
+
+    /**
+     * Builds notification for file operations (Copy, Move, Delete).
+     */
+    fun buildFileOperationNotification(
+        context: Context,
+        type: FileOperationType,
+        current: Int,
+        total: Int,
+        fileName: String,
+        cancelPendingIntent: PendingIntent
+    ): Notification {
+        val titleRes = when (type) {
+            FileOperationType.Copy -> R.string.file_operation_copying
+            FileOperationType.Move -> R.string.file_operation_moving
+            FileOperationType.Delete -> R.string.file_operation_deleting
+        }
+        val title = context.getString(titleRes)
+        val contentText = if (fileName.isNotEmpty()) {
+            "$fileName ($current/$total)"
+        } else {
+            "($current/$total)"
+        }
+
+        val contentIntent = PendingIntent.getActivity(
+            context,
+            0,
+            Intent(context, MainActivity::class.java),
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        return NotificationCompat.Builder(context, CHANNEL_ID_FILE_OPERATION)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle(title)
+            .setContentText(contentText)
+            .setProgress(total, current, false)
+            .setContentIntent(contentIntent)
+            .setOngoing(true)
+            .addAction(
+                android.R.drawable.ic_menu_close_clear_cancel,
+                context.getString(R.string.file_operation_cancel),
+                cancelPendingIntent
+            )
+            .build()
     }
 
     /**

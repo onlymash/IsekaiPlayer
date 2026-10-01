@@ -61,6 +61,7 @@ fun MediaFileList(
     bottomContentPadding: Dp,
     modifier: Modifier = Modifier,
     selectionState: BrowserSelectionState = BrowserSelectionState(),
+    canSelectAllFiles: Boolean = false,
     onItemToggleSelect: (MediaFile) -> Unit = {},
     onItemLongClick: (MediaFile) -> Unit = {},
     scrollState: LazyListState = rememberLazyListState()
@@ -107,19 +108,27 @@ fun MediaFileList(
 
                     is MediaFile.Subtitle -> false
                 }
-                val isSelected =
-                    item is MediaFile.Video && item.path in selectionState.selectedPaths
                 val isSelectionMode = selectionState.isActive
+                val canSelectThisItem = canSelectAllFiles || item is MediaFile.Video
+                val isSelected = canSelectThisItem && item.path in selectionState.selectedPaths
 
                 when (item) {
                     is MediaFile.Folder -> FolderItem(
                         item = item,
                         displayFields = displayFields,
-                        onClick = { onFolderClick(item) },
+                        onClick = {
+                            if (isSelectionMode && canSelectThisItem) {
+                                onItemToggleSelect(item)
+                            } else {
+                                onFolderClick(item)
+                            }
+                        },
                         isLastPlayed = isLastPlayed,
-                        enabled = !isSelectionMode,
-                        isSelected = false,
-                        onLongClick = null
+                        enabled = !isSelectionMode || canSelectThisItem,
+                        isSelected = isSelected,
+                        onLongClick = if (canSelectThisItem) {
+                            { onItemLongClick(item) }
+                        } else null
                     )
 
                     is MediaFile.Video -> VideoItem(
@@ -141,10 +150,18 @@ fun MediaFileList(
                     is MediaFile.Subtitle -> SubtitleItem(
                         item = item,
                         displayFields = displayFields,
-                        onClick = { onSubtitleClick(item) },
-                        enabled = !isSelectionMode,
-                        isSelected = false,
-                        onLongClick = null
+                        onClick = {
+                            if (isSelectionMode && canSelectThisItem) {
+                                onItemToggleSelect(item)
+                            } else {
+                                onSubtitleClick(item)
+                            }
+                        },
+                        enabled = !isSelectionMode || canSelectThisItem,
+                        isSelected = isSelected,
+                        onLongClick = if (canSelectThisItem) {
+                            { onItemLongClick(item) }
+                        } else null
                     )
                 }
             }

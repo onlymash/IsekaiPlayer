@@ -26,7 +26,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.fiepi.media.app.R
+import com.fiepi.media.app.service.FileOperationManager
 import com.fiepi.media.domain.model.history.PlaybackHistory
+import com.fiepi.media.domain.model.media.FileOperationStatus
+import com.fiepi.media.domain.model.media.FileOperationType
 import com.fiepi.media.domain.model.media.MediaFile
 import com.fiepi.media.domain.model.playlist.PlaylistItem
 import com.fiepi.media.domain.model.preferences.MediaOptions
@@ -58,7 +61,8 @@ import kotlin.time.Duration.Companion.milliseconds
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class BrowserViewModel(
     private val application: Application,
-    private val useCases: BrowserUseCases
+    private val useCases: BrowserUseCases,
+    private val fileOperationManager: FileOperationManager
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(BrowserState())
@@ -126,6 +130,7 @@ class BrowserViewModel(
         observeSearchQuery()
         observeLastPlayedInDirectory()
         observePlaylists()
+        observeFileOperations()
     }
 
     // --- Reactive State Pipelines ---
@@ -244,6 +249,50 @@ class BrowserViewModel(
                 .collect { lastPlayedUri ->
                     _state.update { it.copy(lastPlayedUri = lastPlayedUri) }
                 }
+        }
+    }
+
+    private fun observeFileOperations() {
+        viewModelScope.launch {
+            fileOperationManager.status.collect { opStatus ->
+                when (opStatus) {
+                    is FileOperationStatus.NeedConflictDecision -> {
+                        _state.update {
+                            it.copy(
+                                dialogs = it.dialogs.copy(
+                                    conflictFileName = opStatus.conflictFileName
+                                )
+                            )
+                        }
+                    }
+
+                    is FileOperationStatus.Completed -> {
+                        onIntent(BrowserIntent.Storage.LoadFiles)
+                        onIntent(BrowserIntent.Selection.ClearSelection)
+                        _state.update {
+                            it.copy(
+                                dialogs = it.dialogs.copy(
+                                    folderPickerOperation = null,
+                                    conflictFileName = null
+                                )
+                            )
+                        }
+                    }
+
+                    is FileOperationStatus.Failed -> {
+                        _state.update {
+                            it.copy(
+                                dialogs = it.dialogs.copy(
+                                    folderPickerOperation = null,
+                                    conflictFileName = null
+                                )
+                            )
+                        }
+                    }
+
+                    else -> {}
+                }
+            }
         }
     }
 
@@ -418,7 +467,165 @@ class BrowserViewModel(
             is BrowserIntent.Selection -> handleSelectionIntent(intent)
             is BrowserIntent.Dialog -> handleDialogIntent(intent)
             is BrowserIntent.Config -> handleConfigIntent(intent)
+            is BrowserIntent.FileAction -> handleFileActionIntent(intent)
         }
+    }
+
+    private fun handleFileActionIntent(intent: BrowserIntent.FileAction) {
+        when (intent) {
+            is BrowserIntent.FileAction.ShowRename -> {
+                _state.update { it.copy(dialogs = it.dialogs.copy(fileToRename = intent.file)) }
+            }
+
+            is BrowserIntent.FileAction.ConfirmRename -> {
+                viewModelScope.launch {
+                    val result = useCases.fileManagement.renameFile(intent.file.path, intent.newName)
+                    if (result.isSuccess) {
+                        onIntent(BrowserIntent.Storage.LoadFiles)
+                        onIntent(BrowserIntent.Selection.ClearSelection)
+                    }
+                    _state.update { it.copy(dialogs = it.dialogs.copy(fileToRename = null)) }
+                }
+            }
+
+            is BrowserIntent.FileAction.DismissRename -> {
+                _state.update { it.copy(dialogs = it.dialogs.copy(fileToRename = null)) }
+            }
+
+            is BrowserIntent.FileAction.ShowDelete -> {
+                _state.update { it.copy(dialogs = it.dialogs.copy(isDeleteConfirmVisible = true)) }
+            }
+
+            is BrowserIntent.FileAction.ConfirmDelete -> {
+                val selectedPaths = state.value.selection.selectedPaths.toList()
+                _state.update {
+                    it.copy(
+                        dialogs = it.dialogs.copy(isDeleteConfirmVisible = false),
+                        selection = BrowserSelectionState()
+                    )
+                }
+                fileOperationManager.startDelete(application, selectedPaths)
+            }
+
+            is BrowserIntent.FileAction.DismissDelete -> {
+                _state.update { it.copy(dialogs = it.dialogs.copy(isDeleteConfirmVisible = false)) }
+            }
+
+            is BrowserIntent.FileAction.StartCopy -> {
+                _state.update {
+                    it.copy(
+                        dialogs = it.dialogs.copy(
+                            folderPickerOperation = FileOperationType.Copy,
+                            folderPickerCurrentPath = null
+                        )
+                    )
+                }
+            }
+
+            is BrowserIntent.FileAction.StartMove -> {
+                _state.update {
+                    it.copy(
+                        dialogs = it.dialogs.copy(
+                            folderPickerOperation = FileOperationType.Move,
+                            folderPickerCurrentPath = null
+                        )
+                    )
+                }
+            }
+
+            is BrowserIntent.FileAction.ConfirmFolderPicker -> {
+                val selectedPaths = state.value.selection.selectedPaths.toList()
+                val operation = state.value.dialogs.folderPickerOperation
+                _state.update {
+                    it.copy(
+                        dialogs = it.dialogs.copy(
+                            folderPickerOperation = null,
+                            folderPickerCurrentPath = null
+                        ),
+                        selection = BrowserSelectionState()
+                    )
+                }
+                if (operation == FileOperationType.Copy) {
+                    fileOperationManager.startCopy(application, selectedPaths, intent.targetPath)
+                } else if (operation == FileOperationType.Move) {
+                    fileOperationManager.startMove(application, selectedPaths, intent.targetPath)
+                }
+            }
+
+            is BrowserIntent.FileAction.DismissFolderPicker -> {
+                _state.update {
+                    it.copy(
+                        dialogs = it.dialogs.copy(
+                            folderPickerOperation = null,
+                            folderPickerCurrentPath = null
+                        )
+                    )
+                }
+            }
+
+            is BrowserIntent.FileAction.ShowCreateFolder -> {
+                _state.update {
+                    it.copy(
+                        dialogs = it.dialogs.copy(
+                            createFolderParentPath = intent.parentPath,
+                            pendingRestoreFolderPickerOperation = it.dialogs.folderPickerOperation,
+                            folderPickerCurrentPath = intent.currentFolderPickerPath ?: it.dialogs.folderPickerCurrentPath,
+                            folderPickerOperation = null
+                        )
+                    )
+                }
+            }
+
+            is BrowserIntent.FileAction.DismissCreateFolder -> {
+                _state.update { currentState ->
+                    val restoreOperation = currentState.dialogs.pendingRestoreFolderPickerOperation
+                    currentState.copy(
+                        dialogs = currentState.dialogs.copy(
+                            createFolderParentPath = null,
+                            pendingRestoreFolderPickerOperation = null,
+                            folderPickerOperation = restoreOperation,
+                            folderPickerCurrentPath = if (restoreOperation == null) null else currentState.dialogs.folderPickerCurrentPath
+                        )
+                    )
+                }
+            }
+
+            is BrowserIntent.FileAction.CreateFolder -> {
+                viewModelScope.launch {
+                    createFolder(intent.parentPath, intent.name)
+                }
+            }
+
+            is BrowserIntent.FileAction.ResolveConflict -> {
+                _state.update { it.copy(dialogs = it.dialogs.copy(conflictFileName = null)) }
+                fileOperationManager.submitConflictDecision(intent.decision)
+            }
+
+            is BrowserIntent.FileAction.DismissConflict -> {
+                _state.update { it.copy(dialogs = it.dialogs.copy(conflictFileName = null)) }
+                fileOperationManager.cancelOperation()
+            }
+        }
+    }
+
+    suspend fun createFolder(parentPath: String, name: String): Boolean {
+        val result = useCases.fileManagement.createDirectory(parentPath, name)
+        if (result.isSuccess) {
+            onIntent(BrowserIntent.Storage.LoadFiles)
+            _state.update { currentState ->
+                val restoreOperation = currentState.dialogs.pendingRestoreFolderPickerOperation
+                currentState.copy(
+                    dialogs = currentState.dialogs.copy(
+                        createFolderParentPath = null,
+                        pendingRestoreFolderPickerOperation = null,
+                        folderPickerOperation = restoreOperation,
+                        folderPickerCurrentPath = if (restoreOperation == null) null else currentState.dialogs.folderPickerCurrentPath
+                    )
+                )
+            }
+            return true
+        }
+        return false
     }
 
     private fun handleStorageIntent(intent: BrowserIntent.Storage) {
@@ -722,8 +929,9 @@ class BrowserViewModel(
             is BrowserIntent.Selection.ToggleSelect -> {
                 val currentFiles =
                     (_state.value.mediaState as? MediaBrowserState.Content)?.files ?: emptyList()
-                val isVideo = currentFiles.any { it is MediaFile.Video && it.path == intent.path }
-                if (isVideo || intent.path in _state.value.selection.selectedPaths) {
+                val canModify = _state.value.capabilities.canModifyFiles
+                val canSelectThisItem = canModify || currentFiles.any { it is MediaFile.Video && it.path == intent.path }
+                if (canSelectThisItem || intent.path in _state.value.selection.selectedPaths) {
                     _state.update { currentState ->
                         val currentPaths = currentState.selection.selectedPaths
                         val newPaths = if (intent.path in currentPaths) {
@@ -745,13 +953,17 @@ class BrowserViewModel(
             is BrowserIntent.Selection.SelectAll -> {
                 val currentFiles =
                     (_state.value.mediaState as? MediaBrowserState.Content)?.files ?: emptyList()
-                val videoPaths =
+                val canModify = _state.value.capabilities.canModifyFiles
+                val targetPaths = if (canModify) {
+                    currentFiles.map { it.path }.toSet()
+                } else {
                     currentFiles.filterIsInstance<MediaFile.Video>().map { it.path }.toSet()
+                }
                 _state.update { currentState ->
                     currentState.copy(
                         selection = currentState.selection.copy(
-                            isActive = videoPaths.isNotEmpty(),
-                            selectedPaths = videoPaths
+                            isActive = targetPaths.isNotEmpty(),
+                            selectedPaths = targetPaths
                         )
                     )
                 }
@@ -760,11 +972,15 @@ class BrowserViewModel(
             is BrowserIntent.Selection.InvertSelection -> {
                 val currentFiles =
                     (_state.value.mediaState as? MediaBrowserState.Content)?.files ?: emptyList()
-                val videoPaths =
+                val canModify = _state.value.capabilities.canModifyFiles
+                val targetPaths = if (canModify) {
+                    currentFiles.map { it.path }.toSet()
+                } else {
                     currentFiles.filterIsInstance<MediaFile.Video>().map { it.path }.toSet()
+                }
                 _state.update { currentState ->
                     val currentSelected = currentState.selection.selectedPaths
-                    val inverted = videoPaths - currentSelected
+                    val inverted = targetPaths - currentSelected
                     currentState.copy(
                         selection = currentState.selection.copy(
                             isActive = inverted.isNotEmpty(),

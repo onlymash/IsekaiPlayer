@@ -704,4 +704,37 @@
     <string name="notification_screenshot_saved">Screenshot saved</string>
 
     <string name="error_permission_denied_storage">Permission denied: External storage access required</string>
+
+    <!-- File Management -->
+    <string name="file_action_copy">Copy</string>
+    <string name="file_action_move">Move</string>
+    <string name="file_action_rename">Rename</string>
+    <string name="file_action_delete">Delete</string>
+    <string name="file_action_add_to_playlist">Add to playlist</string>
+    <string name="file_action_clear_selection">Clear selection</string>
+    <string name="file_action_create_folder">New folder</string>
+
+    <string name="file_dialog_rename_title">Rename</string>
+    <string name="file_dialog_delete_title">Delete selected items?</string>
+    <string name="file_dialog_delete_confirm">Delete</string>
+    <string name="file_dialog_create_folder_title">Create new folder</string>
+    <string name="file_dialog_create_folder_hint">Folder name</string>
+    <string name="file_dialog_select_target_directory">Select target folder</string>
+    <string name="file_dialog_empty_folder">No subfolders</string>
+    <string name="file_dialog_copy_here">Copy here</string>
+    <string name="file_dialog_move_here">Move here</string>
+    <string name="file_dialog_conflict_title">File conflict</string>
+    <string name="file_dialog_conflict_message">Target location already contains a file named \"%1$s\".</string>
+    <string name="file_dialog_conflict_overwrite">Overwrite</string>
+    <string name="file_dialog_conflict_skip">Skip</string>
+    <string name="file_dialog_conflict_apply_all">Apply to all remaining conflicts</string>
+
+    <string name="file_operation_copying">Copying files…</string>
+    <string name="file_operation_moving">Moving files…</string>
+    <string name="file_operation_deleting">Deleting files…</string>
+    <string name="file_operation_cancel">Cancel</string>
+    <string name="file_operation_completed">File operation completed</string>
+    <string name="file_operation_failed">File operation failed: %1$s</string>
+    <string name="file_operation_notification_channel_name">File Operations</string>
+    <string name="file_operation_notification_channel_desc">Shows progress of active file copying, moving, and deletion tasks.</string>
 </resources>

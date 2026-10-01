@@ -203,4 +203,74 @@ fun BrowserDialogHost(
             }
         )
     }
+
+    state.dialogs.fileToRename?.let { file ->
+        RenameFileDialog(
+            initialName = file.name,
+            onConfirm = { newName ->
+                viewModel.onIntent(BrowserIntent.FileAction.ConfirmRename(file, newName))
+            },
+            onDismiss = {
+                viewModel.onIntent(BrowserIntent.FileAction.DismissRename)
+            }
+        )
+    }
+
+    if (state.dialogs.isDeleteConfirmVisible) {
+        DeleteConfirmDialog(
+            selectedCount = state.selection.selectedPaths.size,
+            onConfirm = {
+                viewModel.onIntent(BrowserIntent.FileAction.ConfirmDelete)
+            },
+            onDismiss = {
+                viewModel.onIntent(BrowserIntent.FileAction.DismissDelete)
+            }
+        )
+    }
+
+    state.dialogs.folderPickerOperation?.let { operation ->
+        val pickerInitialPath = state.dialogs.folderPickerCurrentPath
+            ?: state.mediaNavigationState.currentPath
+        FolderPickerDialog(
+            initialPath = pickerInitialPath,
+            operationType = operation,
+            onConfirm = { targetPath ->
+                viewModel.onIntent(BrowserIntent.FileAction.ConfirmFolderPicker(targetPath))
+            },
+            onRequestCreateFolder = { parentPath ->
+                viewModel.onIntent(
+                    BrowserIntent.FileAction.ShowCreateFolder(
+                        parentPath = parentPath,
+                        currentFolderPickerPath = parentPath
+                    )
+                )
+            },
+            onDismiss = {
+                viewModel.onIntent(BrowserIntent.FileAction.DismissFolderPicker)
+            }
+        )
+    }
+
+    state.dialogs.createFolderParentPath?.let { parentPath ->
+        CreateFolderDialog(
+            onCreate = { folderName ->
+                viewModel.createFolder(parentPath, folderName)
+            },
+            onDismiss = {
+                viewModel.onIntent(BrowserIntent.FileAction.DismissCreateFolder)
+            }
+        )
+    }
+
+    state.dialogs.conflictFileName?.let { conflictFileName ->
+        FileConflictDialog(
+            conflictFileName = conflictFileName,
+            onDecision = { decision ->
+                viewModel.onIntent(BrowserIntent.FileAction.ResolveConflict(decision))
+            },
+            onDismiss = {
+                viewModel.onIntent(BrowserIntent.FileAction.DismissConflict)
+            }
+        )
+    }
 }

@@ -20,12 +20,15 @@ package com.fiepi.media.app.ui.screen.browser.viewmodel
 
 import android.net.Uri
 import com.fiepi.media.domain.model.history.PlaybackHistory
+import com.fiepi.media.domain.model.media.ConflictDecision
+import com.fiepi.media.domain.model.media.FileOperationType
 import com.fiepi.media.domain.model.media.MediaFile
 import com.fiepi.media.domain.model.playlist.Playlist
 import com.fiepi.media.domain.model.preferences.MediaField
 import com.fiepi.media.domain.model.preferences.MediaOptions
 import com.fiepi.media.domain.model.source.MediaSource
 import com.fiepi.media.domain.model.source.RemoteSource
+import com.fiepi.media.domain.model.source.SourceCapabilities
 import com.fiepi.media.domain.model.source.SourceType
 
 /**
@@ -115,7 +118,14 @@ data class BrowserDialogState(
     val pendingRestoreAddToPlaylist: Boolean = false,
     val playlistToRename: Playlist? = null,
     val playlistToDelete: Playlist? = null,
-    val pendingRefreshFilePlaylistId: String? = null
+    val pendingRefreshFilePlaylistId: String? = null,
+    val fileToRename: MediaFile? = null,
+    val isDeleteConfirmVisible: Boolean = false,
+    val folderPickerOperation: FileOperationType? = null,
+    val folderPickerCurrentPath: String? = null,
+    val createFolderParentPath: String? = null,
+    val pendingRestoreFolderPickerOperation: FileOperationType? = null,
+    val conflictFileName: String? = null
 )
 
 /**
@@ -216,6 +226,10 @@ data class BrowserState(
     /** The SourceType (Local, SMB, etc.) of the current media source. */
     val sourceType: SourceType get() = source.current.type
 
+    /** Feature capabilities supported by the active media source. */
+    val capabilities: SourceCapabilities
+        get() = source.current.capabilities
+
     /** Display fields corresponding to the current media source type (Local vs Remote). */
     val displayFields: List<MediaField>
         get() = if (sourceType.isRemote) remoteDisplayFields else localDisplayFields
@@ -225,13 +239,16 @@ data class BrowserState(
         get() = (mediaState as? MediaBrowserState.Content)?.files
             ?.filter { it.path in selection.selectedPaths } ?: emptyList()
 
+    /** Total number of valid selected items. */
+    val selectedCount: Int get() = selectedMediaFiles.size
+
     /** Selected video files in current content. */
     val selectedVideos: List<MediaFile.Video>
         get() = selectedMediaFiles.filterIsInstance<MediaFile.Video>()
 
-    /** Whether add to playlist action is enabled (at least 1 video selected). */
+    /** Whether add to playlist action is enabled (all selected items are videos). */
     val isAddToPlaylistEnabled: Boolean
-        get() = selectedVideos.isNotEmpty()
+        get() = selectedMediaFiles.isNotEmpty() && selectedMediaFiles.all { it is MediaFile.Video }
 
     /** Calculates the playlist breadcrumb list for current detail state. */
     fun playlistBreadcrumbs(rootTitle: String): List<PlaylistBreadcrumb> {
@@ -471,5 +488,27 @@ sealed interface BrowserIntent {
 
         /** Updates the search query and filters the file list. */
         data class SearchQueryChange(val query: String) : Config
+    }
+
+    /** Intents related to file management (Copy, Move, Rename, Delete, Create Folder). */
+    sealed interface FileAction : BrowserIntent {
+        data class ShowRename(val file: MediaFile) : FileAction
+        data class ConfirmRename(val file: MediaFile, val newName: String) : FileAction
+        data object DismissRename : FileAction
+
+        data object ShowDelete : FileAction
+        data object ConfirmDelete : FileAction
+        data object DismissDelete : FileAction
+
+        data class StartCopy(val files: List<MediaFile>) : FileAction
+        data class StartMove(val files: List<MediaFile>) : FileAction
+        data class ConfirmFolderPicker(val targetPath: String) : FileAction
+        data object DismissFolderPicker : FileAction
+
+        data class ShowCreateFolder(val parentPath: String, val currentFolderPickerPath: String? = null) : FileAction
+        data object DismissCreateFolder : FileAction
+        data class CreateFolder(val parentPath: String, val name: String) : FileAction
+        data class ResolveConflict(val decision: ConflictDecision) : FileAction
+        data object DismissConflict : FileAction
     }
 }

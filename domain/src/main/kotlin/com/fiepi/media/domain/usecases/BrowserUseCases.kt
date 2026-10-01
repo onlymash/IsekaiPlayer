@@ -23,6 +23,7 @@ import com.fiepi.media.domain.usecase.history.DeleteHistoryUseCase
 import com.fiepi.media.domain.usecase.history.GetHistoryPagingUseCase
 import com.fiepi.media.domain.usecase.history.GetLastPlayedInDirectoryUseCase
 import com.fiepi.media.domain.usecase.history.SaveHistoryUseCase
+import com.fiepi.media.domain.usecase.media.FileManagementUseCases
 import com.fiepi.media.domain.usecase.media.GetMediaFilesUseCase
 import com.fiepi.media.domain.usecase.media.HasCachedMediaUseCase
 import com.fiepi.media.domain.usecase.media.SearchMediaFilesUseCase
@@ -42,6 +43,7 @@ data class BrowserUseCases(
     val getMediaFiles: GetMediaFilesUseCase,
     val hasCachedMedia: HasCachedMediaUseCase,
     val searchMediaFiles: SearchMediaFilesUseCase,
+    val fileManagement: FileManagementUseCases,
     val getSortOptions: GetSortOptionsUseCase,
     val updateSortOptions: UpdateSortOptionsUseCase,
     val getDisplayFields: GetDisplayFieldsUseCase,

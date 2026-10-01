@@ -25,6 +25,7 @@ sealed class MediaSource {
     abstract val type: SourceType
     abstract val totalSpace: Long?
     abstract val freeSpace: Long?
+    abstract val capabilities: SourceCapabilities
 
     data class Local(
         override val id: String,
@@ -35,6 +36,10 @@ sealed class MediaSource {
         val isRemovable: Boolean = false,
     ) : MediaSource() {
         override val type: SourceType = SourceType.Local
+        override val capabilities: SourceCapabilities = SourceCapabilities(
+            canModifyFiles = true,
+            canCreateFolder = true
+        )
     }
 
     data class Remote(
@@ -50,6 +55,10 @@ sealed class MediaSource {
         override val type: SourceType = source.type
         override val totalSpace: Long? = source.totalSpace
         override val freeSpace: Long? = source.freeSpace
+        override val capabilities: SourceCapabilities = SourceCapabilities(
+            canModifyFiles = false,
+            canCreateFolder = false
+        )
     }
 
     data class External(
@@ -60,6 +69,10 @@ sealed class MediaSource {
         override val freeSpace: Long? = null
     ) : MediaSource() {
         override val type: SourceType = SourceType.External
+        override val capabilities: SourceCapabilities = SourceCapabilities(
+            canModifyFiles = false,
+            canCreateFolder = false
+        )
     }
 
     companion object {

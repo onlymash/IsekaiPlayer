@@ -3,7 +3,9 @@ package com.fiepi.media.app.ui.screen.browser.viewmodel
 import android.app.Application
 import androidx.paging.PagingData
 import app.cash.turbine.test
+import com.fiepi.media.app.service.FileOperationManager
 import com.fiepi.media.domain.model.history.PlaybackHistory
+import com.fiepi.media.domain.model.media.FileOperationStatus
 import com.fiepi.media.domain.model.media.MediaFile
 import com.fiepi.media.domain.model.preferences.MediaField
 import com.fiepi.media.domain.model.preferences.MediaOptions
@@ -34,6 +36,7 @@ class BrowserViewModelTest {
 
     private val application = mockk<Application>(relaxed = true)
     private val useCases = mockk<BrowserUseCases>(relaxed = true)
+    private val fileOperationManager = mockk<FileOperationManager>(relaxed = true)
 
     private val testDispatcher = StandardTestDispatcher()
 
@@ -42,6 +45,7 @@ class BrowserViewModelTest {
     private val interceptBackFlow = MutableStateFlow(true)
     private val sortOptionsFlow = MutableStateFlow(MediaOptions())
     private val displayFieldsFlow = MutableStateFlow<List<MediaField>>(MediaField.entries)
+    private val fileOpStatusFlow = MutableStateFlow<FileOperationStatus>(FileOperationStatus.Idle)
 
     @Before
     fun setup() {
@@ -53,6 +57,7 @@ class BrowserViewModelTest {
         every { useCases.getSortOptions(any()) } returns sortOptionsFlow
         every { useCases.getDisplayFields(any()) } returns displayFieldsFlow
         every { useCases.hasCachedMedia(any(), any()) } returns false
+        every { fileOperationManager.status } returns fileOpStatusFlow
 
         every { application.getString(any()) } returns "Internal Storage"
         coEvery { useCases.getMediaFiles(any(), any(), any(), any()) } returns emptyList()
@@ -65,7 +70,7 @@ class BrowserViewModelTest {
 
     @Test
     fun testInitialState() = runTest {
-        val viewModel = BrowserViewModel(application, useCases)
+        val viewModel = BrowserViewModel(application, useCases, fileOperationManager)
         runCurrent()
 
         viewModel.state.test {
@@ -76,7 +81,7 @@ class BrowserViewModelTest {
 
     @Test
     fun testNavigateToFolder() = runTest {
-        val viewModel = BrowserViewModel(application, useCases)
+        val viewModel = BrowserViewModel(application, useCases, fileOperationManager)
         runCurrent()
 
         viewModel.state.test {
@@ -105,7 +110,7 @@ class BrowserViewModelTest {
         // Mock search to return Matrix when queried
         every { useCases.searchMediaFiles("Matrix", any(), any()) } returns flowOf(matrix)
 
-        val viewModel = BrowserViewModel(application, useCases)
+        val viewModel = BrowserViewModel(application, useCases, fileOperationManager)
         runCurrent()
 
         viewModel.state.test {
@@ -128,7 +133,7 @@ class BrowserViewModelTest {
 
     @Test
     fun testSwitchSource() = runTest {
-        val viewModel = BrowserViewModel(application, useCases)
+        val viewModel = BrowserViewModel(application, useCases, fileOperationManager)
         runCurrent()
 
         viewModel.state.test {
@@ -148,7 +153,7 @@ class BrowserViewModelTest {
 
     @Test
     fun testSwitchToHistory() = runTest {
-        val viewModel = BrowserViewModel(application, useCases)
+        val viewModel = BrowserViewModel(application, useCases, fileOperationManager)
         runCurrent()
 
         viewModel.state.test {
@@ -177,7 +182,7 @@ class BrowserViewModelTest {
             )
         )
 
-        val viewModel = BrowserViewModel(application, useCases)
+        val viewModel = BrowserViewModel(application, useCases, fileOperationManager)
         runCurrent()
 
         viewModel.historyPagingFlow.test {

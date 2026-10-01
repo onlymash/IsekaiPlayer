@@ -372,6 +372,7 @@ fun BrowserContentSwitcher(
                     initialPosition = target.scrollPosition,
                     lastPlayedPath = state.lastPlayedUri,
                     selectionState = state.selection,
+                    canSelectAllFiles = state.capabilities.canModifyFiles,
                     onItemToggleSelect = { media ->
                         actions.onIntent(BrowserIntent.Selection.ToggleSelect(media.path))
                     },

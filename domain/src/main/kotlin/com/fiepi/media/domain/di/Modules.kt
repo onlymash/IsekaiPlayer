@@ -33,8 +33,14 @@ import com.fiepi.media.domain.usecase.history.GetHistoryPagingUseCase
 import com.fiepi.media.domain.usecase.history.GetHistoryUseCase
 import com.fiepi.media.domain.usecase.history.GetLastPlayedInDirectoryUseCase
 import com.fiepi.media.domain.usecase.history.SaveHistoryUseCase
+import com.fiepi.media.domain.usecase.media.CopyFileUseCase
+import com.fiepi.media.domain.usecase.media.CreateDirectoryUseCase
+import com.fiepi.media.domain.usecase.media.DeleteFilesUseCase
+import com.fiepi.media.domain.usecase.media.FileManagementUseCases
 import com.fiepi.media.domain.usecase.media.GetMediaFilesUseCase
 import com.fiepi.media.domain.usecase.media.HasCachedMediaUseCase
+import com.fiepi.media.domain.usecase.media.MoveFileUseCase
+import com.fiepi.media.domain.usecase.media.RenameFileUseCase
 import com.fiepi.media.domain.usecase.media.SearchMediaFilesUseCase
 import com.fiepi.media.domain.usecase.playlist.AddMediaToPlaylistUseCase
 import com.fiepi.media.domain.usecase.playlist.CreatePlaylistUseCase
@@ -162,6 +168,11 @@ private val useCaseMediaModule = module {
     factoryOf(::GetMediaFilesUseCase)
     factoryOf(::HasCachedMediaUseCase)
     factoryOf(::SearchMediaFilesUseCase)
+    factoryOf(::RenameFileUseCase)
+    factoryOf(::DeleteFilesUseCase)
+    factoryOf(::CopyFileUseCase)
+    factoryOf(::MoveFileUseCase)
+    factoryOf(::CreateDirectoryUseCase)
 
     // Cache
     factoryOf(::GetCacheInfoUseCase)
@@ -233,6 +244,7 @@ private val useCaseAggregateModule = module {
 
     factoryOf(::AppUseCases)
     factoryOf(::BrowserUseCases)
+    factoryOf(::FileManagementUseCases)
     factoryOf(::NetworkStreamUseCases)
     factoryOf(::SourceEditorUseCases)
     factoryOf(::SourceManagerUseCases)

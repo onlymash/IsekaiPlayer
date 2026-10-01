@@ -20,6 +20,7 @@ package com.fiepi.media.data.repository.media.local
 
 import android.content.Context
 import android.database.ContentObserver
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
@@ -362,5 +363,157 @@ class LocalMediaRepositoryImpl(
             }
         }
         return videos
+    }
+
+    override suspend fun renameFile(path: String, newName: String): Result<Unit> =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                val oldFile = File(path)
+                if (!oldFile.exists()) {
+                    throw NoSuchFileException(oldFile, null, "File does not exist")
+                }
+
+                val parent = oldFile.parentFile ?: throw IllegalArgumentException("Invalid path")
+                val oldExt = FileUtils.extractExtension(oldFile.name)
+                val finalName = if (oldFile.isFile && !oldExt.isNullOrEmpty() && !newName.endsWith(".$oldExt", ignoreCase = true)) {
+                    "$newName.$oldExt"
+                } else {
+                    newName
+                }
+
+                val newFile = File(parent, finalName)
+                if (newFile.exists()) {
+                    throw FileAlreadyExistsException(newFile, null, "Target name already exists")
+                }
+
+                if (!oldFile.renameTo(newFile)) {
+                    throw IllegalStateException("Failed to rename file")
+                }
+
+                scanMediaFiles(arrayOf(oldFile.absolutePath, newFile.absolutePath))
+                invalidateCache()
+            }
+        }
+
+    override suspend fun deleteFiles(paths: List<String>): Result<Unit> =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                val scannedPaths = mutableListOf<String>()
+                for (path in paths) {
+                    val file = File(path)
+                    if (file.exists()) {
+                        scannedPaths.add(file.absolutePath)
+                        if (file.isDirectory) {
+                            file.deleteRecursively()
+                        } else {
+                            file.delete()
+                        }
+                    }
+                }
+                scanMediaFiles(scannedPaths.toTypedArray())
+                invalidateCache()
+            }
+        }
+
+    override suspend fun copyFile(
+        sourcePath: String,
+        targetDirectory: String,
+        overwrite: Boolean
+    ): Result<Unit> = withContext(Dispatchers.IO) {
+        runCatching {
+            val sourceFile = File(sourcePath)
+            if (!sourceFile.exists()) {
+                throw NoSuchFileException(sourceFile, null, "Source file does not exist")
+            }
+
+            val targetDir = File(targetDirectory)
+            if (!targetDir.exists()) {
+                targetDir.mkdirs()
+            }
+
+            val targetFile = File(targetDir, sourceFile.name)
+            if (targetFile.exists()) {
+                if (!overwrite) {
+                    throw FileAlreadyExistsException(targetFile, null, "Target file already exists")
+                }
+            }
+
+            if (sourceFile.isDirectory) {
+                sourceFile.copyRecursively(targetFile, overwrite = overwrite)
+            } else {
+                sourceFile.copyTo(targetFile, overwrite = overwrite)
+            }
+
+            scanMediaFiles(arrayOf(targetFile.absolutePath))
+            invalidateCache()
+        }
+    }
+
+    override suspend fun moveFile(
+        sourcePath: String,
+        targetDirectory: String,
+        overwrite: Boolean
+    ): Result<Unit> = withContext(Dispatchers.IO) {
+        runCatching {
+            val sourceFile = File(sourcePath)
+            if (!sourceFile.exists()) {
+                throw NoSuchFileException(sourceFile, null, "Source file does not exist")
+            }
+
+            val targetDir = File(targetDirectory)
+            if (!targetDir.exists()) {
+                targetDir.mkdirs()
+            }
+
+            val targetFile = File(targetDir, sourceFile.name)
+            if (targetFile.exists()) {
+                if (!overwrite) {
+                    throw FileAlreadyExistsException(targetFile, null, "Target file already exists")
+                }
+                if (targetFile.isDirectory) {
+                    targetFile.deleteRecursively()
+                } else {
+                    targetFile.delete()
+                }
+            }
+
+            val moved = sourceFile.renameTo(targetFile)
+            if (!moved) {
+                // Fallback to copy and delete if cross-filesystem move
+                if (sourceFile.isDirectory) {
+                    sourceFile.copyRecursively(targetFile, overwrite = true)
+                    sourceFile.deleteRecursively()
+                } else {
+                    sourceFile.copyTo(targetFile, overwrite = true)
+                    sourceFile.delete()
+                }
+            }
+
+            scanMediaFiles(arrayOf(sourceFile.absolutePath, targetFile.absolutePath))
+            invalidateCache()
+        }
+    }
+
+    override suspend fun createDirectory(parentPath: String, folderName: String): Result<Unit> =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                val targetDir = File(parentPath, folderName)
+                if (targetDir.exists()) {
+                    throw FileAlreadyExistsException(targetDir, null, "Folder already exists")
+                }
+                if (!targetDir.mkdirs()) {
+                    throw IllegalStateException("Failed to create directory")
+                }
+                invalidateCache()
+            }
+        }
+
+    private fun scanMediaFiles(paths: Array<String>) {
+        if (paths.isEmpty()) return
+        try {
+            MediaScannerConnection.scanFile(context, paths, null, null)
+        } catch (_: Exception) {
+            // Ignore scan failure
+        }
     }
 }

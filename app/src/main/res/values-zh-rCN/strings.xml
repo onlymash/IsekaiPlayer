@@ -703,4 +703,37 @@
     <string name="notification_screenshot_saved">截图已保存</string>
 
     <string name="error_permission_denied_storage">权限被拒绝：需要外部存储访问权限</string>
+
+    <!-- File Management -->
+    <string name="file_action_copy">复制</string>
+    <string name="file_action_move">移动</string>
+    <string name="file_action_rename">重命名</string>
+    <string name="file_action_delete">删除</string>
+    <string name="file_action_add_to_playlist">添加到播放列表</string>
+    <string name="file_action_clear_selection">清除选择</string>
+    <string name="file_action_create_folder">新建文件夹</string>
+
+    <string name="file_dialog_rename_title">重命名</string>
+    <string name="file_dialog_delete_title">删除选中的项目？</string>
+    <string name="file_dialog_delete_confirm">删除</string>
+    <string name="file_dialog_create_folder_title">新建文件夹</string>
+    <string name="file_dialog_create_folder_hint">文件夹名称</string>
+    <string name="file_dialog_select_target_directory">选择目标文件夹</string>
+    <string name="file_dialog_empty_folder">没有子文件夹</string>
+    <string name="file_dialog_copy_here">复制到此处</string>
+    <string name="file_dialog_move_here">移动到此处</string>
+    <string name="file_dialog_conflict_title">文件同名冲突</string>
+    <string name="file_dialog_conflict_message">目标位置已存在同名文件 \"%1$s\"。</string>
+    <string name="file_dialog_conflict_overwrite">覆盖</string>
+    <string name="file_dialog_conflict_skip">跳过</string>
+    <string name="file_dialog_conflict_apply_all">应用于所有剩余冲突</string>
+
+    <string name="file_operation_copying">正在复制文件…</string>
+    <string name="file_operation_moving">正在移动文件…</string>
+    <string name="file_operation_deleting">正在删除文件…</string>
+    <string name="file_operation_cancel">取消</string>
+    <string name="file_operation_completed">文件操作已完成</string>
+    <string name="file_operation_failed">文件操作失败: %1$s</string>
+    <string name="file_operation_notification_channel_name">文件后台任务</string>
+    <string name="file_operation_notification_channel_desc">展示当前文件复制、移动和删除任务的实时进度。</string>
 </resources>
