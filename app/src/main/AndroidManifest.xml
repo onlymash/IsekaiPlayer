@@ -43,8 +43,7 @@
         android:localeConfig="@xml/locales_config"
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        tools:targetApi="33">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".activity.MainActivity"
             android:exported="true"
