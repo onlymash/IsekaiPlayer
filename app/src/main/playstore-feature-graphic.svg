@@ -122,10 +122,13 @@
 <g transform="translate(104, 175)"><circle r="30" fill="#1E1238" stroke="#7C4DFF" stroke-width="2"/><circle r="22" fill="none" stroke="#00E5FF" stroke-width="1.5" opacity="0.8"/><polygon points="12,0 -8,-11 -8,11" fill="#B388FF"/><polygon points="5,0 -4,-5 -4,5" fill="#FFFFFF"/></g>
 <text x="152" y="192" font-family="Roboto, System-UI, sans-serif" font-weight="800" font-size="54" fill="url(#titleGrad)" filter="url(#textGlow)" letter-spacing="1">IsekaiPlayer</text>
 <text x="72" y="248" font-family="Roboto, System-UI, sans-serif" font-weight="500" font-size="19" fill="#CBB2FF" opacity="0.9" letter-spacing="0.5">Sovereign above myriad realms • Shatter every mortal cipher</text>
-<rect x="72" y="310" width="307.5" height="36" rx="18" fill="#1F123B" fill-opacity="0.75" stroke="#7C4DFF" stroke-width="1.5" stroke-opacity="0.8"/>
-<text x="88" y="333" font-family="Roboto, System-UI, sans-serif" font-weight="600" font-size="14" fill="#FFFFFF" opacity="0.95">⚡ MPV + ExoPlayer Dual Engine</text>
-<rect x="393.5" y="310" width="241.0" height="36" rx="18" fill="#0C2338" fill-opacity="0.75" stroke="#00E5FF" stroke-width="1.5" stroke-opacity="0.8"/>
-<text x="409.5" y="333" font-family="Roboto, System-UI, sans-serif" font-weight="600" font-size="14" fill="#FFFFFF" opacity="0.95">🌐 SMB / WebDAV / Local</text>
-<rect x="648.5" y="310" width="269.5" height="36" rx="18" fill="#281033" fill-opacity="0.75" stroke="#E040FB" stroke-width="1.5" stroke-opacity="0.8"/>
-<text x="664.5" y="333" font-family="Roboto, System-UI, sans-serif" font-weight="600" font-size="14" fill="#FFFFFF" opacity="0.95">✨ Material 3 / Modern MVI</text>
+<rect x="72" y="310" width="291" height="36" rx="18" fill="#1F123B" fill-opacity="0.75" stroke="#7C4DFF" stroke-width="1.5" stroke-opacity="0.8"/>
+<path d="M 94.0 321 L 89.0 328.5 L 94.0 328.5 L 92.5 335 L 100.0 327 L 94.5 327 L 97.0 321 Z" fill="#FFD54F"/>
+<text x="112.0" y="333" font-family="Roboto, System-UI, sans-serif" font-weight="600" font-size="14" fill="#FFFFFF" opacity="0.95">MPV + ExoPlayer Dual Engine</text>
+<rect x="375" y="310" width="230" height="36" rx="18" fill="#0C2338" fill-opacity="0.75" stroke="#00E5FF" stroke-width="1.5" stroke-opacity="0.8"/>
+<circle cx="398.0" cy="328" r="6.5" fill="none" stroke="#80D8FF" stroke-width="1.4"/><line x1="391.5" y1="328" x2="404.5" y2="328" stroke="#80D8FF" stroke-width="1.1"/><ellipse cx="398.0" cy="328" rx="3.2" ry="6.5" fill="none" stroke="#80D8FF" stroke-width="1.1"/>
+<text x="415.0" y="333" font-family="Roboto, System-UI, sans-serif" font-weight="600" font-size="14" fill="#FFFFFF" opacity="0.95">SMB / WebDAV / Local</text>
+<rect x="617" y="310" width="256" height="36" rx="18" fill="#281033" fill-opacity="0.75" stroke="#E040FB" stroke-width="1.5" stroke-opacity="0.8"/>
+<path d="M 639.0 321 Q 639.0 328 646.0 328 Q 639.0 328 639.0 335 Q 639.0 328 632.0 328 Q 639.0 328 639.0 321 Z" fill="#FF80AB"/><path d="M 645.0 322 Q 645.0 324.5 647.5 324.5 Q 645.0 324.5 645.0 327 Q 645.0 324.5 642.5 324.5 Q 645.0 324.5 645.0 322 Z" fill="#FF80AB" opacity="0.85"/>
+<text x="657.0" y="333" font-family="Roboto, System-UI, sans-serif" font-weight="600" font-size="14" fill="#FFFFFF" opacity="0.95">Material 3 / Modern MVI</text>
 </svg>

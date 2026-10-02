@@ -287,60 +287,92 @@ def generate_svg() -> str:
     # Feature Badges Row
     badge_y = 310
     badges = [
-        ("⚡ MPV + ExoPlayer Dual Engine", "#7C4DFF", "#1F123B"),
-        ("🌐 SMB / WebDAV / Local", "#00E5FF", "#0C2338"),
-        ("✨ Material 3 / Modern MVI", "#E040FB", "#281033"),
+        ("lightning", "MPV + ExoPlayer Dual Engine", "#7C4DFF", "#1F123B", "#FFD54F"),
+        ("globe", "SMB / WebDAV / Local", "#00E5FF", "#0C2338", "#80D8FF"),
+        ("sparkle", "Material 3 / Modern MVI", "#E040FB", "#281033", "#FF80AB"),
     ]
 
     badge_x = left_x
-    for label, border_col, bg_col in badges:
-        padding_h = 16
-        text_len = len(label) * 9.5
-        badge_w = text_len + padding_h * 2
+    for icon_type, label, border_col, bg_col, icon_col in badges:
+        padding_h = 14
+        icon_w = 18
+        gap = 8
+        text_len = len(label) * 8.8
+        badge_w = int(padding_h + icon_w + gap + text_len + padding_h)
         badge_h = 36
+        icy = badge_y + 18
 
+        # Badge Background Pill
         svg_parts.append(
             f'<rect x="{badge_x}" y="{badge_y}" width="{badge_w}" height="{badge_h}" rx="18" '
             f'fill="{bg_col}" fill-opacity="0.75" stroke="{border_col}" stroke-width="1.5" stroke-opacity="0.8"/>'
         )
+
+        # Draw Vector Icon
+        icx = badge_x + padding_h + icon_w / 2
+        if icon_type == "lightning":
+            svg_parts.append(
+                f'<path d="M {icx-1} {icy-7} L {icx-6} {icy+0.5} L {icx-1} {icy+0.5} L {icx-2.5} {icy+7} L {icx+5} {icy-1} L {icx-0.5} {icy-1} L {icx+2} {icy-7} Z" fill="{icon_col}"/>'
+            )
+        elif icon_type == "globe":
+            svg_parts.append(
+                f'<circle cx="{icx}" cy="{icy}" r="6.5" fill="none" stroke="{icon_col}" stroke-width="1.4"/>'
+                f'<line x1="{icx-6.5}" y1="{icy}" x2="{icx+6.5}" y2="{icy}" stroke="{icon_col}" stroke-width="1.1"/>'
+                f'<ellipse cx="{icx}" cy="{icy}" rx="3.2" ry="6.5" fill="none" stroke="{icon_col}" stroke-width="1.1"/>'
+            )
+        elif icon_type == "sparkle":
+            p1 = f'M {icx-1} {icy-7} Q {icx-1} {icy} {icx+6} {icy} Q {icx-1} {icy} {icx-1} {icy+7} Q {icx-1} {icy} {icx-8} {icy} Q {icx-1} {icy} {icx-1} {icy-7} Z'
+            p2 = f'M {icx+5} {icy-6} Q {icx+5} {icy-3.5} {icx+7.5} {icy-3.5} Q {icx+5} {icy-3.5} {icx+5} {icy-1} Q {icx+5} {icy-3.5} {icx+2.5} {icy-3.5} Q {icx+5} {icy-3.5} {icx+5} {icy-6} Z'
+            svg_parts.append(
+                f'<path d="{p1}" fill="{icon_col}"/><path d="{p2}" fill="{icon_col}" opacity="0.85"/>'
+            )
+
+        # Badge Text Label
+        text_x = badge_x + padding_h + icon_w + gap
         svg_parts.append(
-            f'<text x="{badge_x + padding_h}" y="{badge_y + 23}" font-family="Roboto, System-UI, sans-serif" '
+            f'<text x="{text_x:.1f}" y="{badge_y + 23}" font-family="Roboto, System-UI, sans-serif" '
             f'font-weight="600" font-size="14" fill="#FFFFFF" opacity="0.95">{label}</text>'
         )
-        badge_x += badge_w + 14
+
+        badge_x += badge_w + 12
 
     svg_parts.append('</svg>')
     return '\n'.join(svg_parts)
 
 
-def export_to_png(svg_path: str, png_path: str) -> bool:
-    """Exports SVG to 1024x500 PNG using rsvg-convert, inkscape, or magick."""
+def export_to_png(svg_path: str, png_path: str) -> None:
+    """Exports SVG to 1024x500 PNG using rsvg-convert, inkscape, or magick.
+
+    Raises RuntimeError if no converter command is available in system PATH.
+    """
     converters = [
-        ['rsvg-convert', '-w', '1024', '-h', '500', svg_path, '-o', png_path],
+        ["rsvg-convert", "-w", "1024", "-h", "500", svg_path, "-o", png_path],
         [
-            'inkscape',
+            "inkscape",
             svg_path,
-            '--export-filename=' + png_path,
-            '-w',
-            '1024',
-            '-h',
-            '500',
+            "--export-filename=" + png_path,
+            "-w",
+            "1024",
+            "-h",
+            "500",
         ],
-        ['magick', 'convert', '-background', 'none', svg_path, png_path],
-        ['convert', '-background', 'none', svg_path, png_path],
+        ["magick", "convert", "-background", "none", svg_path, png_path],
+        ["convert", "-background", "none", svg_path, png_path],
     ]
 
     for cmd in converters:
         try:
             res = subprocess.run(cmd, capture_output=True, text=True)
             if res.returncode == 0 and os.path.exists(png_path):
-                print(f"[SUCCESS] Converted SVG to PNG using: {' '.join(cmd[:2])}")
-                return True
+                print(f"[SUCCESS] Converted SVG to PNG using: {cmd[0]}")
+                return
         except FileNotFoundError:
             continue
 
-    print("[WARNING] Could not convert automatically using CLI converters.")
-    return False
+    raise RuntimeError(
+        "No SVG converter tool found in system PATH (tried: rsvg-convert, inkscape, magick, convert).\n"
+        "Please install one of the required tool packages (e.g., 'librsvg' / 'librsvg2-bin' or 'imagemagick') and ensure it is in PATH."
+    )
 
 
 def main():
@@ -356,11 +388,12 @@ def main():
         f.write(svg_content)
     print(f"[OK] Saved SVG to {svg_path}")
 
-    success = export_to_png(svg_path, png_path)
-    if success:
+    try:
+        export_to_png(svg_path, png_path)
         print(f"[OK] Saved 1024x500 Feature Graphic PNG to {png_path}")
-    else:
-        print(f"[INFO] You can convert {svg_path} manually or using inkscape.")
+    except RuntimeError as err:
+        print(f"[ERROR] {err}", file=sys.stderr)
+        sys.exit(1)
 
 
 if __name__ == '__main__':
