@@ -34,6 +34,7 @@ import com.fiepi.media.app.ui.screen.settings.SettingsScreen
 import com.fiepi.media.app.ui.screen.source.SourceEditorScreen
 import com.fiepi.media.app.ui.screen.source.SourceManagerScreen
 import com.fiepi.media.app.ui.screen.stream.NetworkStreamScreen
+import com.fiepi.media.app.ui.screen.task.FileTaskScreen
 import com.fiepi.media.app.ui.transition.AppTransition
 import com.fiepi.media.domain.usecases.AppUseCases
 import org.koin.compose.koinInject
@@ -109,6 +110,11 @@ fun AppNavDisplay(appUseCases: AppUseCases = koinInject()) {
             entry<AppNavKey.NetworkStream> {
                 NetworkStreamScreen(
                     onNavigateUp = ::onNavigateUp
+                )
+            }
+            entry<AppNavKey.FileTaskQueue> {
+                FileTaskScreen(
+                    onNavigateBack = ::onNavigateUp
                 )
             }
         },

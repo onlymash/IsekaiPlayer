@@ -24,16 +24,20 @@ import android.app.Service
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.IBinder
+import com.fiepi.media.app.activity.MainActivity
 import com.fiepi.media.domain.model.media.ConflictDecision
 import com.fiepi.media.domain.model.media.ConflictResolution
-import com.fiepi.media.domain.model.media.FileOperationStatus
 import com.fiepi.media.domain.model.media.FileOperationType
+import com.fiepi.media.domain.model.media.FileTask
+import com.fiepi.media.domain.model.media.FileTaskState
 import com.fiepi.media.domain.usecase.media.FileManagementUseCases
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.koin.android.ext.android.inject
 import java.io.File
 
@@ -44,7 +48,8 @@ class FileOperationService : Service() {
     private val notificationController: NotificationController by inject()
 
     private val serviceScope = CoroutineScope(Dispatchers.IO + Job())
-    private var activeJob: Job? = null
+    private var processJob: Job? = null
+    private val queueMutex = Mutex()
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -52,56 +57,61 @@ class FileOperationService : Service() {
         val action = intent?.action ?: return START_NOT_STICKY
 
         if (action == ACTION_CANCEL) {
-            fileOperationManager.cancelOperation()
-            activeJob?.cancel()
-            stopForeground(STOP_FOREGROUND_REMOVE)
-            stopSelf()
+            val taskId = intent.getStringExtra(EXTRA_TASK_ID)
+            if (taskId != null) {
+                fileOperationManager.cancelTask(taskId)
+            }
             return START_NOT_STICKY
         }
 
-        if (action == ACTION_START) {
-            val typeName = intent.getStringExtra(EXTRA_TYPE) ?: FileOperationType.Copy.name
-            val type = runCatching { FileOperationType.valueOf(typeName) }.getOrDefault(FileOperationType.Copy)
-            val sourcePaths = intent.getStringArrayListExtra(EXTRA_SOURCE_PATHS) ?: emptyList<String>()
-            val targetDir = intent.getStringExtra(EXTRA_TARGET_DIR) ?: ""
-
-            startForeground(
-                NotificationController.NOTIFICATION_ID_FILE_OPERATION,
-                buildNotification(type, 0, sourcePaths.size, ""),
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
-            )
-
-            activeJob?.cancel()
-            activeJob = serviceScope.launch {
-                executeOperation(type, sourcePaths, targetDir)
-            }
+        if (action == ACTION_PROCESS_QUEUE) {
+            triggerQueueProcessing()
         }
 
         return START_NOT_STICKY
     }
 
-    private suspend fun executeOperation(
-        type: FileOperationType,
-        sourcePaths: List<String>,
-        targetDir: String
-    ) {
+    private fun triggerQueueProcessing() {
+        if (processJob?.isActive == true) return
+
+        processJob = serviceScope.launch {
+            queueMutex.withLock {
+                var currentTask = fileOperationManager.getNextPendingTask()
+                while (currentTask != null) {
+                    val task = currentTask
+                    startForegroundWithNotification(task.type, task.totalCount)
+                    executeSingleTask(task)
+                    currentTask = fileOperationManager.getNextPendingTask()
+                }
+                stopForeground(STOP_FOREGROUND_REMOVE)
+                stopSelf()
+            }
+        }
+    }
+
+    private suspend fun executeSingleTask(task: FileTask) {
+        fileOperationManager.updateTask(task.id) {
+            it.copy(status = FileTaskState.Running)
+        }
+
+        val type = task.type
+        val sourcePaths = task.sourcePaths
+        val targetDir = task.targetDirectory ?: ""
+        val total = task.totalCount
+
         var successCount = 0
         var failCount = 0
         var skippedCount = 0
         var applyToAllDecision: ConflictDecision? = null
 
-        val total = sourcePaths.size
-
         if (type == FileOperationType.Delete) {
-            fileOperationManager.updateStatus(
-                FileOperationStatus.Running(
-                    type = type,
+            fileOperationManager.updateTask(task.id) {
+                it.copy(
                     currentFileName = "",
                     processedCount = 0,
-                    totalCount = total,
                     progressPercent = 0
                 )
-            )
+            }
             val result = fileManagementUseCases.deleteFiles(sourcePaths)
             if (result.isSuccess) {
                 successCount = total
@@ -110,7 +120,9 @@ class FileOperationService : Service() {
             }
         } else {
             for ((index, sourcePath) in sourcePaths.withIndex()) {
-                if (fileOperationManager.isCancelled()) {
+                val currentTaskState =
+                    fileOperationManager.tasks.value.find { it.id == task.id }?.status
+                if (currentTaskState == FileTaskState.Cancelled) {
                     break
                 }
 
@@ -118,30 +130,38 @@ class FileOperationService : Service() {
                 val fileName = sourceFile.name
                 val percent = ((index.toFloat() / total) * 100).toInt()
 
-                fileOperationManager.updateStatus(
-                    FileOperationStatus.Running(
-                        type = type,
+                fileOperationManager.updateTask(task.id) {
+                    it.copy(
                         currentFileName = fileName,
                         processedCount = index,
-                        totalCount = total,
                         progressPercent = percent
                     )
-                )
+                }
                 updateNotification(type, index, total, fileName)
 
                 val targetFile = File(targetDir, fileName)
                 var overwrite = false
 
                 if (targetFile.exists()) {
-                    val decision = applyToAllDecision ?: fileOperationManager.requestConflictDecision(
-                        type = type,
-                        sourcePath = sourcePath,
-                        targetPath = targetDir,
-                        conflictFileName = fileName
-                    )
+                    val decision =
+                        applyToAllDecision ?: fileOperationManager.requestConflictDecision(
+                            taskId = task.id,
+                            sourcePath = sourcePath,
+                            targetPath = targetDir,
+                            conflictFileName = fileName
+                        )
 
-                    if (decision == null || fileOperationManager.isCancelled()) {
+                    val updatedStatus =
+                        fileOperationManager.tasks.value.find { it.id == task.id }?.status
+                    if (decision == null || updatedStatus == FileTaskState.Cancelled) {
+                        fileOperationManager.updateTask(task.id) {
+                            it.copy(status = FileTaskState.Cancelled)
+                        }
                         break
+                    }
+
+                    fileOperationManager.updateTask(task.id) {
+                        it.copy(status = FileTaskState.Running)
                     }
 
                     if (decision.applyToAll && applyToAllDecision == null) {
@@ -170,16 +190,30 @@ class FileOperationService : Service() {
             }
         }
 
-        val finalStatus = FileOperationStatus.Completed(
-            type = type,
-            successCount = successCount,
-            failCount = failCount,
-            skippedCount = skippedCount
-        )
-        fileOperationManager.updateStatus(finalStatus)
+        val finalTaskState = fileOperationManager.tasks.value.find { it.id == task.id }?.status
+        if (finalTaskState != FileTaskState.Cancelled) {
+            fileOperationManager.updateTask(task.id) {
+                it.copy(
+                    status = FileTaskState.Completed,
+                    successCount = successCount,
+                    failCount = failCount,
+                    skippedCount = skippedCount,
+                    progressPercent = 100
+                )
+            }
+        }
+    }
 
-        stopForeground(STOP_FOREGROUND_REMOVE)
-        stopSelf()
+    private fun startForegroundWithNotification(
+        type: FileOperationType,
+        total: Int
+    ) {
+        val notification = buildNotification(type, 0, total, "")
+        startForeground(
+            NotificationController.NOTIFICATION_ID_FILE_OPERATION,
+            notification,
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+        )
     }
 
     private fun updateNotification(
@@ -201,13 +235,13 @@ class FileOperationService : Service() {
         total: Int,
         fileName: String
     ): Notification {
-        val cancelIntent = Intent(this, FileOperationService::class.java).apply {
-            action = ACTION_CANCEL
+        val openActivityIntent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
-        val cancelPendingIntent = PendingIntent.getService(
+        val openActivityPendingIntent = PendingIntent.getActivity(
             this,
-            1,
-            cancelIntent,
+            0,
+            openActivityIntent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
@@ -217,7 +251,7 @@ class FileOperationService : Service() {
             current = current,
             total = total,
             fileName = fileName,
-            cancelPendingIntent = cancelPendingIntent
+            cancelPendingIntent = openActivityPendingIntent
         )
     }
 
@@ -227,11 +261,9 @@ class FileOperationService : Service() {
     }
 
     companion object {
-        const val ACTION_START = "com.fiepi.media.app.action.FILE_OP_START"
+        const val ACTION_PROCESS_QUEUE = "com.fiepi.media.app.action.FILE_OP_PROCESS_QUEUE"
         const val ACTION_CANCEL = "com.fiepi.media.app.action.FILE_OP_CANCEL"
 
-        const val EXTRA_TYPE = "extra_type"
-        const val EXTRA_SOURCE_PATHS = "extra_source_paths"
-        const val EXTRA_TARGET_DIR = "extra_target_dir"
+        const val EXTRA_TASK_ID = "extra_task_id"
     }
 }

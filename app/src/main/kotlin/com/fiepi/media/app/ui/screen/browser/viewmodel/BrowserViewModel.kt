@@ -28,8 +28,8 @@ import androidx.paging.cachedIn
 import com.fiepi.media.app.R
 import com.fiepi.media.app.service.FileOperationManager
 import com.fiepi.media.domain.model.history.PlaybackHistory
-import com.fiepi.media.domain.model.media.FileOperationStatus
 import com.fiepi.media.domain.model.media.FileOperationType
+import com.fiepi.media.domain.model.media.FileTaskState
 import com.fiepi.media.domain.model.media.MediaFile
 import com.fiepi.media.domain.model.playlist.PlaylistItem
 import com.fiepi.media.domain.model.preferences.MediaOptions
@@ -254,43 +254,16 @@ class BrowserViewModel(
 
     private fun observeFileOperations() {
         viewModelScope.launch {
-            fileOperationManager.status.collect { opStatus ->
-                when (opStatus) {
-                    is FileOperationStatus.NeedConflictDecision -> {
-                        _state.update {
-                            it.copy(
-                                dialogs = it.dialogs.copy(
-                                    conflictFileName = opStatus.conflictFileName
-                                )
-                            )
-                        }
-                    }
-
-                    is FileOperationStatus.Completed -> {
-                        onIntent(BrowserIntent.Storage.LoadFiles)
-                        onIntent(BrowserIntent.Selection.ClearSelection)
-                        _state.update {
-                            it.copy(
-                                dialogs = it.dialogs.copy(
-                                    folderPickerOperation = null,
-                                    conflictFileName = null
-                                )
-                            )
-                        }
-                    }
-
-                    is FileOperationStatus.Failed -> {
-                        _state.update {
-                            it.copy(
-                                dialogs = it.dialogs.copy(
-                                    folderPickerOperation = null,
-                                    conflictFileName = null
-                                )
-                            )
-                        }
-                    }
-
-                    else -> {}
+            fileOperationManager.tasks.collect { tasks ->
+                val activeTask = tasks.firstOrNull { !it.isFinished }
+                val needConflictTask = tasks.find { it.status == FileTaskState.NeedConflict }
+                _state.update {
+                    it.copy(
+                        activeFileTask = activeTask,
+                        dialogs = it.dialogs.copy(
+                            conflictFileName = needConflictTask?.conflictFileName
+                        )
+                    )
                 }
             }
         }
@@ -479,7 +452,8 @@ class BrowserViewModel(
 
             is BrowserIntent.FileAction.ConfirmRename -> {
                 viewModelScope.launch {
-                    val result = useCases.fileManagement.renameFile(intent.file.path, intent.newName)
+                    val result =
+                        useCases.fileManagement.renameFile(intent.file.path, intent.newName)
                     if (result.isSuccess) {
                         onIntent(BrowserIntent.Storage.LoadFiles)
                         onIntent(BrowserIntent.Selection.ClearSelection)
@@ -504,7 +478,7 @@ class BrowserViewModel(
                         selection = BrowserSelectionState()
                     )
                 }
-                fileOperationManager.startDelete(application, selectedPaths)
+                fileOperationManager.enqueueDelete(application, selectedPaths)
             }
 
             is BrowserIntent.FileAction.DismissDelete -> {
@@ -546,9 +520,9 @@ class BrowserViewModel(
                     )
                 }
                 if (operation == FileOperationType.Copy) {
-                    fileOperationManager.startCopy(application, selectedPaths, intent.targetPath)
+                    fileOperationManager.enqueueCopy(application, selectedPaths, intent.targetPath)
                 } else if (operation == FileOperationType.Move) {
-                    fileOperationManager.startMove(application, selectedPaths, intent.targetPath)
+                    fileOperationManager.enqueueMove(application, selectedPaths, intent.targetPath)
                 }
             }
 
@@ -569,7 +543,8 @@ class BrowserViewModel(
                         dialogs = it.dialogs.copy(
                             createFolderParentPath = intent.parentPath,
                             pendingRestoreFolderPickerOperation = it.dialogs.folderPickerOperation,
-                            folderPickerCurrentPath = intent.currentFolderPickerPath ?: it.dialogs.folderPickerCurrentPath,
+                            folderPickerCurrentPath = intent.currentFolderPickerPath
+                                ?: it.dialogs.folderPickerCurrentPath,
                             folderPickerOperation = null
                         )
                     )
@@ -598,12 +573,23 @@ class BrowserViewModel(
 
             is BrowserIntent.FileAction.ResolveConflict -> {
                 _state.update { it.copy(dialogs = it.dialogs.copy(conflictFileName = null)) }
-                fileOperationManager.submitConflictDecision(intent.decision)
+                val needConflictTask =
+                    fileOperationManager.tasks.value.find { it.status == FileTaskState.NeedConflict }
+                if (needConflictTask != null) {
+                    fileOperationManager.submitConflictDecision(
+                        needConflictTask.id,
+                        intent.decision
+                    )
+                }
             }
 
             is BrowserIntent.FileAction.DismissConflict -> {
                 _state.update { it.copy(dialogs = it.dialogs.copy(conflictFileName = null)) }
-                fileOperationManager.cancelOperation()
+                val needConflictTask =
+                    fileOperationManager.tasks.value.find { it.status == FileTaskState.NeedConflict }
+                if (needConflictTask != null) {
+                    fileOperationManager.cancelTask(needConflictTask.id)
+                }
             }
         }
     }
@@ -930,7 +916,8 @@ class BrowserViewModel(
                 val currentFiles =
                     (_state.value.mediaState as? MediaBrowserState.Content)?.files ?: emptyList()
                 val canModify = _state.value.capabilities.canModifyFiles
-                val canSelectThisItem = canModify || currentFiles.any { it is MediaFile.Video && it.path == intent.path }
+                val canSelectThisItem =
+                    canModify || currentFiles.any { it is MediaFile.Video && it.path == intent.path }
                 if (canSelectThisItem || intent.path in _state.value.selection.selectedPaths) {
                     _state.update { currentState ->
                         val currentPaths = currentState.selection.selectedPaths

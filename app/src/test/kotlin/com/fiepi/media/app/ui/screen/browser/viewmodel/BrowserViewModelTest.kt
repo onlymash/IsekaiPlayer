@@ -5,7 +5,7 @@ import androidx.paging.PagingData
 import app.cash.turbine.test
 import com.fiepi.media.app.service.FileOperationManager
 import com.fiepi.media.domain.model.history.PlaybackHistory
-import com.fiepi.media.domain.model.media.FileOperationStatus
+import com.fiepi.media.domain.model.media.FileTask
 import com.fiepi.media.domain.model.media.MediaFile
 import com.fiepi.media.domain.model.preferences.MediaField
 import com.fiepi.media.domain.model.preferences.MediaOptions
@@ -45,7 +45,7 @@ class BrowserViewModelTest {
     private val interceptBackFlow = MutableStateFlow(true)
     private val sortOptionsFlow = MutableStateFlow(MediaOptions())
     private val displayFieldsFlow = MutableStateFlow<List<MediaField>>(MediaField.entries)
-    private val fileOpStatusFlow = MutableStateFlow<FileOperationStatus>(FileOperationStatus.Idle)
+    private val tasksFlow = MutableStateFlow<List<FileTask>>(emptyList())
 
     @Before
     fun setup() {
@@ -57,7 +57,7 @@ class BrowserViewModelTest {
         every { useCases.getSortOptions(any()) } returns sortOptionsFlow
         every { useCases.getDisplayFields(any()) } returns displayFieldsFlow
         every { useCases.hasCachedMedia(any(), any()) } returns false
-        every { fileOperationManager.status } returns fileOpStatusFlow
+        every { fileOperationManager.tasks } returns tasksFlow
 
         every { application.getString(any()) } returns "Internal Storage"
         coEvery { useCases.getMediaFiles(any(), any(), any(), any()) } returns emptyList()

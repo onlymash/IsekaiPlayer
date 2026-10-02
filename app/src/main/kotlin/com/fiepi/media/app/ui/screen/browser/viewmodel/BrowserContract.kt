@@ -22,6 +22,7 @@ import android.net.Uri
 import com.fiepi.media.domain.model.history.PlaybackHistory
 import com.fiepi.media.domain.model.media.ConflictDecision
 import com.fiepi.media.domain.model.media.FileOperationType
+import com.fiepi.media.domain.model.media.FileTask
 import com.fiepi.media.domain.model.media.MediaFile
 import com.fiepi.media.domain.model.playlist.Playlist
 import com.fiepi.media.domain.model.preferences.MediaField
@@ -190,6 +191,7 @@ data class BrowserState(
     val mode: BrowserMode = BrowserMode.Storage,
     val isRefreshing: Boolean = false,
     val interceptBackNavigation: Boolean = true,
+    val activeFileTask: FileTask? = null,
 
     //source
     val source: BrowserSourceState = BrowserSourceState(),
@@ -329,7 +331,8 @@ data class BrowserActions(
     val onSettingsClick: () -> Unit = {},
     val onAddRemoteSource: () -> Unit = {},
     val onPlayNetworkStream: () -> Unit = {},
-    val onSourcesClick: () -> Unit = {}
+    val onSourcesClick: () -> Unit = {},
+    val onOpenTaskQueue: () -> Unit = {}
 )
 
 /**
@@ -505,7 +508,11 @@ sealed interface BrowserIntent {
         data class ConfirmFolderPicker(val targetPath: String) : FileAction
         data object DismissFolderPicker : FileAction
 
-        data class ShowCreateFolder(val parentPath: String, val currentFolderPickerPath: String? = null) : FileAction
+        data class ShowCreateFolder(
+            val parentPath: String,
+            val currentFolderPickerPath: String? = null
+        ) : FileAction
+
         data object DismissCreateFolder : FileAction
         data class CreateFolder(val parentPath: String, val name: String) : FileAction
         data class ResolveConflict(val decision: ConflictDecision) : FileAction

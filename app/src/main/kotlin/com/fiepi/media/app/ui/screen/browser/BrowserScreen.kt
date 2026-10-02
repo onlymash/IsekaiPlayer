@@ -81,8 +81,8 @@ import com.fiepi.media.app.ui.screen.browser.components.BrowserContentSwitcher
 import com.fiepi.media.app.ui.screen.browser.components.BrowserDialogHost
 import com.fiepi.media.app.ui.screen.browser.components.BrowserFloatingActionButton
 import com.fiepi.media.app.ui.screen.browser.components.BrowserSearchBar
-import com.fiepi.media.app.ui.screen.browser.components.HistorySourceFilterBar
 import com.fiepi.media.app.ui.screen.browser.components.FileSelectionFloatingToolbar
+import com.fiepi.media.app.ui.screen.browser.components.HistorySourceFilterBar
 import com.fiepi.media.app.ui.screen.browser.components.MediaBreadcrumbsBar
 import com.fiepi.media.app.ui.screen.browser.components.ModalBrowserDrawer
 import com.fiepi.media.app.ui.screen.browser.components.PlaylistBreadcrumbsBar
@@ -268,7 +268,10 @@ fun BrowserScreen(
                 onPlayNetworkStream = {
                     onNavigate(AppNavKey.NetworkStream)
                 },
-                onSourcesClick = { scope.launch { drawerState.open() } }
+                onSourcesClick = { scope.launch { drawerState.open() } },
+                onOpenTaskQueue = {
+                    onNavigate(AppNavKey.FileTaskQueue)
+                }
             )
         }
 
@@ -533,7 +536,8 @@ fun BrowserScreenContent(
                         actions.onIntent(BrowserIntent.Playlist.SwitchToPlaylist)
                     },
                     onManageSources = actions.onManageSources,
-                    onSettingsClick = actions.onSettingsClick
+                    onSettingsClick = actions.onSettingsClick,
+                    onTaskQueueClick = actions.onOpenTaskQueue
                 )
             },
             rightContent = {
@@ -563,7 +567,11 @@ fun BrowserScreenContent(
                         actions.onIntent(BrowserIntent.Playlist.SwitchToPlaylist)
                     },
                     onManageSources = actions.onManageSources,
-                    onSettingsClick = actions.onSettingsClick
+                    onSettingsClick = actions.onSettingsClick,
+                    onTaskQueueClick = {
+                        scope.launch { drawerState.close() }
+                        actions.onOpenTaskQueue()
+                    }
                 )
             },
             content = screenContent

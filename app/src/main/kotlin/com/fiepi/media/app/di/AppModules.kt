@@ -36,6 +36,7 @@ import com.fiepi.media.app.ui.screen.settings.pages.subtitle.SubtitlePrefsViewMo
 import com.fiepi.media.app.ui.screen.source.viewmodel.SourceEditorViewModel
 import com.fiepi.media.app.ui.screen.source.viewmodel.SourceManagerViewModel
 import com.fiepi.media.app.ui.screen.stream.viewmodel.NetworkStreamViewModel
+import com.fiepi.media.app.ui.screen.task.viewmodel.FileTaskViewModel
 import com.fiepi.media.data.di.dataModule
 import com.fiepi.media.domain.di.domainModule
 import com.fiepi.media.player.di.playerModule
@@ -63,6 +64,7 @@ private val appModule = module {
     viewModel { SettingsSearchViewModel(androidContext()) }
 
     viewModelOf(::BrowserViewModel)
+    viewModelOf(::FileTaskViewModel)
     viewModelOf(::SourceManagerViewModel)
     viewModelOf(::NetworkStreamViewModel)
     viewModel { params ->

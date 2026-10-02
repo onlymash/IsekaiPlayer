@@ -37,9 +37,17 @@ interface LocalMediaRepository {
 
     suspend fun deleteFiles(paths: List<String>): Result<Unit>
 
-    suspend fun copyFile(sourcePath: String, targetDirectory: String, overwrite: Boolean): Result<Unit>
+    suspend fun copyFile(
+        sourcePath: String,
+        targetDirectory: String,
+        overwrite: Boolean
+    ): Result<Unit>
 
-    suspend fun moveFile(sourcePath: String, targetDirectory: String, overwrite: Boolean): Result<Unit>
+    suspend fun moveFile(
+        sourcePath: String,
+        targetDirectory: String,
+        overwrite: Boolean
+    ): Result<Unit>
 
     suspend fun createDirectory(parentPath: String, folderName: String): Result<Unit>
 }

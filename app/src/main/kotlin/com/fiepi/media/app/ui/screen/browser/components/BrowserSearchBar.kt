@@ -26,7 +26,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
@@ -37,10 +39,12 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.SwapHoriz
 import androidx.compose.material.icons.twotone.DeleteSweep
 import androidx.compose.material.icons.twotone.SearchOff
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AppBarWithSearch
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExpandedFullScreenSearchBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -59,9 +63,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.fiepi.media.app.R
@@ -141,8 +147,30 @@ fun BrowserSearchBar(
             trailingIcon = {
                 var isHistoryMenuExpanded by remember { mutableStateOf(false) }
                 var showClearAllDialog by remember { mutableStateOf(false) }
+                val activeTask = state.activeFileTask
 
-                Row {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (activeTask != null) {
+                        IconButton(onClick = actions.onOpenTaskQueue) {
+                            Box(
+                                modifier = Modifier.size(28.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator(
+                                    progress = { activeTask.progressPercent / 100f },
+                                    modifier = Modifier.fillMaxSize(),
+                                    strokeWidth = 2.5.dp
+                                )
+                                Icon(
+                                    imageVector = Icons.Outlined.SwapHoriz,
+                                    contentDescription = stringResource(R.string.file_task_queue_title),
+                                    modifier = Modifier.size(16.dp),
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        }
+                    }
+
                     if (state.mode == BrowserMode.Storage) {
                         IconButton(onClick = { actions.onIntent(BrowserIntent.Config.ShowSortDialog) }) {
                             Icon(

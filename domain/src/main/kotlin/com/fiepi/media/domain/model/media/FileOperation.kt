@@ -18,6 +18,8 @@
 
 package com.fiepi.media.domain.model.media
 
+import java.util.UUID
+
 /**
  * Strategy to adopt when encountering a duplicate filename during copy/move operations.
  */
@@ -41,6 +43,44 @@ enum class FileOperationType {
     Copy,
     Move,
     Delete
+}
+
+/**
+ * Execution state of a file task in the queue.
+ */
+enum class FileTaskState {
+    Pending,
+    Running,
+    NeedConflict,
+    Completed,
+    Failed,
+    Cancelled
+}
+
+/**
+ * Encapsulates a file operation task in the queue.
+ */
+data class FileTask(
+    val id: String = UUID.randomUUID().toString(),
+    val type: FileOperationType,
+    val sourcePaths: List<String>,
+    val targetDirectory: String?,
+    val createdAt: Long = System.currentTimeMillis(),
+    val currentFileName: String = "",
+    val processedCount: Int = 0,
+    val totalCount: Int = sourcePaths.size,
+    val progressPercent: Int = 0,
+    val status: FileTaskState = FileTaskState.Pending,
+    val conflictFileName: String? = null,
+    val conflictSourcePath: String? = null,
+    val conflictTargetPath: String? = null,
+    val errorMessage: String? = null,
+    val successCount: Int = 0,
+    val failCount: Int = 0,
+    val skippedCount: Int = 0
+) {
+    val isFinished: Boolean
+        get() = status == FileTaskState.Completed || status == FileTaskState.Failed || status == FileTaskState.Cancelled
 }
 
 /**

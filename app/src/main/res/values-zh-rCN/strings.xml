@@ -736,4 +736,17 @@
     <string name="file_operation_failed">文件操作失败: %1$s</string>
     <string name="file_operation_notification_channel_name">文件后台任务</string>
     <string name="file_operation_notification_channel_desc">展示当前文件复制、移动和删除任务的实时进度。</string>
+
+    <!-- File Task Queue -->
+    <string name="file_task_queue_title">文件操作队列</string>
+    <string name="file_task_clear_completed">清理已完成记录</string>
+    <string name="file_task_section_active">正在执行的任务</string>
+    <string name="file_task_section_pending">等待中的任务 (%d)</string>
+    <string name="file_task_section_completed">历史记录 (%d)</string>
+    <string name="file_task_cancel">取消</string>
+    <string name="file_task_empty">暂无文件操作任务</string>
+    <string name="file_task_status_pending">等待中</string>
+    <string name="file_task_status_completed">已完成</string>
+    <string name="file_task_status_failed">操作失败</string>
+    <string name="file_task_status_cancelled">已取消</string>
 </resources>

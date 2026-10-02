@@ -23,25 +23,28 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class AppNavKey {
+sealed class AppNavKey : NavKey {
 
     @Serializable
-    data object Browser : AppNavKey(), NavKey
+    data object Browser : AppNavKey()
 
     @Serializable
-    data object Settings : AppNavKey(), NavKey
+    data object Settings : AppNavKey()
 
     @Serializable
     data class SourceEditor(
         @SerialName("id")
         val id: String? = null
-    ) : AppNavKey(), NavKey
+    ) : AppNavKey()
 
     @Serializable
-    data object SourceManager : AppNavKey(), NavKey
+    data object SourceManager : AppNavKey()
 
     @Serializable
-    data object NetworkStream : AppNavKey(), NavKey
+    data object NetworkStream : AppNavKey()
+
+    @Serializable
+    data object FileTaskQueue : AppNavKey()
 
     @Serializable
     data class Player(
@@ -49,7 +52,7 @@ sealed class AppNavKey {
         val sourceId: String,
         @SerialName("video_path")
         val videoPath: String
-    ) : AppNavKey(), NavKey
+    ) : AppNavKey()
 
     @Serializable
     data class PlaylistPlayer(
@@ -57,5 +60,5 @@ sealed class AppNavKey {
         val playlistId: String,
         @SerialName("initial_media_id")
         val initialMediaId: String? = null
-    ) : AppNavKey(), NavKey
+    ) : AppNavKey()
 }

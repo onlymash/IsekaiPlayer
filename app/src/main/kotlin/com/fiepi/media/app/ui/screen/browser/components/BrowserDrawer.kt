@@ -43,6 +43,7 @@ import androidx.compose.material.icons.automirrored.twotone.PlaylistPlay
 import androidx.compose.material.icons.twotone.Dns
 import androidx.compose.material.icons.twotone.History
 import androidx.compose.material.icons.twotone.Settings
+import androidx.compose.material.icons.twotone.SwapHoriz
 import androidx.compose.material3.DrawerDefaults
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
@@ -71,8 +72,6 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
-import kotlin.math.cos
-import kotlin.math.sin
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalWindowInfo
@@ -94,6 +93,8 @@ import com.fiepi.media.domain.model.source.MediaSource
 import com.fiepi.media.domain.model.source.RemoteSource
 import com.fiepi.media.domain.model.source.SourceType
 import com.fiepi.media.domain.utils.url
+import kotlin.math.cos
+import kotlin.math.sin
 
 /**
  * A drawer sheet for selecting the active media source, using Modal style.
@@ -110,6 +111,7 @@ fun ModalBrowserDrawer(
     onPlaylistClick: () -> Unit = {},
     onManageSources: () -> Unit,
     onSettingsClick: () -> Unit,
+    onTaskQueueClick: () -> Unit = {},
 ) {
 
     val layoutDirection = LocalLayoutDirection.current
@@ -136,7 +138,8 @@ fun ModalBrowserDrawer(
             onHistoryClick = onHistoryClick,
             onPlaylistClick = onPlaylistClick,
             onManageSources = onManageSources,
-            onSettingsClick = onSettingsClick
+            onSettingsClick = onSettingsClick,
+            onTaskQueueClick = onTaskQueueClick
         )
     }
 }
@@ -155,6 +158,7 @@ fun PermanentBrowserDrawer(
     onPlaylistClick: () -> Unit = {},
     onManageSources: () -> Unit,
     onSettingsClick: () -> Unit,
+    onTaskQueueClick: () -> Unit = {},
 ) {
     val layoutDirection = LocalLayoutDirection.current
     val containerWidth = LocalWindowInfo.current.containerDpSize.width
@@ -179,7 +183,8 @@ fun PermanentBrowserDrawer(
             onHistoryClick = onHistoryClick,
             onPlaylistClick = onPlaylistClick,
             onManageSources = onManageSources,
-            onSettingsClick = onSettingsClick
+            onSettingsClick = onSettingsClick,
+            onTaskQueueClick = onTaskQueueClick
         )
     }
 }
@@ -195,6 +200,7 @@ fun SplitPaneBrowserDrawer(
     onPlaylistClick: () -> Unit = {},
     onManageSources: () -> Unit,
     onSettingsClick: () -> Unit,
+    onTaskQueueClick: () -> Unit = {},
 ) {
     Surface(
         modifier = modifier,
@@ -209,7 +215,8 @@ fun SplitPaneBrowserDrawer(
             onHistoryClick = onHistoryClick,
             onPlaylistClick = onPlaylistClick,
             onManageSources = onManageSources,
-            onSettingsClick = onSettingsClick
+            onSettingsClick = onSettingsClick,
+            onTaskQueueClick = onTaskQueueClick
         )
     }
 }
@@ -227,6 +234,7 @@ private fun BrowserDrawerContent(
     onPlaylistClick: () -> Unit,
     onManageSources: () -> Unit,
     onSettingsClick: () -> Unit,
+    onTaskQueueClick: () -> Unit,
 ) {
     val insets = DrawerDefaults.windowInsets.only(WindowInsetsSides.Start)
 
@@ -238,7 +246,8 @@ private fun BrowserDrawerContent(
 
         DrawerHeader(
             onManageSources = onManageSources,
-            onSettingsClick = onSettingsClick
+            onSettingsClick = onSettingsClick,
+            onTaskQueueClick = onTaskQueueClick
         )
 
         HorizontalDivider()
@@ -322,6 +331,7 @@ private fun BrowserDrawerContent(
 private fun DrawerHeader(
     onManageSources: () -> Unit,
     onSettingsClick: () -> Unit,
+    onTaskQueueClick: () -> Unit,
 ) {
     val contentColor = MaterialTheme.colorScheme.onPrimaryContainer
 
@@ -354,6 +364,13 @@ private fun DrawerHeader(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
         ) {
+            IconButton(onClick = onTaskQueueClick) {
+                Icon(
+                    imageVector = Icons.TwoTone.SwapHoriz,
+                    contentDescription = stringResource(R.string.file_task_queue_title),
+                    tint = contentColor
+                )
+            }
             IconButton(onClick = onManageSources) {
                 Icon(
                     imageVector = Icons.TwoTone.Dns,
@@ -500,9 +517,13 @@ private fun Modifier.headerBackgroundModifier(): Modifier {
             val sinVal = sin(rad)
             val perpCos = -sinVal
 
-            val basePos = Offset(mainCenter.x + starDistance * cosVal, mainCenter.y + starDistance * sinVal)
+            val basePos =
+                Offset(mainCenter.x + starDistance * cosVal, mainCenter.y + starDistance * sinVal)
             val tipOuter = Offset(basePos.x + starLength * cosVal, basePos.y + starLength * sinVal)
-            val tipInner = Offset(basePos.x - starLength * 0.5f * cosVal, basePos.y - starLength * 0.5f * sinVal)
+            val tipInner = Offset(
+                basePos.x - starLength * 0.5f * cosVal,
+                basePos.y - starLength * 0.5f * sinVal
+            )
             val side1 = Offset(basePos.x + starWidth * perpCos, basePos.y + starWidth * cosVal)
             val side2 = Offset(basePos.x - starWidth * perpCos, basePos.y - starWidth * cosVal)
 
@@ -523,7 +544,8 @@ private fun Modifier.headerBackgroundModifier(): Modifier {
         val auxAngles = listOf(180f, 60f, 300f)
         for ((idx, a) in auxAngles.withIndex()) {
             val rad = Math.toRadians(a.toDouble()).toFloat()
-            val pt = Offset(mainCenter.x + auxRadius * cos(rad), mainCenter.y + auxRadius * sin(rad))
+            val pt =
+                Offset(mainCenter.x + auxRadius * cos(rad), mainCenter.y + auxRadius * sin(rad))
             if (idx == 0) auxTrianglePath.moveTo(pt.x, pt.y) else auxTrianglePath.lineTo(pt.x, pt.y)
         }
         auxTrianglePath.close()
@@ -539,8 +561,12 @@ private fun Modifier.headerBackgroundModifier(): Modifier {
         val playAngles = listOf(0f, 120f, 240f)
         for ((idx, a) in playAngles.withIndex()) {
             val rad = Math.toRadians(a.toDouble()).toFloat()
-            val pt = Offset(mainCenter.x + playRadius * cos(rad), mainCenter.y + playRadius * sin(rad))
-            if (idx == 0) playTrianglePath.moveTo(pt.x, pt.y) else playTrianglePath.lineTo(pt.x, pt.y)
+            val pt =
+                Offset(mainCenter.x + playRadius * cos(rad), mainCenter.y + playRadius * sin(rad))
+            if (idx == 0) playTrianglePath.moveTo(pt.x, pt.y) else playTrianglePath.lineTo(
+                pt.x,
+                pt.y
+            )
         }
         playTrianglePath.close()
         drawPath(
@@ -558,8 +584,12 @@ private fun Modifier.headerBackgroundModifier(): Modifier {
         val coreTrianglePath = Path()
         for ((idx, a) in playAngles.withIndex()) {
             val rad = Math.toRadians(a.toDouble()).toFloat()
-            val pt = Offset(mainCenter.x + coreRadius * cos(rad), mainCenter.y + coreRadius * sin(rad))
-            if (idx == 0) coreTrianglePath.moveTo(pt.x, pt.y) else coreTrianglePath.lineTo(pt.x, pt.y)
+            val pt =
+                Offset(mainCenter.x + coreRadius * cos(rad), mainCenter.y + coreRadius * sin(rad))
+            if (idx == 0) coreTrianglePath.moveTo(pt.x, pt.y) else coreTrianglePath.lineTo(
+                pt.x,
+                pt.y
+            )
         }
         coreTrianglePath.close()
         drawPath(

@@ -21,98 +21,113 @@ package com.fiepi.media.app.service
 import android.content.Context
 import android.content.Intent
 import com.fiepi.media.domain.model.media.ConflictDecision
-import com.fiepi.media.domain.model.media.FileOperationStatus
 import com.fiepi.media.domain.model.media.FileOperationType
+import com.fiepi.media.domain.model.media.FileTask
+import com.fiepi.media.domain.model.media.FileTaskState
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.util.concurrent.ConcurrentHashMap
 
 class FileOperationManager {
 
-    private val _status = MutableStateFlow<FileOperationStatus>(FileOperationStatus.Idle)
-    val status: StateFlow<FileOperationStatus> = _status.asStateFlow()
+    private val _tasks = MutableStateFlow<List<FileTask>>(emptyList())
+    val tasks: StateFlow<List<FileTask>> = _tasks.asStateFlow()
 
-    @Volatile
-    private var activeConflictDeferred: CompletableDeferred<ConflictDecision>? = null
+    private val activeConflictDeferreds =
+        ConcurrentHashMap<String, CompletableDeferred<ConflictDecision>>()
 
-    @Volatile
-    private var isCancelRequested: Boolean = false
-
-    fun startCopy(context: Context, sourcePaths: List<String>, targetDirectory: String) {
-        startService(context, FileOperationType.Copy, sourcePaths, targetDirectory)
+    fun enqueueCopy(context: Context, sourcePaths: List<String>, targetDirectory: String): String {
+        return enqueue(context, FileOperationType.Copy, sourcePaths, targetDirectory)
     }
 
-    fun startMove(context: Context, sourcePaths: List<String>, targetDirectory: String) {
-        startService(context, FileOperationType.Move, sourcePaths, targetDirectory)
+    fun enqueueMove(context: Context, sourcePaths: List<String>, targetDirectory: String): String {
+        return enqueue(context, FileOperationType.Move, sourcePaths, targetDirectory)
     }
 
-    fun startDelete(context: Context, sourcePaths: List<String>) {
-        startService(context, FileOperationType.Delete, sourcePaths, null)
+    fun enqueueDelete(context: Context, sourcePaths: List<String>): String {
+        return enqueue(context, FileOperationType.Delete, sourcePaths, null)
     }
 
-    private fun startService(
+    private fun enqueue(
         context: Context,
         type: FileOperationType,
         sourcePaths: List<String>,
         targetDirectory: String?
-    ) {
-        isCancelRequested = false
-        activeConflictDeferred = null
-        _status.value = FileOperationStatus.Running(
+    ): String {
+        val newTask = FileTask(
             type = type,
-            currentFileName = "",
-            processedCount = 0,
-            totalCount = sourcePaths.size,
-            progressPercent = 0
+            sourcePaths = sourcePaths,
+            targetDirectory = targetDirectory,
+            status = FileTaskState.Pending
         )
 
+        _tasks.value += newTask
+
         val intent = Intent(context, FileOperationService::class.java).apply {
-            action = FileOperationService.ACTION_START
-            putExtra(FileOperationService.EXTRA_TYPE, type.name)
-            putStringArrayListExtra(FileOperationService.EXTRA_SOURCE_PATHS, ArrayList(sourcePaths))
-            putExtra(FileOperationService.EXTRA_TARGET_DIR, targetDirectory)
+            action = FileOperationService.ACTION_PROCESS_QUEUE
         }
         context.startForegroundService(intent)
+        return newTask.id
     }
 
-    fun cancelOperation() {
-        isCancelRequested = true
-        activeConflictDeferred?.cancel()
-        activeConflictDeferred = null
+    fun cancelTask(taskId: String) {
+        val deferred = activeConflictDeferreds.remove(taskId)
+        deferred?.cancel()
+
+        _tasks.value = _tasks.value.map { task ->
+            if (task.id == taskId && !task.isFinished) {
+                task.copy(status = FileTaskState.Cancelled)
+            } else {
+                task
+            }
+        }
     }
 
-    fun submitConflictDecision(decision: ConflictDecision) {
-        val deferred = activeConflictDeferred
-        activeConflictDeferred = null
+    fun clearCompletedTasks() {
+        _tasks.value = _tasks.value.filter { !it.isFinished }
+    }
+
+    fun submitConflictDecision(taskId: String, decision: ConflictDecision) {
+        val deferred = activeConflictDeferreds.remove(taskId)
         deferred?.complete(decision)
     }
 
-    internal fun isCancelled(): Boolean = isCancelRequested
+    internal fun getNextPendingTask(): FileTask? {
+        return _tasks.value.firstOrNull { it.status == FileTaskState.Pending }
+    }
 
-    internal fun updateStatus(newStatus: FileOperationStatus) {
-        _status.value = newStatus
+    internal fun updateTask(taskId: String, transform: (FileTask) -> FileTask) {
+        _tasks.value = _tasks.value.map { task ->
+            if (task.id == taskId) transform(task) else task
+        }
     }
 
     internal suspend fun requestConflictDecision(
-        type: FileOperationType,
+        taskId: String,
         sourcePath: String,
         targetPath: String,
         conflictFileName: String
     ): ConflictDecision? {
         val deferred = CompletableDeferred<ConflictDecision>()
-        activeConflictDeferred = deferred
-        _status.value = FileOperationStatus.NeedConflictDecision(
-            type = type,
-            sourcePath = sourcePath,
-            targetPath = targetPath,
-            conflictFileName = conflictFileName
-        )
+        activeConflictDeferreds[taskId] = deferred
+
+        updateTask(taskId) {
+            it.copy(
+                status = FileTaskState.NeedConflict,
+                conflictFileName = conflictFileName,
+                conflictSourcePath = sourcePath,
+                conflictTargetPath = targetPath
+            )
+        }
 
         return try {
             deferred.await()
         } catch (_: Exception) {
             null
+        } finally {
+            activeConflictDeferreds.remove(taskId)
         }
     }
 }

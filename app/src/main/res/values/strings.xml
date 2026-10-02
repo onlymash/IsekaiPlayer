@@ -737,4 +737,17 @@
     <string name="file_operation_failed">File operation failed: %1$s</string>
     <string name="file_operation_notification_channel_name">File Operations</string>
     <string name="file_operation_notification_channel_desc">Shows progress of active file copying, moving, and deletion tasks.</string>
+
+    <!-- File Task Queue -->
+    <string name="file_task_queue_title">File Operation Queue</string>
+    <string name="file_task_clear_completed">Clear completed</string>
+    <string name="file_task_section_active">Active Task</string>
+    <string name="file_task_section_pending">Pending Tasks (%d)</string>
+    <string name="file_task_section_completed">Completed History (%d)</string>
+    <string name="file_task_cancel">Cancel</string>
+    <string name="file_task_empty">No file operation tasks</string>
+    <string name="file_task_status_pending">Pending</string>
+    <string name="file_task_status_completed">Completed</string>
+    <string name="file_task_status_failed">Failed</string>
+    <string name="file_task_status_cancelled">Cancelled</string>
 </resources>

@@ -111,7 +111,10 @@ fun DeleteConfirmDialog(
         title = { Text(stringResource(R.string.file_dialog_delete_title)) },
         text = {
             Text(
-                text = stringResource(R.string.settings_advanced_history_count_format, selectedCount),
+                text = stringResource(
+                    R.string.settings_advanced_history_count_format,
+                    selectedCount
+                ),
                 style = MaterialTheme.typography.bodyMedium
             )
         },
