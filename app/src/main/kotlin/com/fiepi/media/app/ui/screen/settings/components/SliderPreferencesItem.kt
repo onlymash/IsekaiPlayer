@@ -43,6 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.fiepi.media.app.R
+import com.fiepi.media.app.ui.hooks.rememberHapticClickHandler
 
 
 @Composable
@@ -72,7 +73,7 @@ fun SliderPreferencesItem(
         trailingContent = onReset?.let {
             {
                 FilledTonalIconButton(
-                    onClick = it,
+                    onClick = rememberHapticClickHandler(onClick = it),
                     enabled = enabled
                 ) {
                     Icon(
