@@ -20,6 +20,7 @@ package com.fiepi.media.app.ui.screen.browser.components
 
 import android.os.Environment
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,14 +36,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.CreateNewFolder
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.FilledTonalIconButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -54,11 +57,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import com.fiepi.media.app.R
+import com.fiepi.media.app.ui.hooks.rememberHapticClickHandler
+import com.fiepi.media.app.ui.theme.AppTheme
 import com.fiepi.media.domain.model.media.FileOperationType
 import java.io.File
 
@@ -67,6 +74,7 @@ import java.io.File
  * for Copy or Move operations. Displays a fixed action navigation bar, full target path,
  * and a "Create New Folder" action.
  *
+ * @param modifier Modifier to be applied to the dialog.
  * @param initialPath Starting directory path for navigation.
  * @param operationType Current operation type (Copy or Move).
  * @param onConfirm Callback with the selected target directory path.
@@ -75,14 +83,24 @@ import java.io.File
  */
 @Composable
 fun FolderPickerDialog(
+    modifier: Modifier = Modifier,
     initialPath: String,
     operationType: FileOperationType,
     onConfirm: (targetPath: String) -> Unit,
     onRequestCreateFolder: (parentPath: String) -> Unit,
     onDismiss: () -> Unit
 ) {
-    val storageRootPath = remember(initialPath) {
-        val externalStorage = Environment.getExternalStorageDirectory().absolutePath
+    val isPreview = LocalInspectionMode.current
+    val storageRootPath = remember(initialPath, isPreview) {
+        val externalStorage = if (isPreview) {
+            "/storage/emulated/0"
+        } else {
+            try {
+                Environment.getExternalStorageDirectory().absolutePath
+            } catch (_: Exception) {
+                "/storage/emulated/0"
+            }
+        }
         if (initialPath.startsWith(externalStorage)) {
             externalStorage
         } else {
@@ -91,15 +109,30 @@ fun FolderPickerDialog(
     }
 
     var currentPath by remember { mutableStateOf(initialPath) }
-    var subFolders by remember { mutableStateOf<List<File>>(emptyList()) }
+    var subFolders by remember(currentPath, isPreview) {
+        mutableStateOf(
+            if (isPreview) {
+                listOf(
+                    File("$currentPath/Movies"),
+                    File("$currentPath/Music"),
+                    File("$currentPath/Pictures"),
+                    File("$currentPath/Videos")
+                )
+            } else {
+                emptyList()
+            }
+        )
+    }
 
-    LaunchedEffect(currentPath) {
-        val dir = File(currentPath)
-        if (dir.exists() && dir.isDirectory) {
-            val list = dir.listFiles { file -> file.isDirectory && !file.name.startsWith(".") }
-            subFolders = list?.sortedBy { it.name.lowercase() } ?: emptyList()
-        } else {
-            subFolders = emptyList()
+    LaunchedEffect(currentPath, isPreview) {
+        if (!isPreview) {
+            val dir = File(currentPath)
+            if (dir.exists() && dir.isDirectory) {
+                val list = dir.listFiles { file -> file.isDirectory && !file.name.startsWith(".") }
+                subFolders = list?.sortedBy { it.name.lowercase() } ?: emptyList()
+            } else {
+                subFolders = emptyList()
+            }
         }
     }
 
@@ -107,7 +140,7 @@ fun FolderPickerDialog(
     val canGoUp = parentFile != null && parentFile.canRead() && currentPath != "/"
 
     AlertDialog(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth(0.85f)
             .widthIn(max = 480.dp)
             .fillMaxHeight(0.65f)
@@ -121,13 +154,14 @@ fun FolderPickerDialog(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .horizontalScroll(rememberScrollState())
                         .padding(bottom = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     // Back / Go Up
-                    IconButton(
-                        onClick = {
+                    FilledTonalIconButton(
+                        onClick = rememberHapticClickHandler {
                             if (canGoUp) {
                                 currentPath = parentFile.absolutePath
                             }
@@ -141,19 +175,19 @@ fun FolderPickerDialog(
                     }
 
                     // Go to Storage Root
-                    IconButton(
-                        onClick = { currentPath = storageRootPath },
+                    FilledTonalIconButton(
+                        onClick = rememberHapticClickHandler { currentPath = storageRootPath },
                         enabled = currentPath != storageRootPath
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Home,
-                            contentDescription = stringResource(R.string.source_selection_devices_list_title)
+                            contentDescription = stringResource(R.string.file_dialog_device_home_path)
                         )
                     }
 
                     // Create New Folder
-                    IconButton(
-                        onClick = { onRequestCreateFolder(currentPath) }
+                    FilledTonalIconButton(
+                        onClick = rememberHapticClickHandler { onRequestCreateFolder(currentPath) }
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.CreateNewFolder,
@@ -161,6 +195,8 @@ fun FolderPickerDialog(
                         )
                     }
                 }
+
+                HorizontalDivider()
 
                 // Subfolders List Box
                 Box(
@@ -219,7 +255,7 @@ fun FolderPickerDialog(
         confirmButton = {
             val isCopy = operationType == FileOperationType.Copy
             TextButton(
-                onClick = { onConfirm(currentPath) }
+                onClick = rememberHapticClickHandler { onConfirm(currentPath) }
             ) {
                 Text(
                     if (isCopy) stringResource(R.string.file_dialog_copy_here)
@@ -234,3 +270,40 @@ fun FolderPickerDialog(
         }
     )
 }
+
+@Preview(showBackground = true)
+@Composable
+private fun FolderPickerDialogCopyPreview() {
+    AppTheme {
+        Box(
+            Modifier.fillMaxSize()
+        ) {
+            FolderPickerDialog(
+                initialPath = "/storage/emulated/0/Download",
+                operationType = FileOperationType.Copy,
+                onConfirm = {},
+                onRequestCreateFolder = {},
+                onDismiss = {}
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun FolderPickerDialogMovePreview() {
+    AppTheme {
+        Box(
+            Modifier.fillMaxSize()
+        ) {
+            FolderPickerDialog(
+                initialPath = "/storage/emulated/0/Download",
+                operationType = FileOperationType.Move,
+                onConfirm = {},
+                onRequestCreateFolder = {},
+                onDismiss = {}
+            )
+        }
+    }
+}
+

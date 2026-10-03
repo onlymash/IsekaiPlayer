@@ -720,6 +720,7 @@
     <string name="file_dialog_create_folder_title">Create new folder</string>
     <string name="file_dialog_create_folder_hint">Folder name</string>
     <string name="file_dialog_select_target_directory">Select target folder</string>
+    <string name="file_dialog_device_home_path">Storage device</string>
     <string name="file_dialog_empty_folder">No subfolders</string>
     <string name="file_dialog_copy_here">Copy here</string>
     <string name="file_dialog_move_here">Move here</string>

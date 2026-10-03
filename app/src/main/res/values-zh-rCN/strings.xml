@@ -719,6 +719,7 @@
     <string name="file_dialog_create_folder_title">新建文件夹</string>
     <string name="file_dialog_create_folder_hint">文件夹名称</string>
     <string name="file_dialog_select_target_directory">选择目标文件夹</string>
+    <string name="file_dialog_device_home_path">存储设备</string>
     <string name="file_dialog_empty_folder">没有子文件夹</string>
     <string name="file_dialog_copy_here">复制到此处</string>
     <string name="file_dialog_move_here">移动到此处</string>

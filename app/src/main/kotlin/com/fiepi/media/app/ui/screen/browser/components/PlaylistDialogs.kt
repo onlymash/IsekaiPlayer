@@ -22,9 +22,10 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -44,24 +45,20 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.SegmentedListItem
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -189,7 +186,7 @@ fun PlaylistTypeSelectDialog(
         )
     )
 
-    AppAlertDialog(
+    AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.playlist_create_dialog_title)) },
         text = {
@@ -248,7 +245,7 @@ fun BlankPlaylistCreateDialog(
     onPrevious: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    AppAlertDialog(
+    AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.playlist_create_title_blank)) },
         text = {
@@ -293,7 +290,7 @@ fun M3uLinkImportDialog(
     var isLoading by remember { mutableStateOf(false) }
     var errorMessageRes by remember { mutableStateOf<Int?>(null) }
 
-    AppAlertDialog(
+    AlertDialog(
         onDismissRequest = { if (!isLoading) onDismiss() },
         title = { Text(stringResource(R.string.playlist_create_title_m3u_link)) },
         text = {
@@ -411,7 +408,7 @@ fun M3uFileImportDialog(
     var isLoading by remember { mutableStateOf(false) }
     var errorMessageRes by remember { mutableStateOf<Int?>(null) }
 
-    AppAlertDialog(
+    AlertDialog(
         onDismissRequest = { if (!isLoading) onDismiss() },
         title = { Text(stringResource(R.string.playlist_create_title_m3u_file)) },
         text = {
@@ -513,7 +510,7 @@ fun PlaylistInputDialog(
 ) {
     var text by remember { mutableStateOf(initialText) }
 
-    AppAlertDialog(
+    AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(title) },
         text = {
@@ -547,7 +544,7 @@ fun PlaylistDeleteDialog(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    AppAlertDialog(
+    AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.playlist_delete_dialog_title)) },
         text = { Text(stringResource(R.string.playlist_delete_dialog_message, playlist.title)) },
@@ -579,7 +576,7 @@ fun AddToPlaylistDialog(
     onCreateNewPlaylist: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    AppAlertDialog(
+    AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.playlist_select_target_title)) },
         text = {
@@ -686,62 +683,6 @@ fun AddToPlaylistDialog(
     )
 }
 
-@Composable
-private fun AppAlertDialog(
-    onDismissRequest: () -> Unit,
-    confirmButton: @Composable () -> Unit,
-    modifier: Modifier = Modifier,
-    dismissButton: @Composable (() -> Unit)? = null,
-    title: @Composable (() -> Unit)? = null,
-    text: @Composable (() -> Unit)? = null,
-) {
-    if (LocalInspectionMode.current) {
-        Surface(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            shape = MaterialTheme.shapes.extraLarge,
-            color = MaterialTheme.colorScheme.surfaceContainerHigh,
-            tonalElevation = 6.dp
-        ) {
-            Column(modifier = Modifier.padding(24.dp)) {
-                title?.let {
-                    CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurface) {
-                        ProvideTextStyle(MaterialTheme.typography.headlineSmall) {
-                            it()
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-                text?.let {
-                    CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.onSurfaceVariant) {
-                        ProvideTextStyle(MaterialTheme.typography.bodyMedium) {
-                            it()
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(24.dp))
-                }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    dismissButton?.invoke()
-                    Spacer(modifier = Modifier.width(8.dp))
-                    confirmButton()
-                }
-            }
-        }
-    } else {
-        AlertDialog(
-            onDismissRequest = onDismissRequest,
-            confirmButton = confirmButton,
-            modifier = modifier,
-            dismissButton = dismissButton,
-            title = title,
-            text = text
-        )
-    }
-}
 
 // --- Previews ---
 
@@ -749,12 +690,17 @@ private fun AppAlertDialog(
 @Composable
 fun PlaylistTypeSelectDialogPreview() {
     AppTheme {
-        PlaylistTypeSelectDialog(
-            selectedType = PlaylistCreateType.BLANK,
-            onTypeSelected = {},
-            onNext = {},
-            onDismiss = {}
-        )
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            PlaylistTypeSelectDialog(
+                selectedType = PlaylistCreateType.BLANK,
+                onTypeSelected = {},
+                onNext = {},
+                onDismiss = {}
+            )
+        }
     }
 }
 
@@ -762,13 +708,18 @@ fun PlaylistTypeSelectDialogPreview() {
 @Composable
 fun BlankPlaylistCreateDialogPreview() {
     AppTheme {
-        BlankPlaylistCreateDialog(
-            title = "My Favorites",
-            onTitleChange = {},
-            onCreate = {},
-            onPrevious = {},
-            onDismiss = {}
-        )
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            BlankPlaylistCreateDialog(
+                title = "My Favorites",
+                onTitleChange = {},
+                onCreate = {},
+                onPrevious = {},
+                onDismiss = {}
+            )
+        }
     }
 }
 
@@ -776,15 +727,20 @@ fun BlankPlaylistCreateDialogPreview() {
 @Composable
 fun M3uLinkImportDialogPreview() {
     AppTheme {
-        M3uLinkImportDialog(
-            title = "IPTV Channels",
-            url = "https://example.com/playlist.m3u8",
-            onTitleChange = {},
-            onUrlChange = {},
-            onImportM3uUrl = { _, _ -> },
-            onPrevious = {},
-            onDismiss = {}
-        )
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            M3uLinkImportDialog(
+                title = "IPTV Channels",
+                url = "https://example.com/playlist.m3u8",
+                onTitleChange = {},
+                onUrlChange = {},
+                onImportM3uUrl = { _, _ -> },
+                onPrevious = {},
+                onDismiss = {}
+            )
+        }
     }
 }
 
@@ -792,16 +748,21 @@ fun M3uLinkImportDialogPreview() {
 @Composable
 fun M3uFileImportDialogPreview() {
     AppTheme {
-        M3uFileImportDialog(
-            title = "Local M3U Playlist",
-            selectedFileName = "my_playlist.m3u",
-            selectedFileUri = null,
-            onTitleChange = {},
-            onSelectFileClick = {},
-            onImportM3uUri = { _, _ -> },
-            onPrevious = {},
-            onDismiss = {}
-        )
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            M3uFileImportDialog(
+                title = "Local M3U Playlist",
+                selectedFileName = "my_playlist.m3u",
+                selectedFileUri = null,
+                onTitleChange = {},
+                onSelectFileClick = {},
+                onImportM3uUri = { _, _ -> },
+                onPrevious = {},
+                onDismiss = {}
+            )
+        }
     }
 }
 
@@ -809,12 +770,17 @@ fun M3uFileImportDialogPreview() {
 @Composable
 fun PlaylistInputDialogPreview() {
     AppTheme {
-        PlaylistInputDialog(
-            title = "Rename Playlist",
-            initialText = "Watch Later",
-            onConfirm = {},
-            onDismiss = {}
-        )
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            PlaylistInputDialog(
+                title = "Rename Playlist",
+                initialText = "Watch Later",
+                onConfirm = {},
+                onDismiss = {}
+            )
+        }
     }
 }
 
@@ -822,11 +788,16 @@ fun PlaylistInputDialogPreview() {
 @Composable
 fun PlaylistDeleteDialogPreview() {
     AppTheme {
-        PlaylistDeleteDialog(
-            playlist = Playlist(id = "1", title = "Favorites", itemCount = 5),
-            onConfirm = {},
-            onDismiss = {}
-        )
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            PlaylistDeleteDialog(
+                playlist = Playlist(id = "1", title = "Favorites", itemCount = 5),
+                onConfirm = {},
+                onDismiss = {}
+            )
+        }
     }
 }
 
@@ -834,11 +805,16 @@ fun PlaylistDeleteDialogPreview() {
 @Composable
 fun AddToPlaylistDialogPreview() {
     AppTheme {
-        AddToPlaylistDialog(
-            playlists = emptyList(),
-            onSelectPlaylist = {},
-            onCreateNewPlaylist = {},
-            onDismiss = {}
-        )
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            AddToPlaylistDialog(
+                playlists = emptyList(),
+                onSelectPlaylist = {},
+                onCreateNewPlaylist = {},
+                onDismiss = {}
+            )
+        }
     }
 }
