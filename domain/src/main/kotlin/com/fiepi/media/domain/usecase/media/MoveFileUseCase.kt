@@ -26,8 +26,9 @@ class MoveFileUseCase(
     suspend operator fun invoke(
         sourcePath: String,
         targetDirectory: String,
-        overwrite: Boolean
+        overwrite: Boolean,
+        onProgress: ((bytesWritten: Long) -> Unit)? = null
     ): Result<Unit> {
-        return repository.moveFile(sourcePath, targetDirectory, overwrite)
+        return repository.moveFile(sourcePath, targetDirectory, overwrite, onProgress)
     }
 }

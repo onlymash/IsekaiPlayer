@@ -29,6 +29,7 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.Icon
 import android.media.session.MediaSession
 import android.net.Uri
+import android.text.format.Formatter
 import androidx.core.app.NotificationCompat
 import androidx.core.content.FileProvider
 import com.fiepi.media.app.R
@@ -64,6 +65,10 @@ class NotificationController(
         manager.notify(id, notification)
     }
 
+    fun cancelNotification(id: Int) {
+        manager.cancel(id)
+    }
+
     private fun createNotificationChannels() {
         // Playback notification channel
         val playbackChannel = NotificationChannel(
@@ -96,13 +101,14 @@ class NotificationController(
     }
 
     /**
-     * Builds notification for file operations (Copy, Move, Delete).
+     * Builds notification for file operations (Copy, Move, Delete) with byte progress and speed.
      */
     fun buildFileOperationNotification(
         context: Context,
         type: FileOperationType,
-        current: Int,
-        total: Int,
+        processedBytes: Long,
+        totalBytes: Long,
+        bytesPerSecond: Long,
         fileName: String,
         cancelPendingIntent: PendingIntent
     ): Notification {
@@ -112,11 +118,31 @@ class NotificationController(
             FileOperationType.Delete -> R.string.file_operation_deleting
         }
         val title = context.getString(titleRes)
-        val contentText = if (fileName.isNotEmpty()) {
-            "$fileName ($current/$total)"
-        } else {
-            "($current/$total)"
+
+        val formattedSpeed = if (bytesPerSecond > 0) {
+            "${Formatter.formatFileSize(context, bytesPerSecond)}/s"
+        } else ""
+
+        val formattedProcessed = Formatter.formatFileSize(context, processedBytes)
+        val formattedTotal = Formatter.formatFileSize(context, totalBytes)
+
+        val contentText = buildString {
+            if (fileName.isNotEmpty()) {
+                append(fileName)
+            }
+            if (totalBytes > 0) {
+                if (isNotEmpty()) append(" • ")
+                append("$formattedProcessed / $formattedTotal")
+            }
+            if (formattedSpeed.isNotEmpty()) {
+                if (isNotEmpty()) append(" • ")
+                append(formattedSpeed)
+            }
         }
+
+        val progressPercent = if (totalBytes > 0) {
+            ((processedBytes.toDouble() / totalBytes) * 100).toInt().coerceIn(0, 100)
+        } else 0
 
         val contentIntent = PendingIntent.getActivity(
             context,
@@ -129,9 +155,10 @@ class NotificationController(
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle(title)
             .setContentText(contentText)
-            .setProgress(total, current, false)
+            .setProgress(100, progressPercent, totalBytes == 0L && type != FileOperationType.Delete)
             .setContentIntent(contentIntent)
             .setOngoing(true)
+            .setOnlyAlertOnce(true)
             .addAction(
                 android.R.drawable.ic_menu_close_clear_cancel,
                 context.getString(R.string.file_operation_cancel),

@@ -69,6 +69,9 @@ data class FileTask(
     val currentFileName: String = "",
     val processedCount: Int = 0,
     val totalCount: Int = sourcePaths.size,
+    val processedBytes: Long = 0L,
+    val totalBytes: Long = 0L,
+    val bytesPerSecond: Long = 0L,
     val progressPercent: Int = 0,
     val status: FileTaskState = FileTaskState.Pending,
     val conflictFileName: String? = null,
@@ -94,7 +97,10 @@ sealed interface FileOperationStatus {
         val currentFileName: String,
         val processedCount: Int,
         val totalCount: Int,
-        val progressPercent: Int
+        val processedBytes: Long = 0L,
+        val totalBytes: Long = 0L,
+        val bytesPerSecond: Long = 0L,
+        val progressPercent: Int = 0
     ) : FileOperationStatus
 
     data class NeedConflictDecision(

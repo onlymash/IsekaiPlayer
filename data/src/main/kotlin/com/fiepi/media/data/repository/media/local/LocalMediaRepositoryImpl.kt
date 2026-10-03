@@ -418,7 +418,8 @@ class LocalMediaRepositoryImpl(
     override suspend fun copyFile(
         sourcePath: String,
         targetDirectory: String,
-        overwrite: Boolean
+        overwrite: Boolean,
+        onProgress: ((bytesWritten: Long) -> Unit)?
     ): Result<Unit> = withContext(Dispatchers.IO) {
         runCatching {
             val sourceFile = File(sourcePath)
@@ -432,17 +433,7 @@ class LocalMediaRepositoryImpl(
             }
 
             val targetFile = File(targetDir, sourceFile.name)
-            if (targetFile.exists()) {
-                if (!overwrite) {
-                    throw FileAlreadyExistsException(targetFile, null, "Target file already exists")
-                }
-            }
-
-            if (sourceFile.isDirectory) {
-                sourceFile.copyRecursively(targetFile, overwrite = overwrite)
-            } else {
-                sourceFile.copyTo(targetFile, overwrite = overwrite)
-            }
+            copyFileWithProgress(sourceFile, targetFile, overwrite, onProgress)
 
             scanMediaFiles(arrayOf(targetFile.absolutePath))
             invalidateCache()
@@ -452,7 +443,8 @@ class LocalMediaRepositoryImpl(
     override suspend fun moveFile(
         sourcePath: String,
         targetDirectory: String,
-        overwrite: Boolean
+        overwrite: Boolean,
+        onProgress: ((bytesWritten: Long) -> Unit)?
     ): Result<Unit> = withContext(Dispatchers.IO) {
         runCatching {
             val sourceFile = File(sourcePath)
@@ -478,19 +470,70 @@ class LocalMediaRepositoryImpl(
             }
 
             val moved = sourceFile.renameTo(targetFile)
-            if (!moved) {
-                // Fallback to copy and delete if cross-filesystem move
+            if (moved) {
+                val size = if (sourceFile.isFile) sourceFile.length() else sourceFile.walk().filter { it.isFile }.sumOf { it.length() }
+                onProgress?.invoke(size)
+            } else {
+                copyFileWithProgress(sourceFile, targetFile, overwrite = true, onProgress = onProgress)
                 if (sourceFile.isDirectory) {
-                    sourceFile.copyRecursively(targetFile, overwrite = true)
                     sourceFile.deleteRecursively()
                 } else {
-                    sourceFile.copyTo(targetFile, overwrite = true)
                     sourceFile.delete()
                 }
             }
 
             scanMediaFiles(arrayOf(sourceFile.absolutePath, targetFile.absolutePath))
             invalidateCache()
+        }
+    }
+
+    private fun copyFileWithProgress(
+        source: File,
+        target: File,
+        overwrite: Boolean,
+        onProgress: ((bytesWritten: Long) -> Unit)?
+    ) {
+        if (target.exists()) {
+            if (!overwrite) {
+                throw FileAlreadyExistsException(target, null, "Target file already exists")
+            }
+            if (target.isDirectory) {
+                target.deleteRecursively()
+            } else {
+                target.delete()
+            }
+        }
+
+        if (source.isDirectory) {
+            target.mkdirs()
+            val files = source.listFiles() ?: return
+            for (file in files) {
+                val subTarget = File(target, file.name)
+                copyFileWithProgress(file, subTarget, overwrite, onProgress)
+            }
+        } else {
+            val parent = target.parentFile
+            if (parent != null && !parent.exists()) {
+                parent.mkdirs()
+            }
+            try {
+                source.inputStream().use { input ->
+                    target.outputStream().use { output ->
+                        val buffer = ByteArray(128 * 1024)
+                        var bytesRead: Int
+                        while (input.read(buffer).also { bytesRead = it } >= 0) {
+                            onProgress?.invoke(bytesRead.toLong())
+                            output.write(buffer, 0, bytesRead)
+                        }
+                    }
+                }
+                target.setLastModified(source.lastModified())
+            } catch (e: Exception) {
+                if (target.exists()) {
+                    target.delete()
+                }
+                throw e
+            }
         }
     }
 

@@ -18,6 +18,7 @@
 
 package com.fiepi.media.app.ui.screen.task
 
+import android.text.format.Formatter
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,20 +31,19 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Cancel
 import androidx.compose.material.icons.twotone.DeleteSweep
 import androidx.compose.material.icons.twotone.Folder
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -51,6 +51,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -64,6 +65,7 @@ import com.fiepi.media.app.ui.screen.task.viewmodel.FileTaskIntent
 import com.fiepi.media.app.ui.screen.task.viewmodel.FileTaskScreenState
 import com.fiepi.media.app.ui.screen.task.viewmodel.FileTaskViewModel
 import com.fiepi.media.app.ui.theme.AppTheme
+import com.fiepi.media.app.ui.utils.formatDate
 import com.fiepi.media.domain.model.media.FileOperationType
 import com.fiepi.media.domain.model.media.FileTask
 import com.fiepi.media.domain.model.media.FileTaskState
@@ -89,7 +91,6 @@ fun FileTaskScreen(
 /**
  * Stateless content layout for the File Task Queue Screen.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FileTaskScreenContent(
     state: FileTaskScreenState,
@@ -100,7 +101,9 @@ fun FileTaskScreenContent(
     val activeTask = tasks.firstOrNull { !it.isFinished }
     val pendingTasks =
         tasks.filter { it.status == FileTaskState.Pending && it.id != activeTask?.id }
+            .sortedBy { it.createdAt }
     val historyTasks = tasks.filter { it.isFinished }
+        .sortedByDescending { it.createdAt }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     Scaffold(
@@ -153,7 +156,7 @@ fun FileTaskScreenContent(
                         .widthIn(max = 600.dp)
                         .fillMaxSize(),
                     contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     // Active Task Section
@@ -179,9 +182,11 @@ fun FileTaskScreenContent(
                                 )
                             )
                         }
-                        items(pendingTasks, key = { it.id }) { task ->
+                        itemsIndexed(pendingTasks, key = { _, task -> task.id }) { index, task ->
                             PendingTaskCard(
                                 task = task,
+                                index = index,
+                                count = pendingTasks.size,
                                 onCancel = { onIntent(FileTaskIntent.CancelTask(task.id)) }
                             )
                         }
@@ -197,8 +202,12 @@ fun FileTaskScreenContent(
                                 )
                             )
                         }
-                        items(historyTasks, key = { it.id }) { task ->
-                            CompletedTaskCard(task = task)
+                        itemsIndexed(historyTasks, key = { _, task -> task.id }) { index, task ->
+                            CompletedTaskCard(
+                                task = task,
+                                index = index,
+                                count = historyTasks.size
+                            )
                         }
                     }
                 }
@@ -216,8 +225,17 @@ private fun SectionTitle(text: String) {
         fontWeight = FontWeight.Bold,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 4.dp, bottom = 4.dp)
+            .padding(start = 4.dp, top = 12.dp, bottom = 4.dp)
     )
+}
+
+private fun formatSourcePaths(paths: List<String>): String {
+    if (paths.isEmpty()) return ""
+    return if (paths.size == 1) {
+        paths.first()
+    } else {
+        "${paths.first()} (+${paths.size - 1})"
+    }
 }
 
 @Composable
@@ -225,130 +243,212 @@ private fun ActiveTaskCard(
     task: FileTask,
     onCancel: () -> Unit
 ) {
-    Card(
+    val context = LocalContext.current
+    val typeText = formatTaskType(task.type)
+    val speedText = if (task.bytesPerSecond > 0) {
+        "${Formatter.formatFileSize(context, task.bytesPerSecond)}/s"
+    } else ""
+
+    SegmentedListItem(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
+        shapes = ListItemDefaults.segmentedShapes(0, 1),
+        colors = ListItemDefaults.colors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
-        )
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = formatTaskType(task.type),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-                IconButton(onClick = onCancel) {
-                    Icon(
-                        imageVector = Icons.TwoTone.Cancel,
-                        contentDescription = stringResource(R.string.file_task_cancel),
-                        tint = MaterialTheme.colorScheme.error
+        ),
+        contentPadding = PaddingValues(16.dp),
+        content = {
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = if (speedText.isNotEmpty()) "$typeText • $speedText" else typeText,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    IconButton(onClick = onCancel) {
+                        Icon(
+                            imageVector = Icons.TwoTone.Cancel,
+                            contentDescription = stringResource(R.string.file_task_cancel),
+                            tint = MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                if (task.currentFileName.isNotEmpty()) {
+                    Text(
+                        text = "${task.currentFileName} (${task.processedCount + 1}/${task.totalCount})",
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
-            }
 
-            Spacer(modifier = Modifier.height(4.dp))
-
-            if (task.currentFileName.isNotEmpty()) {
-                Text(
-                    text = "${task.currentFileName} (${task.processedCount}/${task.totalCount})",
-                    style = MaterialTheme.typography.bodyMedium,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-
-            val targetDir = task.targetDirectory
-            if (targetDir != null) {
-                Text(
-                    text = targetDir,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            LinearProgressIndicator(
-                progress = { task.progressPercent / 100f },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Text(
-                text = "${task.progressPercent}%",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.align(Alignment.End)
-            )
-        }
-    }
-}
-
-@Composable
-private fun PendingTaskCard(
-    task: FileTask,
-    onCancel: () -> Unit
-) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
-        )
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = formatTaskType(task.type),
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Text(
-                    text = stringResource(
-                        R.string.settings_advanced_history_count_format,
-                        task.totalCount
-                    ),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                val pendingTargetDir = task.targetDirectory
-                if (pendingTargetDir != null) {
+                if (task.sourcePaths.isNotEmpty()) {
                     Text(
-                        text = pendingTargetDir,
-                        style = MaterialTheme.typography.labelSmall,
+                        text = formatSourcePaths(task.sourcePaths),
+                        style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-            }
 
-            IconButton(onClick = onCancel) {
-                Icon(
-                    imageVector = Icons.TwoTone.Cancel,
-                    contentDescription = stringResource(R.string.file_task_cancel),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                val targetDir = task.targetDirectory
+                if (targetDir != null) {
+                    Text(
+                        text = "→ $targetDir",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                LinearProgressIndicator(
+                    progress = { task.progressPercent / 100f },
+                    modifier = Modifier.fillMaxWidth()
                 )
+
+                Spacer(modifier = Modifier.height(6.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    if (task.totalBytes > 0) {
+                        val formattedProcessed =
+                            Formatter.formatFileSize(context, task.processedBytes)
+                        val formattedTotal = Formatter.formatFileSize(context, task.totalBytes)
+                        Text(
+                            text = "$formattedProcessed / $formattedTotal",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    } else {
+                        Spacer(modifier = Modifier.weight(1f))
+                    }
+
+                    Text(
+                        text = "${task.progressPercent}% • ${formatDate(task.createdAt)}",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
             }
         }
-    }
+    )
 }
 
 @Composable
-private fun CompletedTaskCard(task: FileTask) {
+private fun PendingTaskCard(
+    task: FileTask,
+    index: Int,
+    count: Int,
+    onCancel: () -> Unit
+) {
+    val context = LocalContext.current
+    val formattedSize = if (task.totalBytes > 0) {
+        Formatter.formatFileSize(context, task.totalBytes)
+    } else null
+
+    SegmentedListItem(
+        modifier = Modifier.fillMaxWidth(),
+        shapes = ListItemDefaults.segmentedShapes(index, count),
+        colors = ListItemDefaults.colors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+        ),
+        contentPadding = PaddingValues(16.dp),
+        content = {
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = formatTaskType(task.type),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    IconButton(onClick = onCancel) {
+                        Icon(
+                            imageVector = Icons.TwoTone.Cancel,
+                            contentDescription = stringResource(R.string.file_task_cancel),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+
+                if (task.sourcePaths.isNotEmpty()) {
+                    Text(
+                        text = formatSourcePaths(task.sourcePaths),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+
+                val pendingTargetDir = task.targetDirectory
+                if (pendingTargetDir != null) {
+                    Text(
+                        text = "→ $pendingTargetDir",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    val details = buildString {
+                        append(
+                            stringResource(
+                                R.string.settings_advanced_history_count_format,
+                                task.totalCount
+                            )
+                        )
+                        if (formattedSize != null) {
+                            append(" • ")
+                            append(formattedSize)
+                        }
+                    }
+                    Text(
+                        text = details,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = formatDate(task.createdAt),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
+    )
+}
+
+@Composable
+private fun CompletedTaskCard(
+    task: FileTask,
+    index: Int,
+    count: Int
+) {
+    val context = LocalContext.current
     val statusText = when (task.status) {
         FileTaskState.Completed -> stringResource(R.string.file_task_status_completed)
         FileTaskState.Failed -> stringResource(R.string.file_task_status_failed)
@@ -362,42 +462,92 @@ private fun CompletedTaskCard(task: FileTask) {
         else -> MaterialTheme.colorScheme.onSurfaceVariant
     }
 
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        )
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = formatTaskType(task.type),
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Medium
-                )
-                Text(
-                    text = stringResource(
-                        R.string.settings_advanced_history_count_format,
-                        task.totalCount
-                    ),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
+    val formattedSize = if (task.totalBytes > 0) {
+        Formatter.formatFileSize(context, task.totalBytes)
+    } else null
 
-            Text(
-                text = statusText,
-                style = MaterialTheme.typography.labelMedium,
-                color = statusColor
-            )
+    SegmentedListItem(
+        modifier = Modifier.fillMaxWidth(),
+        shapes = ListItemDefaults.segmentedShapes(index, count),
+        colors = ListItemDefaults.colors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        contentPadding = PaddingValues(16.dp),
+        content = {
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = formatTaskType(task.type),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Text(
+                        text = statusText,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = statusColor,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                if (task.sourcePaths.isNotEmpty()) {
+                    Text(
+                        text = formatSourcePaths(task.sourcePaths),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+
+                val targetDir = task.targetDirectory
+                if (targetDir != null) {
+                    Text(
+                        text = "→ $targetDir",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    val details = buildString {
+                        append(
+                            stringResource(
+                                R.string.settings_advanced_history_count_format,
+                                task.totalCount
+                            )
+                        )
+                        if (formattedSize != null) {
+                            append(" • ")
+                            append(formattedSize)
+                        }
+                    }
+                    Text(
+                        text = details,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = formatDate(task.createdAt),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
         }
-    }
+    )
 }
 
 @Composable
@@ -413,35 +563,94 @@ private fun formatTaskType(type: FileOperationType): String {
 @Composable
 fun FileTaskScreenPreview() {
     val sampleTasks = listOf(
+        // Active Running Task
         FileTask(
             id = "1",
             type = FileOperationType.Copy,
             sourcePaths = listOf(
-                "/storage/emulated/0/Download/movie1.mp4",
-                "/storage/emulated/0/Download/movie2.mp4"
+                "/storage/emulated/0/Download/Interstellar.2014.2160p.UHD.mkv",
+                "/storage/emulated/0/Download/Interstellar.2014.zh.ass"
             ),
-            targetDirectory = "/storage/emulated/0/Movies",
-            currentFileName = "movie1.mp4",
-            processedCount = 1,
+            targetDirectory = "/storage/emulated/0/Movies/Sci-Fi",
+            currentFileName = "Interstellar.2014.2160p.UHD.mkv",
+            processedCount = 0,
             totalCount = 2,
-            progressPercent = 50,
-            status = FileTaskState.Running
+            processedBytes = 1_500_000_000L,
+            totalBytes = 4_500_000_000L,
+            bytesPerSecond = 28_500_000L,
+            progressPercent = 33,
+            status = FileTaskState.Running,
+            createdAt = System.currentTimeMillis() - 120_000L
         ),
+        // Pending Task 1 (Top)
         FileTask(
             id = "2",
             type = FileOperationType.Move,
-            sourcePaths = listOf("/storage/emulated/0/Download/sub.srt"),
+            sourcePaths = listOf("/storage/emulated/0/Download/Subtitle_Pack_01.zip"),
             targetDirectory = "/storage/emulated/0/Subtitles",
             totalCount = 1,
-            status = FileTaskState.Pending
+            totalBytes = 15_000_000L,
+            status = FileTaskState.Pending,
+            createdAt = System.currentTimeMillis() - 90_000L
         ),
+        // Pending Task 2 (Middle)
         FileTask(
             id = "3",
+            type = FileOperationType.Copy,
+            sourcePaths = listOf(
+                "/storage/emulated/0/Download/Anime_EP01.mp4",
+                "/storage/emulated/0/Download/Anime_EP02.mp4",
+                "/storage/emulated/0/Download/Anime_EP03.mp4"
+            ),
+            targetDirectory = "/storage/emulated/0/Anime/Season1",
+            totalCount = 3,
+            totalBytes = 1_200_000_000L,
+            status = FileTaskState.Pending,
+            createdAt = System.currentTimeMillis() - 60_000L
+        ),
+        // Pending Task 3 (Bottom)
+        FileTask(
+            id = "4",
             type = FileOperationType.Delete,
-            sourcePaths = listOf("/storage/emulated/0/Download/old.mp4"),
+            sourcePaths = listOf("/storage/emulated/0/Download/temp_cache_file.tmp"),
             targetDirectory = null,
             totalCount = 1,
-            status = FileTaskState.Completed
+            totalBytes = 250_000_000L,
+            status = FileTaskState.Pending,
+            createdAt = System.currentTimeMillis() - 30_000L
+        ),
+        // Completed History 1 (Top - Completed)
+        FileTask(
+            id = "5",
+            type = FileOperationType.Copy,
+            sourcePaths = listOf("/storage/emulated/0/Download/Documentary.mp4"),
+            targetDirectory = "/storage/emulated/0/Movies",
+            totalCount = 1,
+            totalBytes = 850_000_000L,
+            status = FileTaskState.Completed,
+            createdAt = System.currentTimeMillis() - 3_600_000L
+        ),
+        // Completed History 2 (Middle - Cancelled)
+        FileTask(
+            id = "6",
+            type = FileOperationType.Move,
+            sourcePaths = listOf("/storage/emulated/0/Download/Unfinished_Download.part"),
+            targetDirectory = "/storage/emulated/0/Movies",
+            totalCount = 1,
+            totalBytes = 3_100_000_000L,
+            status = FileTaskState.Cancelled,
+            createdAt = System.currentTimeMillis() - 7_200_000L
+        ),
+        // Completed History 3 (Bottom - Failed)
+        FileTask(
+            id = "7",
+            type = FileOperationType.Delete,
+            sourcePaths = listOf("/storage/emulated/0/System/protected_file.sys"),
+            targetDirectory = null,
+            totalCount = 1,
+            totalBytes = 42_000_000L,
+            status = FileTaskState.Failed,
+            createdAt = System.currentTimeMillis() - 86_400_000L
         )
     )
     AppTheme {

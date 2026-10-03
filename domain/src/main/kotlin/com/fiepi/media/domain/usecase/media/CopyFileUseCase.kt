@@ -26,8 +26,9 @@ class CopyFileUseCase(
     suspend operator fun invoke(
         sourcePath: String,
         targetDirectory: String,
-        overwrite: Boolean
+        overwrite: Boolean,
+        onProgress: ((bytesWritten: Long) -> Unit)? = null
     ): Result<Unit> {
-        return repository.copyFile(sourcePath, targetDirectory, overwrite)
+        return repository.copyFile(sourcePath, targetDirectory, overwrite, onProgress)
     }
 }

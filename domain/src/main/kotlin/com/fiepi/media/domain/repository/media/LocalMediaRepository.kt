@@ -40,13 +40,15 @@ interface LocalMediaRepository {
     suspend fun copyFile(
         sourcePath: String,
         targetDirectory: String,
-        overwrite: Boolean
+        overwrite: Boolean,
+        onProgress: ((bytesWritten: Long) -> Unit)? = null
     ): Result<Unit>
 
     suspend fun moveFile(
         sourcePath: String,
         targetDirectory: String,
-        overwrite: Boolean
+        overwrite: Boolean,
+        onProgress: ((bytesWritten: Long) -> Unit)? = null
     ): Result<Unit>
 
     suspend fun createDirectory(parentPath: String, folderName: String): Result<Unit>
