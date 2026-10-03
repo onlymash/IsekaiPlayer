@@ -24,7 +24,6 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -59,7 +58,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.fiepi.media.app.ui.utils.formatDuration
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BrowserItem(
     modifier: Modifier = Modifier,
@@ -81,7 +79,7 @@ fun BrowserItem(
     )
 ) {
     val containerColor = if (isSelected) {
-        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.9f)
+        MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.9f)
     } else {
         Color.Transparent
     }
