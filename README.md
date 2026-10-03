@@ -3,6 +3,7 @@
 # IsekaiPlayer
 
 [![Get it on Google Play](https://img.shields.io/badge/Google_Play-Get_it_on_Google_Play-410099?style=for-the-badge&logo=google-play&logoColor=white)](https://play.google.com/store/apps/details?id=com.fiepi.media.app)
+[![Download APK](https://img.shields.io/badge/GitHub_Release-Download_APK-24292e?style=for-the-badge&logo=github&logoColor=white)](https://github.com/onlymash/IsekaiPlayer/releases)
 
 > ### *Apocalypse Zero: Genesis Stream*
 > 
@@ -33,6 +34,7 @@ IsekaiPlayer is a powerful, modern media player for Android designed to bridge t
 
 ## 🛠 Tech Stack
 
+*   **Minimum Requirement**: Android 13 (API 33)
 *   **UI**: Jetpack Compose (Material 3)
 *   **Navigation**: Navigation3
 *   **Dependency Injection**: Koin
