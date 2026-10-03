@@ -82,6 +82,7 @@ import java.io.File
  *
  * @param modifier Modifier to be applied to the dialog container.
  * @param initialPath Starting directory path for navigation.
+ * @param storageRootPath Root directory path of the active storage source (e.g., SD card or USB).
  * @param operationType Current operation type (Copy or Move).
  * @param onConfirm Callback with the selected target directory path.
  * @param onRequestCreateFolder Callback to open the "Create New Folder" dialog under a parent path.
@@ -91,26 +92,29 @@ import java.io.File
 fun FolderPickerDialog(
     modifier: Modifier = Modifier,
     initialPath: String,
+    storageRootPath: String = "",
     operationType: FileOperationType,
     onConfirm: (targetPath: String) -> Unit,
     onRequestCreateFolder: (parentPath: String) -> Unit,
     onDismiss: () -> Unit
 ) {
     val isPreview = LocalInspectionMode.current
-    val storageRootPath = remember(initialPath, isPreview) {
-        val externalStorage = if (isPreview) {
-            "/storage/emulated/0"
-        } else {
-            try {
-                Environment.getExternalStorageDirectory().absolutePath
-            } catch (_: Exception) {
-                "/storage/emulated/0"
+    val effectiveStorageRoot = remember(initialPath, storageRootPath, isPreview) {
+        when {
+            storageRootPath.isNotEmpty() -> storageRootPath
+            isPreview -> "/storage/emulated/0"
+            else -> {
+                val defaultExternal = try {
+                    Environment.getExternalStorageDirectory().absolutePath
+                } catch (_: Exception) {
+                    "/storage/emulated/0"
+                }
+                if (initialPath.startsWith(defaultExternal)) {
+                    defaultExternal
+                } else {
+                    initialPath.substringBefore('/', "").ifEmpty { defaultExternal }
+                }
             }
-        }
-        if (initialPath.startsWith(externalStorage)) {
-            externalStorage
-        } else {
-            initialPath.substringBefore('/', "").ifEmpty { externalStorage }
         }
     }
 
@@ -145,7 +149,11 @@ fun FolderPickerDialog(
     }
 
     val parentFile = File(currentPath).parentFile
-    val canGoUp = parentFile != null && parentFile.canRead() && currentPath != "/"
+    val canGoUp = parentFile != null &&
+            parentFile.canRead() &&
+            currentPath != "/" &&
+            currentPath != effectiveStorageRoot &&
+            currentPath.startsWith(effectiveStorageRoot)
 
     val adaptiveInfo = currentWindowAdaptiveInfoV2()
     val sizeClass = adaptiveInfo.windowSizeClass
@@ -180,11 +188,11 @@ fun FolderPickerDialog(
                 FolderPickerTwoPaneContent(
                     currentPath = currentPath,
                     canGoUp = canGoUp,
-                    storageRootPath = storageRootPath,
+                    storageRootPath = effectiveStorageRoot,
                     operationType = operationType,
                     subFolders = subFolders,
                     onGoUp = { if (canGoUp) currentPath = parentFile.absolutePath },
-                    onGoHome = { currentPath = storageRootPath },
+                    onGoHome = { currentPath = effectiveStorageRoot },
                     onRequestCreateFolder = { onRequestCreateFolder(currentPath) },
                     onSelectFolder = { currentPath = it.absolutePath },
                     onConfirm = { onConfirm(currentPath) },
@@ -194,11 +202,11 @@ fun FolderPickerDialog(
                 FolderPickerSinglePaneContent(
                     currentPath = currentPath,
                     canGoUp = canGoUp,
-                    storageRootPath = storageRootPath,
+                    storageRootPath = effectiveStorageRoot,
                     operationType = operationType,
                     subFolders = subFolders,
                     onGoUp = { if (canGoUp) currentPath = parentFile.absolutePath },
-                    onGoHome = { currentPath = storageRootPath },
+                    onGoHome = { currentPath = effectiveStorageRoot },
                     onRequestCreateFolder = { onRequestCreateFolder(currentPath) },
                     onSelectFolder = { currentPath = it.absolutePath },
                     onConfirm = { onConfirm(currentPath) },

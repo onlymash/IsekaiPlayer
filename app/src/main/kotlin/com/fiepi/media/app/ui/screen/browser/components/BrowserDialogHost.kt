@@ -231,8 +231,10 @@ fun BrowserDialogHost(
     state.dialogs.folderPickerOperation?.let { operation ->
         val pickerInitialPath = state.dialogs.folderPickerCurrentPath
             ?: state.mediaNavigationState.currentPath
+        val activeStorageRoot = state.source.current.rootPath
         FolderPickerDialog(
             initialPath = pickerInitialPath,
+            storageRootPath = activeStorageRoot,
             operationType = operation,
             onConfirm = { targetPath ->
                 viewModel.onIntent(BrowserIntent.FileAction.ConfirmFolderPicker(targetPath))
