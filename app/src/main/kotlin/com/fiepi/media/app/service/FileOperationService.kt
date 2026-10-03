@@ -42,6 +42,10 @@ import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 import java.io.File
 
+/**
+ * Foreground service executing file operation tasks (Copy, Move, Delete) sequentially from the FIFO queue.
+ * Calculates total byte size, tracks real-time I/O speed, and posts ongoing foreground notifications.
+ */
 class FileOperationService : Service() {
 
     private val fileOperationManager: FileOperationManager by inject()
@@ -77,6 +81,7 @@ class FileOperationService : Service() {
         return START_NOT_STICKY
     }
 
+    /** Triggers sequential task queue processing in a background coroutine with a Mutex lock. */
     private fun triggerQueueProcessing() {
         if (processJob?.isActive == true) return
 
@@ -102,6 +107,7 @@ class FileOperationService : Service() {
         }
     }
 
+    /** Executes a single task, calculates overall bytes and real-time I/O transfer speed. */
     private suspend fun executeSingleTask(task: FileTask) {
         fileOperationManager.updateTask(task.id) {
             it.copy(status = FileTaskState.Running)

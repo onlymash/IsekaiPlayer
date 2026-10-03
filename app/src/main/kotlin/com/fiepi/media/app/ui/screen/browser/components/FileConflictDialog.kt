@@ -44,6 +44,14 @@ import com.fiepi.media.app.R
 import com.fiepi.media.domain.model.media.ConflictDecision
 import com.fiepi.media.domain.model.media.ConflictResolution
 
+/**
+ * Dialog prompting user to resolve duplicate filename conflicts during copy or move operations.
+ * Allows choosing Overwrite vs Skip, with an option to apply the choice to all remaining conflicts.
+ *
+ * @param conflictFileName Name of the duplicate file causing the conflict.
+ * @param onDecision Callback with the user's conflict decision.
+ * @param onDismiss Callback when the dialog is dismissed or cancelled.
+ */
 @Composable
 fun FileConflictDialog(
     conflictFileName: String,

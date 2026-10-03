@@ -44,6 +44,14 @@ import androidx.compose.ui.unit.dp
 import com.fiepi.media.app.R
 import kotlinx.coroutines.launch
 
+/**
+ * Dialog for renaming a single selected file or folder.
+ * Automatically requests focus and positions the text cursor at the end.
+ *
+ * @param initialName Current name of the file/folder.
+ * @param onConfirm Callback with the new non-empty name.
+ * @param onDismiss Callback when the dialog is dismissed.
+ */
 @Composable
 fun RenameFileDialog(
     initialName: String,
@@ -100,6 +108,13 @@ fun RenameFileDialog(
     )
 }
 
+/**
+ * Confirmation dialog shown before deleting selected files or folders.
+ *
+ * @param selectedCount Number of items selected for deletion.
+ * @param onConfirm Callback to proceed with deletion.
+ * @param onDismiss Callback when the dialog is cancelled.
+ */
 @Composable
 fun DeleteConfirmDialog(
     selectedCount: Int,
@@ -134,6 +149,13 @@ fun DeleteConfirmDialog(
     )
 }
 
+/**
+ * Dialog for creating a new subfolder under a given directory.
+ * Shows a loading indicator on the OK button while directory creation is in progress.
+ *
+ * @param onCreate Suspending callback to create the folder. Returns true if successful.
+ * @param onDismiss Callback when the dialog is dismissed.
+ */
 @Composable
 fun CreateFolderDialog(
     onCreate: suspend (folderName: String) -> Boolean,

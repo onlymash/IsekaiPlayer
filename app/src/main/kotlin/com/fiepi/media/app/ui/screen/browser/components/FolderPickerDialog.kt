@@ -62,6 +62,17 @@ import com.fiepi.media.app.R
 import com.fiepi.media.domain.model.media.FileOperationType
 import java.io.File
 
+/**
+ * Responsive dialog enabling users to browse local subfolders and select a target directory
+ * for Copy or Move operations. Displays a fixed action navigation bar, full target path,
+ * and a "Create New Folder" action.
+ *
+ * @param initialPath Starting directory path for navigation.
+ * @param operationType Current operation type (Copy or Move).
+ * @param onConfirm Callback with the selected target directory path.
+ * @param onRequestCreateFolder Callback to open the "Create New Folder" dialog under a parent path.
+ * @param onDismiss Callback when the dialog is dismissed.
+ */
 @Composable
 fun FolderPickerDialog(
     initialPath: String,
@@ -98,67 +109,64 @@ fun FolderPickerDialog(
     AlertDialog(
         modifier = Modifier
             .fillMaxWidth(0.85f)
+            .widthIn(max = 480.dp)
             .fillMaxHeight(0.65f)
-            .widthIn(max = 560.dp)
-            .heightIn(min = 360.dp, max = 560.dp),
-        onDismissRequest = onDismiss,
+            .heightIn(max = 500.dp),
         properties = DialogProperties(usePlatformDefaultWidth = false),
-        title = {
-            Text(
-                text = stringResource(R.string.file_dialog_select_target_directory),
-                style = MaterialTheme.typography.titleMedium
-            )
-        },
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.file_dialog_select_target_directory)) },
         text = {
             Column(modifier = Modifier.fillMaxSize()) {
-                // Fixed Action Bar with 3 Icons (Go Up, Home, New Folder)
+                // Fixed 3-icon Action Navigation Bar
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 8.dp),
-                    horizontalArrangement = Arrangement.Start,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // 1. Go up button
+                    // Back / Go Up
                     IconButton(
-                        onClick = { parentFile?.let { currentPath = it.absolutePath } },
+                        onClick = {
+                            if (canGoUp) {
+                                currentPath = parentFile.absolutePath
+                            }
+                        },
                         enabled = canGoUp
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-                            contentDescription = stringResource(R.string.file_action_clear_selection)
+                            contentDescription = stringResource(R.string.common_back)
                         )
                     }
 
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    // 2. Home / Storage root button
+                    // Go to Storage Root
                     IconButton(
                         onClick = { currentPath = storageRootPath },
                         enabled = currentPath != storageRootPath
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Home,
-                            contentDescription = stringResource(R.string.source_internal_storage_name)
+                            contentDescription = stringResource(R.string.source_selection_devices_list_title)
                         )
                     }
 
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    // 3. Create folder button
-                    IconButton(onClick = { onRequestCreateFolder(currentPath) }) {
+                    // Create New Folder
+                    IconButton(
+                        onClick = { onRequestCreateFolder(currentPath) }
+                    ) {
                         Icon(
                             imageVector = Icons.Outlined.CreateNewFolder,
-                            contentDescription = stringResource(R.string.file_action_create_folder)
+                            contentDescription = stringResource(R.string.file_dialog_create_folder_title)
                         )
                     }
                 }
 
-                // Subfolders List Container
+                // Subfolders List Box
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth()
                         .weight(1f)
+                        .fillMaxWidth()
                 ) {
                     if (subFolders.isEmpty()) {
                         Text(
@@ -174,7 +182,7 @@ fun FolderPickerDialog(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .clickable { currentPath = folder.absolutePath }
-                                        .padding(vertical = 10.dp, horizontal = 8.dp),
+                                        .padding(vertical = 10.dp, horizontal = 4.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Icon(
@@ -185,7 +193,9 @@ fun FolderPickerDialog(
                                     Spacer(modifier = Modifier.width(12.dp))
                                     Text(
                                         text = folder.name,
-                                        style = MaterialTheme.typography.bodyMedium
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
                                     )
                                 }
                             }
@@ -193,11 +203,12 @@ fun FolderPickerDialog(
                     }
                 }
 
-                // Full target path display below the folder list
                 Spacer(modifier = Modifier.height(8.dp))
+
+                // Bottom Full Path Display
                 Text(
                     text = currentPath,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
@@ -206,26 +217,19 @@ fun FolderPickerDialog(
             }
         },
         confirmButton = {
-            val isSameDirectory = remember(currentPath, initialPath) {
-                val normalize = { p: String -> if (p.length > 1) p.removeSuffix("/") else p }
-                normalize(currentPath) == normalize(initialPath)
-            }
+            val isCopy = operationType == FileOperationType.Copy
             TextButton(
-                onClick = { onConfirm(currentPath) },
-                enabled = !isSameDirectory
+                onClick = { onConfirm(currentPath) }
             ) {
                 Text(
-                    text = if (operationType == FileOperationType.Copy) {
-                        stringResource(R.string.file_dialog_copy_here)
-                    } else {
-                        stringResource(R.string.file_dialog_move_here)
-                    }
+                    if (isCopy) stringResource(R.string.file_dialog_copy_here)
+                    else stringResource(R.string.file_dialog_move_here)
                 )
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text(stringResource(android.R.string.cancel))
+                Text(stringResource(R.string.common_cancel))
             }
         }
     )

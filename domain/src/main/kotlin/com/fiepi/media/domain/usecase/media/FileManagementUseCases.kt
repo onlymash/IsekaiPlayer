@@ -18,6 +18,9 @@
 
 package com.fiepi.media.domain.usecase.media
 
+/**
+ * Aggregates all file management use cases (Rename, Delete, Copy, Move, Create Directory).
+ */
 data class FileManagementUseCases(
     val renameFile: RenameFileUseCase,
     val deleteFiles: DeleteFilesUseCase,

@@ -30,22 +30,52 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.util.concurrent.ConcurrentHashMap
 
+/**
+ * Singleton manager responsible for enqueuing, tracking, and coordinating file operation tasks
+ * (Copy, Move, Delete). Maintains a FIFO sequential queue and handles async conflict resolution.
+ */
 class FileOperationManager {
 
     private val _tasks = MutableStateFlow<List<FileTask>>(emptyList())
+
+    /** Observable list of all file tasks in the queue (pending, running, and completed). */
     val tasks: StateFlow<List<FileTask>> = _tasks.asStateFlow()
 
+    /** Map of active completable deferreds waiting for user conflict decisions per task ID. */
     private val activeConflictDeferreds =
         ConcurrentHashMap<String, CompletableDeferred<ConflictDecision>>()
 
+    /**
+     * Enqueues a batch file copy operation and starts the background execution service.
+     *
+     * @param context Application context.
+     * @param sourcePaths List of absolute paths of source files/folders to copy.
+     * @param targetDirectory Destination directory absolute path.
+     * @return Unique ID of the created task.
+     */
     fun enqueueCopy(context: Context, sourcePaths: List<String>, targetDirectory: String): String {
         return enqueue(context, FileOperationType.Copy, sourcePaths, targetDirectory)
     }
 
+    /**
+     * Enqueues a batch file move operation and starts the background execution service.
+     *
+     * @param context Application context.
+     * @param sourcePaths List of absolute paths of source files/folders to move.
+     * @param targetDirectory Destination directory absolute path.
+     * @return Unique ID of the created task.
+     */
     fun enqueueMove(context: Context, sourcePaths: List<String>, targetDirectory: String): String {
         return enqueue(context, FileOperationType.Move, sourcePaths, targetDirectory)
     }
 
+    /**
+     * Enqueues a batch file delete operation and starts the background execution service.
+     *
+     * @param context Application context.
+     * @param sourcePaths List of absolute paths of source files/folders to delete.
+     * @return Unique ID of the created task.
+     */
     fun enqueueDelete(context: Context, sourcePaths: List<String>): String {
         return enqueue(context, FileOperationType.Delete, sourcePaths, null)
     }
@@ -72,6 +102,11 @@ class FileOperationManager {
         return newTask.id
     }
 
+    /**
+     * Cancels an active or pending task by its unique ID.
+     *
+     * @param taskId Unique identifier of the task to cancel.
+     */
     fun cancelTask(taskId: String) {
         val deferred = activeConflictDeferreds.remove(taskId)
         deferred?.cancel()
@@ -85,25 +120,35 @@ class FileOperationManager {
         }
     }
 
+    /** Clears all finished (completed, failed, or cancelled) task records from the queue. */
     fun clearCompletedTasks() {
         _tasks.value = _tasks.value.filter { !it.isFinished }
     }
 
+    /**
+     * Submits the user's conflict decision (Overwrite/Skip) for a duplicate file conflict.
+     *
+     * @param taskId Task ID encountering the conflict.
+     * @param decision The resolution decision made by the user.
+     */
     fun submitConflictDecision(taskId: String, decision: ConflictDecision) {
         val deferred = activeConflictDeferreds.remove(taskId)
         deferred?.complete(decision)
     }
 
+    /** Gets the next pending task in the FIFO queue, or null if empty. */
     internal fun getNextPendingTask(): FileTask? {
         return _tasks.value.firstOrNull { it.status == FileTaskState.Pending }
     }
 
+    /** Mutates and updates the state of a specific task in the queue. */
     internal fun updateTask(taskId: String, transform: (FileTask) -> FileTask) {
         _tasks.value = _tasks.value.map { task ->
             if (task.id == taskId) transform(task) else task
         }
     }
 
+    /** Suspends service execution until user resolves a file name collision conflict. */
     internal suspend fun requestConflictDecision(
         taskId: String,
         sourcePath: String,

@@ -375,7 +375,11 @@ class LocalMediaRepositoryImpl(
 
                 val parent = oldFile.parentFile ?: throw IllegalArgumentException("Invalid path")
                 val oldExt = FileUtils.extractExtension(oldFile.name)
-                val finalName = if (oldFile.isFile && !oldExt.isNullOrEmpty() && !newName.endsWith(".$oldExt", ignoreCase = true)) {
+                val finalName = if (oldFile.isFile && !oldExt.isNullOrEmpty() && !newName.endsWith(
+                        ".$oldExt",
+                        ignoreCase = true
+                    )
+                ) {
                     "$newName.$oldExt"
                 } else {
                     newName
@@ -471,10 +475,16 @@ class LocalMediaRepositoryImpl(
 
             val moved = sourceFile.renameTo(targetFile)
             if (moved) {
-                val size = if (sourceFile.isFile) sourceFile.length() else sourceFile.walk().filter { it.isFile }.sumOf { it.length() }
+                val size = if (sourceFile.isFile) sourceFile.length() else sourceFile.walk()
+                    .filter { it.isFile }.sumOf { it.length() }
                 onProgress?.invoke(size)
             } else {
-                copyFileWithProgress(sourceFile, targetFile, overwrite = true, onProgress = onProgress)
+                copyFileWithProgress(
+                    sourceFile,
+                    targetFile,
+                    overwrite = true,
+                    onProgress = onProgress
+                )
                 if (sourceFile.isDirectory) {
                     sourceFile.deleteRecursively()
                 } else {

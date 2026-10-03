@@ -41,6 +41,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.fiepi.media.app.R
 
+/**
+ * Expressive Material 3 floating toolbar presented during multi-selection mode in local file browser.
+ * Provides quick actions for Copy, Move, Rename, Delete, and Add to Playlist.
+ *
+ * @param selectedCount Number of items currently selected.
+ * @param isAddToPlaylistEnabled Whether "Add to Playlist" is enabled (only when selected items are videos).
+ * @param onCopyClick Callback triggered when user clicks Copy.
+ * @param onMoveClick Callback triggered when user clicks Move.
+ * @param onRenameClick Callback triggered when user clicks Rename.
+ * @param onDeleteClick Callback triggered when user clicks Delete.
+ * @param onAddToPlaylistClick Callback triggered when user clicks Add to Playlist.
+ */
 @OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun FileSelectionFloatingToolbar(
