@@ -162,16 +162,16 @@ fun FolderPickerDialog(
 
     val containerModifier = if (useTwoPaneLayout) {
         modifier
+            .widthIn(max = 800.dp)
             .fillMaxWidth(0.90f)
-            .widthIn(max = 720.dp)
-            .fillMaxHeight(0.88f)
-            .heightIn(max = 400.dp)
+            .heightIn(max = 480.dp)
+            .fillMaxHeight(0.9f)
     } else {
         modifier
-            .fillMaxWidth(0.88f)
             .widthIn(max = 480.dp)
+            .fillMaxWidth(0.88f)
+            .heightIn(max = 800.dp)
             .fillMaxHeight(0.75f)
-            .heightIn(max = 560.dp)
     }
 
     Dialog(
