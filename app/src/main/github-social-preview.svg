@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
+
+    <defs>
+        <!-- Background Linear Gradient -->
+        <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#080512"/>
+            <stop offset="50%" stop-color="#140B2D"/>
+            <stop offset="100%" stop-color="#090E20"/>
+        </linearGradient>
+
+        <!-- Title Text Gradient -->
+        <linearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#FFFFFF"/>
+            <stop offset="60%" stop-color="#E2C4FF"/>
+            <stop offset="100%" stop-color="#80E5FF"/>
+        </linearGradient>
+
+        <!-- Magic Glow Radial Gradients -->
+        <radialGradient id="magicGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#7C4DFF" stop-opacity="0.38"/>
+            <stop offset="50%" stop-color="#00E5FF" stop-opacity="0.18"/>
+            <stop offset="100%" stop-color="#080512" stop-opacity="0"/>
+        </radialGradient>
+
+        <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.65"/>
+            <stop offset="30%" stop-color="#B388FF" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="#00E5FF" stop-opacity="0"/>
+        </radialGradient>
+
+        <!-- Soft Drop Shadow Filter -->
+        <filter id="glowFilter" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="10" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+        </filter>
+
+        <filter id="textGlow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="#7C4DFF" flood-opacity="0.65"/>
+        </filter>
+    </defs>
+    
+<rect width="1280" height="640" fill="url(#bgGrad)"/>
+<circle cx="900" cy="320" r="429" fill="url(#magicGlow)"/>
+<circle cx="900" cy="320" r="221" fill="url(#centerGlow)"/>
+<g transform="translate(900, 320)">
+<circle r="260" fill="none" stroke="#7C4DFF" stroke-width="4" opacity="0.8"/>
+<circle r="275" fill="none" stroke="#00E5FF" stroke-width="1.8" opacity="0.45"/>
+<circle r="176" fill="none" stroke="#7C4DFF" stroke-width="2.5" opacity="0.65"/>
+<circle r="104" fill="none" stroke="#00E5FF" stroke-width="1.8" opacity="0.55"/>
+<path d="M 75.59 207.67 A 221 221 0 0 1 -19.26 220.16" fill="none" stroke="#00E5FF" stroke-width="4.5" stroke-linecap="round" opacity="0.88"/>
+<path d="M -75.59 207.67 A 221 221 0 0 1 -156.27 156.27" fill="none" stroke="#00E5FF" stroke-width="4.5" stroke-linecap="round" opacity="0.88"/>
+<path d="M -207.67 75.59 A 221 221 0 0 1 -220.16 -19.26" fill="none" stroke="#00E5FF" stroke-width="4.5" stroke-linecap="round" opacity="0.88"/>
+<path d="M -207.67 -75.59 A 221 221 0 0 1 -156.27 -156.27" fill="none" stroke="#00E5FF" stroke-width="4.5" stroke-linecap="round" opacity="0.88"/>
+<path d="M -75.59 -207.67 A 221 221 0 0 1 19.26 -220.16" fill="none" stroke="#00E5FF" stroke-width="4.5" stroke-linecap="round" opacity="0.88"/>
+<path d="M 75.59 -207.67 A 221 221 0 0 1 156.27 -156.27" fill="none" stroke="#00E5FF" stroke-width="4.5" stroke-linecap="round" opacity="0.88"/>
+<path d="M 207.67 -75.59 A 221 221 0 0 1 220.16 19.26" fill="none" stroke="#00E5FF" stroke-width="4.5" stroke-linecap="round" opacity="0.88"/>
+<path d="M 207.67 75.59 A 221 221 0 0 1 156.27 156.27" fill="none" stroke="#00E5FF" stroke-width="4.5" stroke-linecap="round" opacity="0.88"/>
+<line x1="249.60" y1="0.00" x2="270.40" y2="0.00" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="245.81" y1="43.34" x2="266.29" y2="46.95" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="234.55" y1="85.37" x2="254.09" y2="92.48" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="216.16" y1="124.80" x2="234.17" y2="135.20" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="191.20" y1="160.44" x2="207.14" y2="173.81" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="160.44" y1="191.20" x2="173.81" y2="207.14" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="124.80" y1="216.16" x2="135.20" y2="234.17" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="85.37" y1="234.55" x2="92.48" y2="254.09" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="43.34" y1="245.81" x2="46.95" y2="266.29" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="0.00" y1="249.60" x2="0.00" y2="270.40" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="-43.34" y1="245.81" x2="-46.95" y2="266.29" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="-85.37" y1="234.55" x2="-92.48" y2="254.09" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="-124.80" y1="216.16" x2="-135.20" y2="234.17" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="-160.44" y1="191.20" x2="-173.81" y2="207.14" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="-191.20" y1="160.44" x2="-207.14" y2="173.81" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="-216.16" y1="124.80" x2="-234.17" y2="135.20" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="-234.55" y1="85.37" x2="-254.09" y2="92.48" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="-245.81" y1="43.34" x2="-266.29" y2="46.95" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="-249.60" y1="0.00" x2="-270.40" y2="0.00" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="-245.81" y1="-43.34" x2="-266.29" y2="-46.95" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="-234.55" y1="-85.37" x2="-254.09" y2="-92.48" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="-216.16" y1="-124.80" x2="-234.17" y2="-135.20" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="-191.20" y1="-160.44" x2="-207.14" y2="-173.81" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="-160.44" y1="-191.20" x2="-173.81" y2="-207.14" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="-124.80" y1="-216.16" x2="-135.20" y2="-234.17" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="-85.37" y1="-234.55" x2="-92.48" y2="-254.09" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="-43.34" y1="-245.81" x2="-46.95" y2="-266.29" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="-0.00" y1="-249.60" x2="-0.00" y2="-270.40" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="43.34" y1="-245.81" x2="46.95" y2="-266.29" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="85.37" y1="-234.55" x2="92.48" y2="-254.09" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="124.80" y1="-216.16" x2="135.20" y2="-234.17" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="160.44" y1="-191.20" x2="173.81" y2="-207.14" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="191.20" y1="-160.44" x2="207.14" y2="-173.81" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="216.16" y1="-124.80" x2="234.17" y2="-135.20" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="234.55" y1="-85.37" x2="254.09" y2="-92.48" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<line x1="245.81" y1="-43.34" x2="266.29" y2="-46.95" stroke="#00E5FF" stroke-width="1.4" opacity="0.55"/>
+<polygon points="298.00,0.00 260.00,12.00 244.80,0.00 260.00,-12.00" fill="#00E5FF" opacity="0.9"/>
+<polygon points="0.00,298.00 -12.00,260.00 0.00,244.80 12.00,260.00" fill="#00E5FF" opacity="0.9"/>
+<polygon points="-298.00,0.00 -260.00,-12.00 -244.80,0.00 -260.00,12.00" fill="#00E5FF" opacity="0.9"/>
+<polygon points="-0.00,-298.00 12.00,-260.00 -0.00,-244.80 -12.00,-260.00" fill="#00E5FF" opacity="0.9"/>
+<polygon points="199.40,199.40 179.61,188.09 178.90,178.90 188.09,179.61" fill="#B388FF" opacity="0.78"/>
+<polygon points="-199.40,199.40 -188.09,179.61 -178.90,178.90 -179.61,188.09" fill="#B388FF" opacity="0.78"/>
+<polygon points="-199.40,-199.40 -179.61,-188.09 -178.90,-178.90 -188.09,-179.61" fill="#B388FF" opacity="0.78"/>
+<polygon points="199.40,-199.40 188.09,-179.61 178.90,-178.90 179.61,-188.09" fill="#B388FF" opacity="0.78"/>
+<polygon points="-150.80,0.00 75.40,130.60 75.40,-130.60" fill="none" stroke="#7C4DFF" stroke-width="3" opacity="0.7"/>
+<polygon points="135.20,0.00 -67.60,117.09 -67.60,-117.09" fill="#B388FF" fill-opacity="0.18" stroke="#00E5FF" stroke-width="3.5" opacity="0.9"/>
+<polygon points="60.84,0.00 -30.42,52.69 -30.42,-52.69" fill="#FFFFFF" opacity="0.88"/>
+</g>
+<g transform="translate(220, 110)">
+<circle r="100" fill="none" stroke="#7C4DFF" stroke-width="1.8" opacity="0.28"/>
+<circle r="75" fill="none" stroke="#00E5FF" stroke-width="1.2" opacity="0.22"/>
+<circle cx="100.00" cy="0.00" r="3" fill="#00E5FF" opacity="0.45"/>
+<circle cx="0.00" cy="100.00" r="3" fill="#00E5FF" opacity="0.45"/>
+<circle cx="-100.00" cy="0.00" r="3" fill="#00E5FF" opacity="0.45"/>
+<circle cx="-0.00" cy="-100.00" r="3" fill="#00E5FF" opacity="0.45"/>
+</g>
+<circle cx="150" cy="480" r="3.0" fill="#00E5FF" opacity="0.65"/>
+<circle cx="420" cy="110" r="3.5" fill="#B388FF" opacity="0.55"/>
+<circle cx="580" cy="530" r="2.5" fill="#FFFFFF" opacity="0.75"/>
+<circle cx="650" cy="90" r="4.0" fill="#00E5FF" opacity="0.85"/>
+<circle cx="1150" cy="120" r="2.5" fill="#B388FF" opacity="0.45"/>
+<circle cx="1180" cy="520" r="3.5" fill="#00E5FF" opacity="0.65"/>
+<circle cx="780" cy="560" r="3.0" fill="#FFFFFF" opacity="0.55"/>
+<circle cx="100" cy="350" r="2.5" fill="#7C4DFF" opacity="0.45"/>
+<g transform="translate(128, 230)"><circle r="36" fill="#1E1238" stroke="#7C4DFF" stroke-width="2.5"/><circle r="26" fill="none" stroke="#00E5FF" stroke-width="1.8" opacity="0.85"/><polygon points="14,0 -9,-13 -9,13" fill="#B388FF"/><polygon points="6,0 -5,-6 -5,6" fill="#FFFFFF"/></g>
+<text x="186" y="250" font-family="Roboto, System-UI, sans-serif" font-weight="800" font-size="64" fill="url(#titleGrad)" filter="url(#textGlow)" letter-spacing="1">IsekaiPlayer</text>
+<text x="90" y="315" font-family="Roboto, System-UI, sans-serif" font-weight="500" font-size="22" fill="#CBB2FF" opacity="0.92" letter-spacing="0.5">Sovereign above myriad realms • Shatter every mortal cipher</text>
+<rect x="90" y="390" width="326" height="42" rx="21" fill="#1F123B" fill-opacity="0.8" stroke="#7C4DFF" stroke-width="1.8" stroke-opacity="0.85"/>
+<path d="M 115.0 403 L 109.0 411.5 L 115.0 411.5 L 113.0 419 L 122.0 410 L 115.5 410 L 118.5 403 Z" fill="#FFD54F"/>
+<text x="136.0" y="417" font-family="Roboto, System-UI, sans-serif" font-weight="600" font-size="15" fill="#FFFFFF" opacity="0.95">MPV + ExoPlayer Dual Engine</text>
+<rect x="430" y="390" width="316" height="42" rx="21" fill="#0C2338" fill-opacity="0.8" stroke="#00E5FF" stroke-width="1.8" stroke-opacity="0.85"/>
+<circle cx="456.0" cy="411" r="7.5" fill="none" stroke="#80D8FF" stroke-width="1.6"/><line x1="448.5" y1="411" x2="463.5" y2="411" stroke="#80D8FF" stroke-width="1.2"/><ellipse cx="456.0" cy="411" rx="3.6" ry="7.5" fill="none" stroke="#80D8FF" stroke-width="1.2"/>
+<text x="476.0" y="417" font-family="Roboto, System-UI, sans-serif" font-weight="600" font-size="15" fill="#FFFFFF" opacity="0.95">SMB / WebDAV / FTP / Local</text>
+<rect x="760" y="390" width="287" height="42" rx="21" fill="#281033" fill-opacity="0.8" stroke="#E040FB" stroke-width="1.8" stroke-opacity="0.85"/>
+<path d="M 785.0 403 Q 785.0 411 793.0 411 Q 785.0 411 785.0 419 Q 785.0 411 777.0 411 Q 785.0 411 785.0 403 Z" fill="#FF80AB"/><path d="M 792.0 404 Q 792.0 407 795.0 407 Q 792.0 407 792.0 410 Q 792.0 407 789.0 407 Q 792.0 407 792.0 404 Z" fill="#FF80AB" opacity="0.85"/>
+<text x="806.0" y="417" font-family="Roboto, System-UI, sans-serif" font-weight="600" font-size="15" fill="#FFFFFF" opacity="0.95">Material 3 / Modern MVI</text>
+</svg>
