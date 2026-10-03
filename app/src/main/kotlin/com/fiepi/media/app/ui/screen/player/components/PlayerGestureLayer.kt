@@ -79,7 +79,7 @@ fun PlayerGestureLayer(
             .padding(16.dp)
             .fillMaxSize()
             .onSizeChanged { width = it.width }
-            .pointerInput(width, state.ui.isLocked, state.ui.controlMode) {
+            .pointerInput(width, state.ui.isLocked, state.ui.controlMode, gestureOptions) {
                 if (width <= 0 || state.ui.isLocked || state.ui.controlMode != PlayerControlMode.Normal) return@pointerInput
                 var dragTotalX = 0f
                 var dragTotalY = 0f
@@ -143,8 +143,11 @@ fun PlayerGestureLayer(
                                 onIntent(PlayerIntent.OnScrubbing(lastTargetTime))
                             }
                         } else if (isVerticalDrag) {
-                            if (change.previousPosition.x < width * 0.5f) {
-                                // Left side adjustment: System Volume
+                            val isLeftSide = change.previousPosition.x < width * 0.5f
+                            val isVolumeControl = if (gestureOptions.swapVolumeBrightness) !isLeftSide else isLeftSide
+
+                            if (isVolumeControl) {
+                                // Volume adjustment
                                 if (gestureOptions.verticalDragVolumeEnabled) {
                                     val deltaVol =
                                         ((dragTotalY / -fullSweepPx) * currentSystemMaxVolume).toInt()
@@ -155,7 +158,7 @@ fun PlayerGestureLayer(
                                     onIntent(PlayerIntent.SetSystemVolume(newSystemVol))
                                 }
                             } else {
-                                // Right side adjustment: Brightness (0..1f)
+                                // Brightness adjustment (0..1f)
                                 if (gestureOptions.verticalDragBrightnessEnabled) {
                                     val newBrightness =
                                         (dragAnchorBrightness + (dragTotalY / -fullSweepPx))
@@ -173,7 +176,7 @@ fun PlayerGestureLayer(
                     }
                 )
             }
-            .pointerInput(width, state.ui.isLocked, state.ui.controlMode) {
+            .pointerInput(width, state.ui.isLocked, state.ui.controlMode, gestureOptions) {
                 if (width <= 0 || state.ui.controlMode != PlayerControlMode.Normal) return@pointerInput
                 if (state.ui.isLocked) {
                     detectTapGestures(onTap = { onIntent(PlayerIntent.ToggleControls) })
@@ -203,7 +206,7 @@ fun PlayerGestureLayer(
                     )
                 }
             }
-            .pointerInput(width, state.ui.isLocked, state.ui.controlMode) {
+            .pointerInput(width, state.ui.isLocked, state.ui.controlMode, gestureOptions) {
                 if (width <= 0 || state.ui.isLocked || state.ui.controlMode != PlayerControlMode.Normal) return@pointerInput
                 awaitEachGesture {
                     val down = awaitFirstDown()

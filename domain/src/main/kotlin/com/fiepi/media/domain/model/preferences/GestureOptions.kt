@@ -29,6 +29,8 @@ data class GestureOptions(
     val verticalDragVolumeEnabled: Boolean = true,
     @SerialName("vertical_drag_brightness_enabled")
     val verticalDragBrightnessEnabled: Boolean = true,
+    @SerialName("swap_volume_brightness")
+    val swapVolumeBrightness: Boolean = false,
     @SerialName("double_tap_seek_enabled")
     val doubleTapSeekEnabled: Boolean = true,
     @SerialName("double_tap_seek_duration_seconds")
@@ -38,5 +40,5 @@ data class GestureOptions(
     @SerialName("long_press_enabled")
     val longPressEnabled: Boolean = true,
     @SerialName("long_press_speed")
-    val longPressSpeed: Float = 3.0f
+    val longPressSpeed: Float = 3.0f,
 )

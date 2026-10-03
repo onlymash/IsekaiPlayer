@@ -79,14 +79,23 @@ fun PlayerQuickControls(
     onSystemVolumeChange: (Int) -> Unit,
     onPlayerVolumeChange: (Int) -> Unit
 ) {
+    val swapVolumeBrightness = state.uiOptions.gestureOptions.swapVolumeBrightness
+
+    // The control bar is shown on the OPPOSITE side of the gesture swipe area to avoid finger obstruction
+    val brightnessAlignment = if (swapVolumeBrightness) Alignment.CenterEnd else Alignment.CenterStart
+    val brightnessPadding = if (swapVolumeBrightness) Modifier.padding(end = 32.dp) else Modifier.padding(start = 32.dp)
+
+    val volumeAlignment = if (swapVolumeBrightness) Alignment.CenterStart else Alignment.CenterEnd
+    val volumePadding = if (swapVolumeBrightness) Modifier.padding(start = 32.dp) else Modifier.padding(end = 32.dp)
+
     Box(modifier = modifier.fillMaxSize()) {
         AnimatedVisibility(
             visible = state.ui.quickBarMode == QuickBarMode.Brightness,
             enter = fadeIn(),
             exit = fadeOut(),
             modifier = Modifier
-                .align(Alignment.CenterStart)
-                .padding(start = 32.dp)
+                .align(brightnessAlignment)
+                .then(brightnessPadding)
         ) {
             val brightnessVal = if (state.ui.brightness < 0f) 0.5f else state.ui.brightness
             QuickControlBar(
@@ -109,17 +118,17 @@ fun PlayerQuickControls(
             enter = fadeIn(),
             exit = fadeOut(),
             modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .padding(end = 32.dp)
+                .align(volumeAlignment)
+                .then(volumePadding)
         ) {
             val systemVol = state.playback.systemVolume
             val systemMaxVol = state.playback.systemMaxVolume.coerceAtLeast(1)
             val playerVol = state.playback.gainVolume
             val maxPlayerVol = state.playback.capabilities.maxGainVolume.coerceAtLeast(100)
 
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
+            val isVolumeOnLeft = volumeAlignment == Alignment.CenterStart
+
+            val playerVolumeBar = @Composable {
                 // Player Volume Bar ("播放器音量" - Equalizer/GraphicEq Icon)
                 QuickControlBar(
                     value = playerVol.toFloat(),
@@ -130,7 +139,9 @@ fun PlayerQuickControls(
                     displayText = "$playerVol%",
                     isOverBoost = playerVol > 100
                 )
+            }
 
+            val systemVolumeBar = @Composable {
                 // System Volume Bar (Speaker Icon)
                 QuickControlBar(
                     value = systemVol.toFloat(),
@@ -140,6 +151,20 @@ fun PlayerQuickControls(
                     label = stringResource(R.string.player_control_system_volume),
                     displayText = "$systemVol"
                 )
+            }
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                if (isVolumeOnLeft) {
+                    // System Volume Bar is closest to left screen edge
+                    systemVolumeBar()
+                    playerVolumeBar()
+                } else {
+                    // System Volume Bar is closest to right screen edge
+                    playerVolumeBar()
+                    systemVolumeBar()
+                }
             }
         }
     }

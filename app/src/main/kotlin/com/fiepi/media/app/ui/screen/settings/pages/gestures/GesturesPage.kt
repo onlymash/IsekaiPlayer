@@ -30,6 +30,7 @@ import androidx.compose.material.icons.twotone.DoubleArrow
 import androidx.compose.material.icons.twotone.FastForward
 import androidx.compose.material.icons.twotone.PlayCircle
 import androidx.compose.material.icons.twotone.Speed
+import androidx.compose.material.icons.twotone.SwapHoriz
 import androidx.compose.material.icons.twotone.Swipe
 import androidx.compose.material.icons.twotone.TouchApp
 import androidx.compose.material3.Icon
@@ -142,6 +143,29 @@ fun GesturesPageContent(
                         icon = {
                             Icon(
                                 imageVector = Icons.TwoTone.Brightness6,
+                                contentDescription = null
+                            )
+                        }
+                    )
+                },
+                { shapes ->
+                    SwitchPreferencesItem(
+                        title = stringResource(R.string.settings_gestures_swap_volume_brightness),
+                        summary = stringResource(R.string.settings_gestures_swap_volume_brightness_summary),
+                        checked = options.swapVolumeBrightness,
+                        onCheckedChange = {
+                            onIntent(
+                                GesturesPrefsIntent.UpdateGestureOptions(
+                                    options.copy(
+                                        swapVolumeBrightness = it
+                                    )
+                                )
+                            )
+                        },
+                        shapes = shapes,
+                        icon = {
+                            Icon(
+                                imageVector = Icons.TwoTone.SwapHoriz,
                                 contentDescription = null
                             )
                         }

@@ -77,6 +77,8 @@
     <string name="settings_gestures_vertical_drag_volume_summary">Enable vertical swipe on left side to adjust volume</string>
     <string name="settings_gestures_vertical_drag_brightness">Brightness</string>
     <string name="settings_gestures_vertical_drag_brightness_summary">Enable vertical swipe on right side to adjust brightness</string>
+    <string name="settings_gestures_swap_volume_brightness">Swap volume and brightness areas</string>
+    <string name="settings_gestures_swap_volume_brightness_summary">Swap left and right side gesture areas for volume and brightness control</string>
     <string name="settings_gestures_double_tap_seek">Double tap to seek</string>
     <string name="settings_gestures_double_tap_seek_summary">Enable double tap on sides to seek forward or backward</string>
     <string name="settings_gestures_double_tap_play_pause">Double tap to play/pause</string>

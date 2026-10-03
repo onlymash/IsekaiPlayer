@@ -77,6 +77,8 @@
     <string name="settings_gestures_vertical_drag_volume_summary">支持通过屏幕左侧垂直滑动调节音量</string>
     <string name="settings_gestures_vertical_drag_brightness">亮度调节</string>
     <string name="settings_gestures_vertical_drag_brightness_summary">支持通过屏幕右侧垂直滑动调节亮度</string>
+    <string name="settings_gestures_swap_volume_brightness">交换音量和亮度区域</string>
+    <string name="settings_gestures_swap_volume_brightness_summary">调换左右两侧滑动调节音量和亮度的区域</string>
     <string name="settings_gestures_double_tap_seek">双击快进/快退</string>
     <string name="settings_gestures_double_tap_seek_summary">支持在两侧双击以快进或快退</string>
     <string name="settings_gestures_double_tap_play_pause">双击播放/暂停</string>
