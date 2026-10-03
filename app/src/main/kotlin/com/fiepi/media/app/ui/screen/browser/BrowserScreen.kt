@@ -568,10 +568,7 @@ fun BrowserScreenContent(
                     },
                     onManageSources = actions.onManageSources,
                     onSettingsClick = actions.onSettingsClick,
-                    onTaskQueueClick = {
-                        scope.launch { drawerState.close() }
-                        actions.onOpenTaskQueue()
-                    }
+                    onTaskQueueClick = actions.onOpenTaskQueue
                 )
             },
             content = screenContent
