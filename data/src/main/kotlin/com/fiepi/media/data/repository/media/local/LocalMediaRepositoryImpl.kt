@@ -418,6 +418,7 @@ class LocalMediaRepositoryImpl(
 
     /**
      * Renames a file or directory on local disk and updates system MediaScanner.
+     * Supports case-sensitive renaming and handles case-only renames (e.g., "file.txt" to "File.txt").
      */
     override suspend fun renameFile(path: String, newName: String): Result<Unit> =
         withContext(Dispatchers.IO) {
@@ -429,22 +430,37 @@ class LocalMediaRepositoryImpl(
 
                 val parent = oldFile.parentFile ?: throw IllegalArgumentException("Invalid path")
                 val oldExt = FileUtils.extractExtension(oldFile.name)
-                val finalName = if (oldFile.isFile && !oldExt.isNullOrEmpty() && !newName.endsWith(
-                        ".$oldExt",
-                        ignoreCase = true
-                    )
-                ) {
-                    "$newName.$oldExt"
-                } else {
-                    newName
-                }
+                val newExt = FileUtils.extractExtension(newName)
+
+                // Preserve original extension if newName does not specify an extension for files
+                val finalName =
+                    if (oldFile.isFile && !oldExt.isNullOrEmpty() && newExt.isNullOrEmpty()) {
+                        "$newName.$oldExt"
+                    } else {
+                        newName
+                    }
 
                 val newFile = File(parent, finalName)
-                if (newFile.exists()) {
+                val isCaseOnlyRename =
+                    oldFile.name.equals(finalName, ignoreCase = true) && oldFile.name != finalName
+
+                if (newFile.exists() && !isCaseOnlyRename) {
                     throw FileAlreadyExistsException(newFile, null, "Target name already exists")
                 }
 
-                if (!oldFile.renameTo(newFile)) {
+                var success = oldFile.renameTo(newFile)
+                if (!success && isCaseOnlyRename) {
+                    // Fallback for case-folding filesystems: rename through a temporary file
+                    val tempFile = File(parent, "${oldFile.name}.tmp_${System.currentTimeMillis()}")
+                    if (oldFile.renameTo(tempFile)) {
+                        success = tempFile.renameTo(newFile)
+                        if (!success) {
+                            tempFile.renameTo(oldFile)
+                        }
+                    }
+                }
+
+                if (!success) {
                     throw IllegalStateException("Failed to rename file")
                 }
 
