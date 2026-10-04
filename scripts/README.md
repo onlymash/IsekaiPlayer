@@ -14,6 +14,7 @@ This directory contains scripts responsible for managing, configuring, updating,
 | `env.sh` | Environment configuration script (parses NDK version and MinSDK from `gradle/config.versions.toml`, configures cross-compilation toolchains and flags) |
 | `versions.sh` | Centralized definition of native dependency Git repositories, tags/branches, licenses, and metadata, linked with `gradle/libs.versions.toml` |
 | `sync-sources.sh` | Idempotent script to clone, sync, and update native dependency source code in `external/sources/` (supports single component target and fast mode) |
+| `update-cacert.sh` | Utility script to download and update the Mozilla CA certificate bundle at `player/src/main/assets/cacert.pem` with SHA256 verification |
 | `utils.sh` | Helper functions (Meson cross-file generator, `vulkan.pc` generator, and `libraries.json` generator) |
 | `components/` | Individual build recipes for C/C++ dependencies (`mbedtls.sh`, `lua.sh`, `ffmpeg.sh`, `mpv.sh`, etc., 16 components in total) |
 
