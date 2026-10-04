@@ -40,6 +40,7 @@ import com.fiepi.media.domain.usecase.media.FileManagementUseCases
 import com.fiepi.media.domain.usecase.media.GetMediaFilesUseCase
 import com.fiepi.media.domain.usecase.media.HasCachedMediaUseCase
 import com.fiepi.media.domain.usecase.media.MoveFileUseCase
+import com.fiepi.media.domain.usecase.media.ObserveMediaFilesUseCase
 import com.fiepi.media.domain.usecase.media.RenameFileUseCase
 import com.fiepi.media.domain.usecase.media.SearchMediaFilesUseCase
 import com.fiepi.media.domain.usecase.playlist.AddMediaToPlaylistUseCase
@@ -166,6 +167,7 @@ private val useCaseMediaModule = module {
 
     // Media
     factoryOf(::GetMediaFilesUseCase)
+    factoryOf(::ObserveMediaFilesUseCase)
     factoryOf(::HasCachedMediaUseCase)
     factoryOf(::SearchMediaFilesUseCase)
     factoryOf(::RenameFileUseCase)

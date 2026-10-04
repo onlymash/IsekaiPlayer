@@ -43,6 +43,20 @@ interface MediaRepository {
     ): List<MediaFile>
 
     /**
+     * Observes files at a specific path for a given source as a continuous reactive stream.
+     * @param path The directory path to list files from.
+     * @param source The media source to use.
+     * @param options Sorting and filtering options.
+     * @param forceRefresh Whether to bypass cache and reload from the storage provider.
+     */
+    fun observeMediaFiles(
+        path: String?,
+        source: MediaSource,
+        options: MediaOptions,
+        forceRefresh: Boolean = false
+    ): Flow<List<MediaFile>>
+
+    /**
      * Checks if the data for the given path is already cached in memory.
      */
     fun hasCachedData(path: String, source: MediaSource): Boolean

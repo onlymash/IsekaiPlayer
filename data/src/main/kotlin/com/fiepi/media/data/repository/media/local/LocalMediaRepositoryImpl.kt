@@ -36,7 +36,9 @@ import com.fiepi.media.domain.repository.media.LocalMediaRepository
 import com.fiepi.media.domain.utils.FileUtils
 import com.fiepi.media.domain.utils.SubtitleUtils
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
@@ -63,6 +65,11 @@ class LocalMediaRepositoryImpl(
     @Volatile
     private var isCacheDirty = true
 
+    private val _updateEvent = MutableSharedFlow<Unit>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+
     init {
         context.contentResolver.registerContentObserver(
             MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
@@ -82,6 +89,7 @@ class LocalMediaRepositoryImpl(
         allParentPathsCache = emptySet()
         subtitleCache.clear()
         folderItemCountCache.clear()
+        _updateEvent.tryEmit(Unit)
     }
 
     private suspend fun ensureVideosLoaded(force: Boolean = false): List<MediaFile.Video> =
@@ -159,6 +167,17 @@ class LocalMediaRepositoryImpl(
         // Perform optimized sorting
         return sortItems(items, options)
     }
+
+    override fun observeMediaFiles(
+        path: String?,
+        options: MediaOptions,
+        forceRefresh: Boolean
+    ): Flow<List<MediaFile>> = flow {
+        emit(getMediaFiles(path, options, forceRefresh))
+        _updateEvent.collect {
+            emit(getMediaFiles(path, options, false))
+        }
+    }.flowOn(Dispatchers.IO)
 
     private fun sortItems(items: List<MediaFile>, options: MediaOptions): List<MediaFile> {
         val comparator = compareBy<MediaFile> {

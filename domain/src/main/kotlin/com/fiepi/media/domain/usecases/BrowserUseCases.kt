@@ -26,6 +26,7 @@ import com.fiepi.media.domain.usecase.history.SaveHistoryUseCase
 import com.fiepi.media.domain.usecase.media.FileManagementUseCases
 import com.fiepi.media.domain.usecase.media.GetMediaFilesUseCase
 import com.fiepi.media.domain.usecase.media.HasCachedMediaUseCase
+import com.fiepi.media.domain.usecase.media.ObserveMediaFilesUseCase
 import com.fiepi.media.domain.usecase.media.SearchMediaFilesUseCase
 import com.fiepi.media.domain.usecase.preferences.GetDisplayFieldsUseCase
 import com.fiepi.media.domain.usecase.preferences.GetInterceptBackNavigationUseCase
@@ -41,6 +42,7 @@ import com.fiepi.media.domain.usecases.playlist.PlaylistUseCases
 
 data class BrowserUseCases(
     val getMediaFiles: GetMediaFilesUseCase,
+    val observeMediaFiles: ObserveMediaFilesUseCase,
     val hasCachedMedia: HasCachedMediaUseCase,
     val searchMediaFiles: SearchMediaFilesUseCase,
     val fileManagement: FileManagementUseCases,

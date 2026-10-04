@@ -43,6 +43,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -299,57 +300,53 @@ class BrowserViewModel(
             }
                 .debounce(100.milliseconds)
                 .flatMapLatest { request ->
-                    flow {
-                        // A. Prepare UI and Breadcrumbs
-                        val currentState = _state.value
-                        val isLocal = request.source.type == SourceType.Local
-                        val shouldKeepContent =
-                            currentState.mediaState is MediaBrowserState.Content && !request.needsPermission
-                        val isCached = useCases.hasCachedMedia(request.path, request.source)
+                    // A. Prepare UI and Breadcrumbs
+                    val currentState = _state.value
+                    val isLocal = request.source.type == SourceType.Local
+                    val shouldKeepContent =
+                        currentState.mediaState is MediaBrowserState.Content && !request.needsPermission
+                    val isCached = useCases.hasCachedMedia(request.path, request.source)
 
-                        _state.update {
-                            it.copy(
-                                mediaNavigationState = it.mediaNavigationState.copy(
-                                    currentPath = request.path,
-                                    breadcrumbs = calculateNextMediaBreadcrumbs(
-                                        request.path,
-                                        request.source,
-                                        it.mediaNavigationState.breadcrumbs
-                                    )
-                                ),
-                                options = request.options,
-                                mediaState = when {
-                                    request.needsPermission -> MediaBrowserState.Permission
-                                    it.isRefreshing || shouldKeepContent || it.mediaState is MediaBrowserState.Skeleton -> it.mediaState
-                                    else -> MediaBrowserState.Skeleton
-                                },
-                                source = it.source.copy(permissionGranted = request.granted),
-                                isRefreshing = if (request.refreshSignal.isManual) true
-                                else if (shouldKeepContent && !isLocal && !isCached) true
-                                else it.isRefreshing
-                            )
-                        }
+                    _state.update {
+                        it.copy(
+                            mediaNavigationState = it.mediaNavigationState.copy(
+                                currentPath = request.path,
+                                breadcrumbs = calculateNextMediaBreadcrumbs(
+                                    request.path,
+                                    request.source,
+                                    it.mediaNavigationState.breadcrumbs
+                                )
+                            ),
+                            options = request.options,
+                            mediaState = when {
+                                request.needsPermission -> MediaBrowserState.Permission
+                                it.isRefreshing || shouldKeepContent || it.mediaState is MediaBrowserState.Skeleton -> it.mediaState
+                                else -> MediaBrowserState.Skeleton
+                            },
+                            source = it.source.copy(permissionGranted = request.granted),
+                            isRefreshing = if (request.refreshSignal.isManual) true
+                            else if (shouldKeepContent && !isLocal && !isCached) true
+                            else it.isRefreshing
+                        )
+                    }
 
-                        if (request.needsPermission) {
-                            emit(MediaBrowserState.Permission)
-                            return@flow
-                        }
-
-                        // B. Data Fetching
-                        try {
-                            val files = useCases.getMediaFiles(
-                                request.path,
-                                request.source,
-                                request.options,
-                                request.refreshSignal.isManual
-                            )
+                    if (request.needsPermission) {
+                        flowOf(MediaBrowserState.Permission)
+                    } else {
+                        // B. Continuous Reactive Data Observation
+                        useCases.observeMediaFiles(
+                            request.path,
+                            request.source,
+                            request.options,
+                            request.refreshSignal.isManual
+                        ).map { files ->
                             if (files.isEmpty()) {
-                                emit(MediaBrowserState.Empty)
+                                MediaBrowserState.Empty
                             } else {
                                 val scrollPos = scrollPositions[request.path]
-                                emit(MediaBrowserState.Content(request.path, files, scrollPos))
+                                MediaBrowserState.Content(request.path, files, scrollPos)
                             }
-                        } catch (e: Exception) {
+                        }.catch { e ->
                             emit(MediaBrowserState.Error(e.localizedMessage ?: "Unknown Error"))
                         }
                     }

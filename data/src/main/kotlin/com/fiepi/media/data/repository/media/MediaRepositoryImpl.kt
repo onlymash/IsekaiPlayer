@@ -39,9 +39,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -67,6 +70,10 @@ class MediaRepositoryImpl(
     private var currentRemoteRepo: RemoteMediaRepository? = null
     private var currentSource: MediaSource.Remote? = null
     private val remoteFilesCache = ConcurrentHashMap<String, List<MediaFile>>()
+    private val _remoteUpdateEvent = MutableSharedFlow<Unit>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
 
     override suspend fun getMediaFiles(
         path: String?,
@@ -126,6 +133,24 @@ class MediaRepositoryImpl(
                     }
                 }
             }
+        }
+    }
+
+    override fun observeMediaFiles(
+        path: String?,
+        source: MediaSource,
+        options: MediaOptions,
+        forceRefresh: Boolean
+    ): Flow<List<MediaFile>> {
+        return when (source) {
+            is MediaSource.Local -> localMediaRepository.observeMediaFiles(path, options, forceRefresh)
+            is MediaSource.External -> flowOf(emptyList())
+            is MediaSource.Remote -> flow {
+                emit(getMediaFiles(path, source, options, forceRefresh))
+                _remoteUpdateEvent.collect {
+                    emit(getMediaFiles(path, source, options, forceRefresh = false))
+                }
+            }.flowOn(Dispatchers.IO)
         }
     }
 

@@ -29,6 +29,12 @@ interface LocalMediaRepository {
         forceRefresh: Boolean = false
     ): List<MediaFile>
 
+    fun observeMediaFiles(
+        path: String?,
+        options: MediaOptions,
+        forceRefresh: Boolean = false
+    ): Flow<List<MediaFile>>
+
     fun searchMediaFiles(query: String, path: String?): Flow<MediaFile.Video>
 
     fun isCached(): Boolean
