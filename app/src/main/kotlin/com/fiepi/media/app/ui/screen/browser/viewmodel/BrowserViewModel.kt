@@ -564,7 +564,30 @@ class BrowserViewModel(
 
             is BrowserIntent.FileAction.CreateFolder -> {
                 viewModelScope.launch {
-                    createFolder(intent.parentPath, intent.name)
+                    _state.update { it.copy(dialogs = it.dialogs.copy(isCreatingFolder = true)) }
+                    val result =
+                        useCases.fileManagement.createDirectory(intent.parentPath, intent.name)
+                    _state.update { currentState ->
+                        if (result.isSuccess) {
+                            val restoreOperation =
+                                currentState.dialogs.pendingRestoreFolderPickerOperation
+                            currentState.copy(
+                                dialogs = currentState.dialogs.copy(
+                                    createFolderParentPath = null,
+                                    isCreatingFolder = false,
+                                    pendingRestoreFolderPickerOperation = null,
+                                    folderPickerOperation = restoreOperation,
+                                    folderPickerCurrentPath = if (restoreOperation == null) null else currentState.dialogs.folderPickerCurrentPath
+                                )
+                            )
+                        } else {
+                            currentState.copy(
+                                dialogs = currentState.dialogs.copy(
+                                    isCreatingFolder = false
+                                )
+                            )
+                        }
+                    }
                 }
             }
 
@@ -589,26 +612,6 @@ class BrowserViewModel(
                 }
             }
         }
-    }
-
-    suspend fun createFolder(parentPath: String, name: String): Boolean {
-        val result = useCases.fileManagement.createDirectory(parentPath, name)
-        if (result.isSuccess) {
-            onIntent(BrowserIntent.Storage.LoadFiles)
-            _state.update { currentState ->
-                val restoreOperation = currentState.dialogs.pendingRestoreFolderPickerOperation
-                currentState.copy(
-                    dialogs = currentState.dialogs.copy(
-                        createFolderParentPath = null,
-                        pendingRestoreFolderPickerOperation = null,
-                        folderPickerOperation = restoreOperation,
-                        folderPickerCurrentPath = if (restoreOperation == null) null else currentState.dialogs.folderPickerCurrentPath
-                    )
-                )
-            }
-            return true
-        }
-        return false
     }
 
     private fun handleStorageIntent(intent: BrowserIntent.Storage) {

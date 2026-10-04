@@ -32,7 +32,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -42,7 +41,6 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.fiepi.media.app.R
-import kotlinx.coroutines.launch
 
 /**
  * Dialog for renaming a single selected file or folder.
@@ -153,18 +151,18 @@ fun DeleteConfirmDialog(
  * Dialog for creating a new subfolder under a given directory.
  * Shows a loading indicator on the OK button while directory creation is in progress.
  *
- * @param onCreate Suspending callback to create the folder. Returns true if successful.
+ * @param isCreating Whether directory creation is currently in progress.
+ * @param onCreate Callback with the folder name to create.
  * @param onDismiss Callback when the dialog is dismissed.
  */
 @Composable
 fun CreateFolderDialog(
-    onCreate: suspend (folderName: String) -> Boolean,
+    isCreating: Boolean = false,
+    onCreate: (folderName: String) -> Unit,
     onDismiss: () -> Unit
 ) {
     var text by remember { mutableStateOf("") }
-    var isCreating by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
-    val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -192,11 +190,7 @@ fun CreateFolderDialog(
                 onClick = {
                     val trimmed = text.trim()
                     if (trimmed.isNotEmpty() && !isCreating) {
-                        isCreating = true
-                        scope.launch {
-                            onCreate(trimmed)
-                            isCreating = false
-                        }
+                        onCreate(trimmed)
                     }
                 },
                 enabled = text.trim().isNotEmpty() && !isCreating

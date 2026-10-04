@@ -82,11 +82,14 @@ fun PlayerQuickControls(
     val swapVolumeBrightness = state.uiOptions.gestureOptions.swapVolumeBrightness
 
     // The control bar is shown on the OPPOSITE side of the gesture swipe area to avoid finger obstruction
-    val brightnessAlignment = if (swapVolumeBrightness) Alignment.CenterEnd else Alignment.CenterStart
-    val brightnessPadding = if (swapVolumeBrightness) Modifier.padding(end = 32.dp) else Modifier.padding(start = 32.dp)
+    val brightnessAlignment =
+        if (swapVolumeBrightness) Alignment.CenterEnd else Alignment.CenterStart
+    val brightnessPadding =
+        if (swapVolumeBrightness) Modifier.padding(end = 32.dp) else Modifier.padding(start = 32.dp)
 
     val volumeAlignment = if (swapVolumeBrightness) Alignment.CenterStart else Alignment.CenterEnd
-    val volumePadding = if (swapVolumeBrightness) Modifier.padding(start = 32.dp) else Modifier.padding(end = 32.dp)
+    val volumePadding =
+        if (swapVolumeBrightness) Modifier.padding(start = 32.dp) else Modifier.padding(end = 32.dp)
 
     Box(modifier = modifier.fillMaxSize()) {
         AnimatedVisibility(

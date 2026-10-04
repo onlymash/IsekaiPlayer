@@ -125,6 +125,7 @@ data class BrowserDialogState(
     val folderPickerOperation: FileOperationType? = null,
     val folderPickerCurrentPath: String? = null,
     val createFolderParentPath: String? = null,
+    val isCreatingFolder: Boolean = false,
     val pendingRestoreFolderPickerOperation: FileOperationType? = null,
     val conflictFileName: String? = null
 )

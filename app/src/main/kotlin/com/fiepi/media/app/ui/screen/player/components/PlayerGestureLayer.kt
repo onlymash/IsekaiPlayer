@@ -144,7 +144,8 @@ fun PlayerGestureLayer(
                             }
                         } else if (isVerticalDrag) {
                             val isLeftSide = change.previousPosition.x < width * 0.5f
-                            val isVolumeControl = if (gestureOptions.swapVolumeBrightness) !isLeftSide else isLeftSide
+                            val isVolumeControl =
+                                if (gestureOptions.swapVolumeBrightness) !isLeftSide else isLeftSide
 
                             if (isVolumeControl) {
                                 // Volume adjustment

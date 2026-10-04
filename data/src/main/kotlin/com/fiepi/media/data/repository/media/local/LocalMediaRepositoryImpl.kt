@@ -47,30 +47,37 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.concurrent.ConcurrentHashMap
 
+/**
+ * Implementation of [LocalMediaRepository] using MediaStore and local file system access.
+ * Manages video metadata caching, external subtitle discovery, reactive media updates,
+ * and file management operations including file copying, moving, renaming, and deletion.
+ */
 class LocalMediaRepositoryImpl(
     private val context: Context
 ) : LocalMediaRepository {
 
-    // Primary caches for video data
+    // Primary memory caches for video items and folder directory structures
     private var allVideosCache: List<MediaFile.Video>? = null
     private var videosByParentCache: Map<String, List<MediaFile.Video>> = emptyMap()
     private var allParentPathsCache: Set<String> = emptySet()
 
-    // Secondary caches for expensive disk-based metadata
+    // Secondary memory caches for expensive disk-based metadata
     private val subtitleCache = ConcurrentHashMap<String, List<MediaFile.Subtitle>>()
 
-    // Key: folderPath + "|" + showSubtitles + "|" + showHidden
+    // Key format: folderPath + "|" + showSubtitles + "|" + showHidden
     private val folderItemCountCache = ConcurrentHashMap<String, Int>()
 
     @Volatile
     private var isCacheDirty = true
 
+    // Shared flow used to notify observers when local media cache is invalidated
     private val _updateEvent = MutableSharedFlow<Unit>(
         extraBufferCapacity = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
     init {
+        // Register ContentObserver to listen for MediaStore video changes on external storage
         context.contentResolver.registerContentObserver(
             MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
             true,
@@ -82,6 +89,9 @@ class LocalMediaRepositoryImpl(
         )
     }
 
+    /**
+     * Clears all in-memory caches and notifies active reactive streams to re-emit fresh data.
+     */
     private fun invalidateCache() {
         isCacheDirty = true
         allVideosCache = null
@@ -92,6 +102,9 @@ class LocalMediaRepositoryImpl(
         _updateEvent.tryEmit(Unit)
     }
 
+    /**
+     * Ensures all local video files are loaded from MediaStore and indexed into memory caches.
+     */
     private suspend fun ensureVideosLoaded(force: Boolean = false): List<MediaFile.Video> =
         withContext(Dispatchers.IO) {
             if (force || isCacheDirty || allVideosCache == null) {
@@ -101,7 +114,6 @@ class LocalMediaRepositoryImpl(
                 videosByParentCache = grouped
                 allParentPathsCache = grouped.keys
 
-                // If forced, we clear everything to ensure a fresh scan
                 if (force) {
                     subtitleCache.clear()
                     folderItemCountCache.clear()
@@ -112,6 +124,9 @@ class LocalMediaRepositoryImpl(
             allVideosCache!!
         }
 
+    /**
+     * Fetches media items (videos, subfolders, and subtitles) for a specified local path.
+     */
     override suspend fun getMediaFiles(
         path: String?,
         options: MediaOptions,
@@ -120,7 +135,7 @@ class LocalMediaRepositoryImpl(
         ensureVideosLoaded(forceRefresh)
 
         val items = if (path == null) {
-            // Show root folders that contain videos
+            // Root view: Return parent folders that contain indexed video files
             allParentPathsCache.asSequence()
                 .filter { it.isNotEmpty() }
                 .map { folderPath -> createFolderItem(folderPath, options) }
@@ -128,10 +143,10 @@ class LocalMediaRepositoryImpl(
         } else {
             val folderItems = mutableListOf<MediaFile>()
 
-            // Add direct videos from memory cache
+            // Add video files located directly in this folder
             videosByParentCache[path]?.let { folderItems.addAll(it) }
 
-            // Add direct sub-folders discovered from indexed video paths
+            // Discover and add immediate sub-folders derived from indexed video paths
             val searchPrefix = if (path.endsWith("/")) path else "$path/"
             val directSubFolders = allParentPathsCache.asSequence()
                 .filter { it.startsWith(searchPrefix) }
@@ -144,13 +159,13 @@ class LocalMediaRepositoryImpl(
                 .map { subFolderPath -> createFolderItem(subFolderPath, options) }
             folderItems.addAll(directSubFolders)
 
-            // Add subtitles (lazy cached disk scan)
+            // Add external subtitle files via disk scan if enabled
             val subtitles = getOrScanSubtitles(path)
             if (options.showSubtitles) {
                 folderItems.addAll(subtitles)
             }
 
-            // Associate subtitles with videos in this folder
+            // Associate matching subtitles with corresponding videos in this directory
             folderItems.indices.forEach { i ->
                 val item = folderItems[i]
                 if (item is MediaFile.Video) {
@@ -164,10 +179,12 @@ class LocalMediaRepositoryImpl(
             folderItems
         }
 
-        // Perform optimized sorting
         return sortItems(items, options)
     }
 
+    /**
+     * Observes media files at a specific path as a reactive flow, re-emitting whenever caches invalidate.
+     */
     override fun observeMediaFiles(
         path: String?,
         options: MediaOptions,
@@ -179,6 +196,9 @@ class LocalMediaRepositoryImpl(
         }
     }.flowOn(Dispatchers.IO)
 
+    /**
+     * Sorts media files based on current user options such as folder order, sort type, and direction.
+     */
     private fun sortItems(items: List<MediaFile>, options: MediaOptions): List<MediaFile> {
         val comparator = compareBy<MediaFile> {
             if (options.foldersFirst) {
@@ -214,6 +234,9 @@ class LocalMediaRepositoryImpl(
         return items.sortedWith(comparator)
     }
 
+    /**
+     * Searches for video files matching the search query under the specified path prefix.
+     */
     override fun searchMediaFiles(query: String, path: String?): Flow<MediaFile.Video> = flow {
         val allVideos = ensureVideosLoaded()
         allVideos.forEach { video ->
@@ -232,6 +255,9 @@ class LocalMediaRepositoryImpl(
 
     override fun isCached(): Boolean = !isCacheDirty && allVideosCache != null
 
+    /**
+     * Constructs a folder item with cached item counts.
+     */
     private fun createFolderItem(folderPath: String, options: MediaOptions): MediaFile.Folder {
         val folderFile = File(folderPath)
         return MediaFile.Folder(
@@ -243,20 +269,20 @@ class LocalMediaRepositoryImpl(
         )
     }
 
+    /**
+     * Calculates the total item count (subfolders, videos, subtitles) for a folder with caching.
+     */
     private fun getOrCalculateItemCount(folderPath: String, options: MediaOptions): Int {
         val cacheKey = "$folderPath|${options.showSubtitles}|${options.showHidden}"
         return folderItemCountCache.getOrPut(cacheKey) {
-            // A. Count sub-folders that contain videos (from memory)
             val subFoldersCount = allParentPathsCache.count {
                 it.startsWith(folderPath) && it != folderPath &&
                         it.removePrefix(folderPath).removePrefix("/")
                             .substringBefore('/') == it.removePrefix(folderPath).removePrefix("/")
             }
 
-            // B. Count videos in this folder (from memory)
             val videosCount = videosByParentCache[folderPath]?.size ?: 0
 
-            // C. Count subtitles (minimal disk probe, then cached)
             val subtitlesCount = if (options.showSubtitles) {
                 val subs = getOrScanSubtitles(folderPath)
                 if (options.showHidden) subs.size else subs.count { !it.name.startsWith(".") }
@@ -266,6 +292,9 @@ class LocalMediaRepositoryImpl(
         }
     }
 
+    /**
+     * Scans local directory for subtitle files matching the base names of videos in that directory.
+     */
     private fun getOrScanSubtitles(path: String): List<MediaFile.Subtitle> {
         return subtitleCache.getOrPut(path) {
             val videos = videosByParentCache[path]
@@ -319,6 +348,9 @@ class LocalMediaRepositoryImpl(
         }
     }
 
+    /**
+     * Queries local video items directly from MediaStore ContentProvider.
+     */
     private fun queryVideos(): List<MediaFile.Video> {
         val videos = mutableListOf<MediaFile.Video>()
         val projection = arrayOf(
@@ -384,6 +416,9 @@ class LocalMediaRepositoryImpl(
         return videos
     }
 
+    /**
+     * Renames a file or directory on local disk and updates system MediaScanner.
+     */
     override suspend fun renameFile(path: String, newName: String): Result<Unit> =
         withContext(Dispatchers.IO) {
             runCatching {
@@ -418,6 +453,9 @@ class LocalMediaRepositoryImpl(
             }
         }
 
+    /**
+     * Recursively deletes specified files or directories from local disk.
+     */
     override suspend fun deleteFiles(paths: List<String>): Result<Unit> =
         withContext(Dispatchers.IO) {
             runCatching {
@@ -438,6 +476,9 @@ class LocalMediaRepositoryImpl(
             }
         }
 
+    /**
+     * Copies a source file or directory to a target directory.
+     */
     override suspend fun copyFile(
         sourcePath: String,
         targetDirectory: String,
@@ -463,6 +504,10 @@ class LocalMediaRepositoryImpl(
         }
     }
 
+    /**
+     * Moves a source file or directory to a target directory.
+     * Merges directory contents if target directory already exists.
+     */
     override suspend fun moveFile(
         sourcePath: String,
         targetDirectory: String,
@@ -476,38 +521,63 @@ class LocalMediaRepositoryImpl(
             }
 
             val targetDir = File(targetDirectory)
+            if (sourceFile.isDirectory) {
+                val sourceCanonical =
+                    runCatching { sourceFile.canonicalPath }.getOrDefault(sourceFile.absolutePath)
+                val targetDirCanonical =
+                    runCatching { targetDir.canonicalPath }.getOrDefault(targetDir.absolutePath)
+                if (targetDirCanonical == sourceCanonical || targetDirCanonical.startsWith(
+                        sourceCanonical + File.separator
+                    )
+                ) {
+                    throw IllegalArgumentException("Cannot move a directory into itself or one of its subdirectories")
+                }
+            }
+
             if (!targetDir.exists()) {
                 targetDir.mkdirs()
             }
 
             val targetFile = File(targetDir, sourceFile.name)
-            if (targetFile.exists()) {
+
+            if (sourceFile.isDirectory && targetFile.exists() && targetFile.isDirectory) {
                 if (!overwrite) {
                     throw FileAlreadyExistsException(targetFile, null, "Target file already exists")
                 }
-                if (targetFile.isDirectory) {
-                    targetFile.deleteRecursively()
-                } else {
-                    targetFile.delete()
-                }
-            }
-
-            val moved = sourceFile.renameTo(targetFile)
-            if (moved) {
-                val size = if (sourceFile.isFile) sourceFile.length() else sourceFile.walk()
-                    .filter { it.isFile }.sumOf { it.length() }
-                onProgress?.invoke(size)
+                moveDirectoryContents(sourceFile, targetFile, true, onProgress)
             } else {
-                copyFileWithProgress(
-                    sourceFile,
-                    targetFile,
-                    overwrite = true,
-                    onProgress = onProgress
-                )
-                if (sourceFile.isDirectory) {
-                    sourceFile.deleteRecursively()
+                if (targetFile.exists()) {
+                    if (!overwrite) {
+                        throw FileAlreadyExistsException(
+                            targetFile,
+                            null,
+                            "Target file already exists"
+                        )
+                    }
+                    if (targetFile.isDirectory) {
+                        targetFile.deleteRecursively()
+                    } else {
+                        targetFile.delete()
+                    }
+                }
+
+                val moved = sourceFile.renameTo(targetFile)
+                if (moved) {
+                    val size = if (sourceFile.isFile) sourceFile.length() else sourceFile.walk()
+                        .filter { it.isFile }.sumOf { it.length() }
+                    onProgress?.invoke(size)
                 } else {
-                    sourceFile.delete()
+                    copyFileWithProgress(
+                        sourceFile,
+                        targetFile,
+                        overwrite = true,
+                        onProgress = onProgress
+                    )
+                    if (sourceFile.isDirectory) {
+                        sourceFile.deleteRecursively()
+                    } else {
+                        sourceFile.delete()
+                    }
                 }
             }
 
@@ -516,20 +586,109 @@ class LocalMediaRepositoryImpl(
         }
     }
 
+    /**
+     * Recursively moves the contents of a directory into a target directory,
+     * merging subfolders and overwriting individual file conflicts.
+     */
+    private fun moveDirectoryContents(
+        sourceDir: File,
+        targetDir: File,
+        overwrite: Boolean,
+        onProgress: ((bytesWritten: Long) -> Unit)?
+    ) {
+        if (!targetDir.exists()) {
+            targetDir.mkdirs()
+        }
+
+        val files = sourceDir.listFiles() ?: return
+        for (file in files) {
+            val dest = File(targetDir, file.name)
+            if (file.isDirectory) {
+                if (dest.exists()) {
+                    if (dest.isDirectory) {
+                        moveDirectoryContents(file, dest, overwrite, onProgress)
+                    } else {
+                        if (!overwrite) {
+                            throw FileAlreadyExistsException(dest, null, "Target already exists")
+                        }
+                        dest.delete()
+                        val moved = file.renameTo(dest)
+                        if (!moved) {
+                            copyFileWithProgress(
+                                file,
+                                dest,
+                                overwrite = true,
+                                onProgress = onProgress
+                            )
+                            file.deleteRecursively()
+                        }
+                    }
+                } else {
+                    val moved = file.renameTo(dest)
+                    if (moved) {
+                        val size = file.walk().filter { it.isFile }.sumOf { it.length() }
+                        onProgress?.invoke(size)
+                    } else {
+                        copyFileWithProgress(file, dest, overwrite = true, onProgress = onProgress)
+                        file.deleteRecursively()
+                    }
+                }
+            } else {
+                if (dest.exists()) {
+                    if (!overwrite) {
+                        throw FileAlreadyExistsException(dest, null, "Target file already exists")
+                    }
+                    if (dest.isDirectory) {
+                        dest.deleteRecursively()
+                    } else {
+                        dest.delete()
+                    }
+                }
+                val moved = file.renameTo(dest)
+                if (moved) {
+                    onProgress?.invoke(file.length())
+                } else {
+                    copyFileWithProgress(file, dest, overwrite = true, onProgress = onProgress)
+                    file.delete()
+                }
+            }
+        }
+
+        val remaining = sourceDir.listFiles()
+        if (remaining.isNullOrEmpty()) {
+            sourceDir.delete()
+        }
+    }
+
+    /**
+     * Copies a file or directory with progress reporting.
+     * Guarantees prevention of infinite recursion when copying a directory into its descendant.
+     */
     private fun copyFileWithProgress(
         source: File,
         target: File,
         overwrite: Boolean,
-        onProgress: ((bytesWritten: Long) -> Unit)?
+        onProgress: ((bytesWritten: Long) -> Unit)?,
+        rootTarget: File = target
     ) {
+        val sourceCanonical = runCatching { source.canonicalPath }.getOrDefault(source.absolutePath)
+        val rootTargetCanonical =
+            runCatching { rootTarget.canonicalPath }.getOrDefault(rootTarget.absolutePath)
+
+        if (sourceCanonical == rootTargetCanonical || sourceCanonical.startsWith(rootTargetCanonical + File.separator)) {
+            return
+        }
+
         if (target.exists()) {
             if (!overwrite) {
                 throw FileAlreadyExistsException(target, null, "Target file already exists")
             }
-            if (target.isDirectory) {
-                target.deleteRecursively()
-            } else {
-                target.delete()
+            if (source.isFile || target.isFile) {
+                if (target.isDirectory) {
+                    target.deleteRecursively()
+                } else {
+                    target.delete()
+                }
             }
         }
 
@@ -538,7 +697,7 @@ class LocalMediaRepositoryImpl(
             val files = source.listFiles() ?: return
             for (file in files) {
                 val subTarget = File(target, file.name)
-                copyFileWithProgress(file, subTarget, overwrite, onProgress)
+                copyFileWithProgress(file, subTarget, overwrite, onProgress, rootTarget)
             }
         } else {
             val parent = target.parentFile
@@ -566,6 +725,9 @@ class LocalMediaRepositoryImpl(
         }
     }
 
+    /**
+     * Creates a new subfolder under the specified parent directory.
+     */
     override suspend fun createDirectory(parentPath: String, folderName: String): Result<Unit> =
         withContext(Dispatchers.IO) {
             runCatching {
@@ -580,6 +742,9 @@ class LocalMediaRepositoryImpl(
             }
         }
 
+    /**
+     * Triggers MediaScannerConnection to update Android's MediaStore database for modified paths.
+     */
     private fun scanMediaFiles(paths: Array<String>) {
         if (paths.isEmpty()) return
         try {

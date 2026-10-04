@@ -143,7 +143,12 @@ class MediaRepositoryImpl(
         forceRefresh: Boolean
     ): Flow<List<MediaFile>> {
         return when (source) {
-            is MediaSource.Local -> localMediaRepository.observeMediaFiles(path, options, forceRefresh)
+            is MediaSource.Local -> localMediaRepository.observeMediaFiles(
+                path,
+                options,
+                forceRefresh
+            )
+
             is MediaSource.External -> flowOf(emptyList())
             is MediaSource.Remote -> flow {
                 emit(getMediaFiles(path, source, options, forceRefresh))

@@ -92,6 +92,7 @@ import java.io.File
 fun FolderPickerDialog(
     modifier: Modifier = Modifier,
     initialPath: String,
+    sourceDirectoryPath: String = initialPath,
     storageRootPath: String = "",
     operationType: FileOperationType,
     onConfirm: (targetPath: String) -> Unit,
@@ -155,6 +156,11 @@ fun FolderPickerDialog(
             currentPath != effectiveStorageRoot &&
             currentPath.startsWith(effectiveStorageRoot)
 
+    val isSameDirectory = remember(currentPath, sourceDirectoryPath) {
+        currentPath.trimEnd('/') == sourceDirectoryPath.trimEnd('/')
+    }
+    val isConfirmEnabled = !isSameDirectory
+
     val adaptiveInfo = currentWindowAdaptiveInfoV2()
     val sizeClass = adaptiveInfo.windowSizeClass
     val useTwoPaneLayout =
@@ -188,6 +194,7 @@ fun FolderPickerDialog(
                 FolderPickerTwoPaneContent(
                     currentPath = currentPath,
                     canGoUp = canGoUp,
+                    isConfirmEnabled = isConfirmEnabled,
                     storageRootPath = effectiveStorageRoot,
                     operationType = operationType,
                     subFolders = subFolders,
@@ -202,6 +209,7 @@ fun FolderPickerDialog(
                 FolderPickerSinglePaneContent(
                     currentPath = currentPath,
                     canGoUp = canGoUp,
+                    isConfirmEnabled = isConfirmEnabled,
                     storageRootPath = effectiveStorageRoot,
                     operationType = operationType,
                     subFolders = subFolders,
@@ -221,6 +229,7 @@ fun FolderPickerDialog(
 private fun FolderPickerSinglePaneContent(
     currentPath: String,
     canGoUp: Boolean,
+    isConfirmEnabled: Boolean,
     storageRootPath: String,
     operationType: FileOperationType,
     subFolders: List<File>,
@@ -284,6 +293,7 @@ private fun FolderPickerSinglePaneContent(
         FolderPickerConfirmActions(
             modifier = Modifier.fillMaxWidth(),
             operationType = operationType,
+            isConfirmEnabled = isConfirmEnabled,
             onConfirm = onConfirm,
             onDismiss = onDismiss
         )
@@ -294,6 +304,7 @@ private fun FolderPickerSinglePaneContent(
 private fun FolderPickerTwoPaneContent(
     currentPath: String,
     canGoUp: Boolean,
+    isConfirmEnabled: Boolean,
     storageRootPath: String,
     operationType: FileOperationType,
     subFolders: List<File>,
@@ -346,6 +357,7 @@ private fun FolderPickerTwoPaneContent(
             FolderPickerConfirmActions(
                 modifier = Modifier.fillMaxWidth(),
                 operationType = operationType,
+                isConfirmEnabled = isConfirmEnabled,
                 onConfirm = onConfirm,
                 onDismiss = onDismiss
             )
@@ -417,6 +429,7 @@ private fun FolderPickerNavigationActions(
 private fun FolderPickerConfirmActions(
     modifier: Modifier = Modifier,
     operationType: FileOperationType,
+    isConfirmEnabled: Boolean = true,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -433,7 +446,8 @@ private fun FolderPickerConfirmActions(
 
         val isCopy = operationType == FileOperationType.Copy
         TextButton(
-            onClick = rememberHapticClickHandler { onConfirm() }
+            onClick = rememberHapticClickHandler { onConfirm() },
+            enabled = isConfirmEnabled
         ) {
             Text(
                 if (isCopy) stringResource(R.string.file_dialog_copy_here)

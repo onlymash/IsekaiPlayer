@@ -231,9 +231,11 @@ fun BrowserDialogHost(
     state.dialogs.folderPickerOperation?.let { operation ->
         val pickerInitialPath = state.dialogs.folderPickerCurrentPath
             ?: state.mediaNavigationState.currentPath
+        val sourceDirectoryPath = state.mediaNavigationState.currentPath
         val activeStorageRoot = state.source.current.rootPath
         FolderPickerDialog(
             initialPath = pickerInitialPath,
+            sourceDirectoryPath = sourceDirectoryPath,
             storageRootPath = activeStorageRoot,
             operationType = operation,
             onConfirm = { targetPath ->
@@ -255,8 +257,9 @@ fun BrowserDialogHost(
 
     state.dialogs.createFolderParentPath?.let { parentPath ->
         CreateFolderDialog(
+            isCreating = state.dialogs.isCreatingFolder,
             onCreate = { folderName ->
-                viewModel.createFolder(parentPath, folderName)
+                viewModel.onIntent(BrowserIntent.FileAction.CreateFolder(parentPath, folderName))
             },
             onDismiss = {
                 viewModel.onIntent(BrowserIntent.FileAction.DismissCreateFolder)
