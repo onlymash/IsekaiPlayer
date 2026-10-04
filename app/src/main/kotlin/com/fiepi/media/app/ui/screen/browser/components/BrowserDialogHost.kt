@@ -109,14 +109,16 @@ fun BrowserDialogHost(
 
     if (state.dialogs.isCreatePlaylistVisible) {
         CreatePlaylistDialog(
+            isCreating = state.dialogs.isCreatingPlaylist,
+            errorMessageRes = state.dialogs.createPlaylistErrorRes,
             onCreateBlank = { title ->
                 viewModel.onIntent(BrowserIntent.Playlist.Create(title))
             },
             onImportM3uUrl = { title, url ->
-                viewModel.importM3uFromUrl(title, url)
+                viewModel.onIntent(BrowserIntent.Playlist.ImportFromUrl(title, url))
             },
             onImportM3uUri = { title, uri ->
-                viewModel.importM3uFromUri(title, uri)
+                viewModel.onIntent(BrowserIntent.Playlist.ImportFromUri(title, uri))
             },
             onDismiss = { viewModel.onIntent(BrowserIntent.Dialog.DismissCreatePlaylist) }
         )

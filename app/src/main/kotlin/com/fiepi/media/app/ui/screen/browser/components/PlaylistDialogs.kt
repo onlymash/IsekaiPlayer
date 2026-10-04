@@ -55,7 +55,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -68,8 +67,6 @@ import com.fiepi.media.app.ui.hooks.rememberHapticClickHandler
 import com.fiepi.media.app.ui.theme.AppTheme
 import com.fiepi.media.domain.model.playlist.Playlist
 import com.fiepi.media.domain.utils.FileUtils
-import kotlinx.coroutines.launch
-import java.io.IOException
 
 enum class PlaylistCreateType {
     BLANK,
@@ -86,9 +83,11 @@ private enum class PlaylistCreateStep {
 
 @Composable
 fun CreatePlaylistDialog(
+    isCreating: Boolean = false,
+    errorMessageRes: Int? = null,
     onCreateBlank: (title: String) -> Unit,
-    onImportM3uUrl: suspend (title: String, url: String) -> Unit,
-    onImportM3uUri: suspend (title: String, uri: Uri) -> Unit,
+    onImportM3uUrl: (title: String, url: String) -> Unit,
+    onImportM3uUri: (title: String, uri: Uri) -> Unit,
     onDismiss: () -> Unit
 ) {
     var step by remember { mutableStateOf(PlaylistCreateStep.SELECT_TYPE) }
@@ -141,6 +140,8 @@ fun CreatePlaylistDialog(
             M3uLinkImportDialog(
                 title = playlistTitle,
                 url = m3uUrl,
+                isCreating = isCreating,
+                errorMessageRes = errorMessageRes,
                 onTitleChange = { playlistTitle = it },
                 onUrlChange = { m3uUrl = it },
                 onImportM3uUrl = onImportM3uUrl,
@@ -154,6 +155,8 @@ fun CreatePlaylistDialog(
                 title = playlistTitle,
                 selectedFileName = selectedFileName,
                 selectedFileUri = selectedFileUri,
+                isCreating = isCreating,
+                errorMessageRes = errorMessageRes,
                 onTitleChange = { playlistTitle = it },
                 onSelectFileClick = { filePickerLauncher.launch("*/*") },
                 onImportM3uUri = onImportM3uUri,
@@ -279,19 +282,19 @@ fun BlankPlaylistCreateDialog(
 fun M3uLinkImportDialog(
     title: String,
     url: String,
+    isCreating: Boolean = false,
+    errorMessageRes: Int? = null,
     onTitleChange: (String) -> Unit,
     onUrlChange: (String) -> Unit,
-    onImportM3uUrl: suspend (title: String, url: String) -> Unit,
+    onImportM3uUrl: (title: String, url: String) -> Unit,
     onPrevious: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    val scope = rememberCoroutineScope()
-
-    var isLoading by remember { mutableStateOf(false) }
-    var errorMessageRes by remember { mutableStateOf<Int?>(null) }
+    var localErrorRes by remember { mutableStateOf<Int?>(null) }
+    val displayErrorRes = localErrorRes ?: errorMessageRes
 
     AlertDialog(
-        onDismissRequest = { if (!isLoading) onDismiss() },
+        onDismissRequest = { if (!isCreating) onDismiss() },
         title = { Text(stringResource(R.string.playlist_create_title_m3u_link)) },
         text = {
             Column {
@@ -299,10 +302,10 @@ fun M3uLinkImportDialog(
                     value = title,
                     onValueChange = {
                         onTitleChange(it)
-                        if (errorMessageRes != null) errorMessageRes = null
+                        if (localErrorRes != null) localErrorRes = null
                     },
                     singleLine = true,
-                    enabled = !isLoading,
+                    enabled = !isCreating,
                     placeholder = { Text(stringResource(R.string.playlist_create_dialog_placeholder)) },
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -311,12 +314,12 @@ fun M3uLinkImportDialog(
                     value = url,
                     onValueChange = {
                         onUrlChange(it)
-                        if (errorMessageRes != null) errorMessageRes = null
+                        if (localErrorRes != null) localErrorRes = null
                     },
                     singleLine = true,
-                    enabled = !isLoading,
-                    isError = errorMessageRes != null,
-                    supportingText = errorMessageRes?.let { resId ->
+                    enabled = !isCreating,
+                    isError = displayErrorRes != null,
+                    supportingText = displayErrorRes?.let { resId ->
                         {
                             Text(
                                 text = stringResource(resId),
@@ -337,7 +340,7 @@ fun M3uLinkImportDialog(
                     val trimmedUrl = url.trim()
 
                     if (trimmedTitle.isBlank()) {
-                        errorMessageRes = R.string.playlist_import_error_title_empty
+                        localErrorRes = R.string.playlist_import_error_title_empty
                         return@rememberHapticClickHandler
                     }
 
@@ -347,31 +350,16 @@ fun M3uLinkImportDialog(
                         ) &&
                                 !trimmedUrl.startsWith("https://", ignoreCase = true))
                     ) {
-                        errorMessageRes = R.string.playlist_import_error_invalid_url
+                        localErrorRes = R.string.playlist_import_error_invalid_url
                         return@rememberHapticClickHandler
                     }
 
-                    errorMessageRes = null
-                    isLoading = true
-                    scope.launch {
-                        try {
-                            onImportM3uUrl(trimmedTitle, trimmedUrl)
-                            isLoading = false
-                            onDismiss()
-                        } catch (e: Exception) {
-                            isLoading = false
-                            errorMessageRes =
-                                if (e.message?.contains("Network") == true || e is IOException) {
-                                    R.string.playlist_import_error_network
-                                } else {
-                                    R.string.playlist_import_error_parse
-                                }
-                        }
-                    }
+                    localErrorRes = null
+                    onImportM3uUrl(trimmedTitle, trimmedUrl)
                 },
-                enabled = url.isNotBlank() && !isLoading
+                enabled = url.isNotBlank() && !isCreating
             ) {
-                if (isLoading) {
+                if (isCreating) {
                     CircularProgressIndicator(
                         modifier = Modifier.size(16.dp),
                         strokeWidth = 2.dp
@@ -384,7 +372,7 @@ fun M3uLinkImportDialog(
         dismissButton = {
             TextButton(
                 onClick = rememberHapticClickHandler(onPrevious),
-                enabled = !isLoading
+                enabled = !isCreating
             ) {
                 Text(stringResource(R.string.playlist_create_previous_button))
             }
@@ -397,19 +385,19 @@ fun M3uFileImportDialog(
     title: String,
     selectedFileName: String?,
     selectedFileUri: Uri?,
+    isCreating: Boolean = false,
+    errorMessageRes: Int? = null,
     onTitleChange: (String) -> Unit,
     onSelectFileClick: () -> Unit,
-    onImportM3uUri: suspend (title: String, uri: Uri) -> Unit,
+    onImportM3uUri: (title: String, uri: Uri) -> Unit,
     onPrevious: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    val scope = rememberCoroutineScope()
-
-    var isLoading by remember { mutableStateOf(false) }
-    var errorMessageRes by remember { mutableStateOf<Int?>(null) }
+    var localErrorRes by remember { mutableStateOf<Int?>(null) }
+    val displayErrorRes = localErrorRes ?: errorMessageRes
 
     AlertDialog(
-        onDismissRequest = { if (!isLoading) onDismiss() },
+        onDismissRequest = { if (!isCreating) onDismiss() },
         title = { Text(stringResource(R.string.playlist_create_title_m3u_file)) },
         text = {
             Column {
@@ -417,17 +405,17 @@ fun M3uFileImportDialog(
                     value = title,
                     onValueChange = {
                         onTitleChange(it)
-                        if (errorMessageRes != null) errorMessageRes = null
+                        if (localErrorRes != null) localErrorRes = null
                     },
                     singleLine = true,
-                    enabled = !isLoading,
+                    enabled = !isCreating,
                     placeholder = { Text(stringResource(R.string.playlist_create_dialog_placeholder)) },
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 OutlinedButton(
                     onClick = rememberHapticClickHandler(onSelectFileClick),
-                    enabled = !isLoading,
+                    enabled = !isCreating,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Icon(
@@ -443,7 +431,7 @@ fun M3uFileImportDialog(
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-                errorMessageRes?.let { resId ->
+                displayErrorRes?.let { resId ->
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = stringResource(resId),
@@ -461,26 +449,16 @@ fun M3uFileImportDialog(
                     val trimmedTitle = title.trim()
 
                     if (trimmedTitle.isBlank()) {
-                        errorMessageRes = R.string.playlist_import_error_title_empty
+                        localErrorRes = R.string.playlist_import_error_title_empty
                         return@rememberHapticClickHandler
                     }
 
-                    errorMessageRes = null
-                    isLoading = true
-                    scope.launch {
-                        try {
-                            onImportM3uUri(trimmedTitle, uri)
-                            isLoading = false
-                            onDismiss()
-                        } catch (_: Exception) {
-                            isLoading = false
-                            errorMessageRes = R.string.playlist_import_error_parse
-                        }
-                    }
+                    localErrorRes = null
+                    onImportM3uUri(trimmedTitle, uri)
                 },
-                enabled = selectedFileUri != null && !isLoading
+                enabled = selectedFileUri != null && !isCreating
             ) {
-                if (isLoading) {
+                if (isCreating) {
                     CircularProgressIndicator(
                         modifier = Modifier.size(16.dp),
                         strokeWidth = 2.dp
@@ -493,7 +471,7 @@ fun M3uFileImportDialog(
         dismissButton = {
             TextButton(
                 onClick = rememberHapticClickHandler(onPrevious),
-                enabled = !isLoading
+                enabled = !isCreating
             ) {
                 Text(stringResource(R.string.playlist_create_previous_button))
             }

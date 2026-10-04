@@ -19,7 +19,6 @@
 package com.fiepi.media.app.ui.screen.browser.viewmodel
 
 import android.app.Application
-import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -54,6 +53,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.File
+import java.io.IOException
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
@@ -795,29 +795,118 @@ class BrowserViewModel(
 
             is BrowserIntent.Playlist.Create -> {
                 viewModelScope.launch {
-                    useCases.playlist.createPlaylist(intent.title)
+                    _state.update {
+                        it.copy(
+                            dialogs = it.dialogs.copy(
+                                isCreatingPlaylist = true,
+                                createPlaylistErrorRes = null
+                            )
+                        )
+                    }
+                    try {
+                        useCases.playlist.createPlaylist(intent.title)
+                        _state.update {
+                            it.copy(
+                                dialogs = it.dialogs.copy(
+                                    isCreatePlaylistVisible = false,
+                                    isCreatingPlaylist = false,
+                                    createPlaylistErrorRes = null
+                                )
+                            )
+                        }
+                    } catch (e: Exception) {
+                        Log.e(
+                            "BrowserViewModel",
+                            "Failed to create blank playlist: ${intent.title}",
+                            e
+                        )
+                        _state.update {
+                            it.copy(
+                                dialogs = it.dialogs.copy(
+                                    isCreatingPlaylist = false,
+                                    createPlaylistErrorRes = R.string.playlist_import_error_parse
+                                )
+                            )
+                        }
+                    }
                 }
             }
 
             is BrowserIntent.Playlist.ImportFromUrl -> {
                 viewModelScope.launch {
+                    _state.update {
+                        it.copy(
+                            dialogs = it.dialogs.copy(
+                                isCreatingPlaylist = true,
+                                createPlaylistErrorRes = null
+                            )
+                        )
+                    }
                     try {
                         useCases.playlist.importM3uPlaylist.fromUrl(intent.title, intent.url)
+                        _state.update {
+                            it.copy(
+                                dialogs = it.dialogs.copy(
+                                    isCreatePlaylistVisible = false,
+                                    isCreatingPlaylist = false,
+                                    createPlaylistErrorRes = null
+                                )
+                            )
+                        }
                     } catch (e: Exception) {
                         Log.e("BrowserViewModel", "Failed to import M3U from URL: ${intent.url}", e)
+                        val errRes =
+                            if (e.message?.contains("Network") == true || e is IOException) {
+                                R.string.playlist_import_error_network
+                            } else {
+                                R.string.playlist_import_error_parse
+                            }
+                        _state.update {
+                            it.copy(
+                                dialogs = it.dialogs.copy(
+                                    isCreatingPlaylist = false,
+                                    createPlaylistErrorRes = errRes
+                                )
+                            )
+                        }
                     }
                 }
             }
 
             is BrowserIntent.Playlist.ImportFromUri -> {
                 viewModelScope.launch {
+                    _state.update {
+                        it.copy(
+                            dialogs = it.dialogs.copy(
+                                isCreatingPlaylist = true,
+                                createPlaylistErrorRes = null
+                            )
+                        )
+                    }
                     try {
                         useCases.playlist.importM3uPlaylist.fromUri(
                             intent.title,
                             intent.uri.toString()
                         )
+                        _state.update {
+                            it.copy(
+                                dialogs = it.dialogs.copy(
+                                    isCreatePlaylistVisible = false,
+                                    isCreatingPlaylist = false,
+                                    createPlaylistErrorRes = null
+                                )
+                            )
+                        }
                     } catch (e: Exception) {
                         Log.e("BrowserViewModel", "Failed to import M3U from Uri: ${intent.uri}", e)
+                        _state.update {
+                            it.copy(
+                                dialogs = it.dialogs.copy(
+                                    isCreatingPlaylist = false,
+                                    createPlaylistErrorRes = R.string.playlist_import_error_parse
+                                )
+                            )
+                        }
                     }
                 }
             }
@@ -1031,7 +1120,15 @@ class BrowserViewModel(
             }
 
             is BrowserIntent.Dialog.DismissCreatePlaylist -> {
-                _state.update { it.copy(dialogs = it.dialogs.copy(isCreatePlaylistVisible = false)) }
+                _state.update {
+                    it.copy(
+                        dialogs = it.dialogs.copy(
+                            isCreatePlaylistVisible = false,
+                            isCreatingPlaylist = false,
+                            createPlaylistErrorRes = null
+                        )
+                    )
+                }
             }
 
             is BrowserIntent.Dialog.ShowCreateBlankPlaylist -> {
@@ -1087,14 +1184,6 @@ class BrowserViewModel(
                 }
             }
         }
-    }
-
-    suspend fun importM3uFromUrl(title: String, url: String): String {
-        return useCases.playlist.importM3uPlaylist.fromUrl(title, url)
-    }
-
-    suspend fun importM3uFromUri(title: String, uri: Uri): String {
-        return useCases.playlist.importM3uPlaylist.fromUri(title, uri.toString())
     }
 
     private fun handleConfigIntent(intent: BrowserIntent.Config) {
