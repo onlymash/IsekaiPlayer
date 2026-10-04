@@ -448,9 +448,9 @@ class LocalMediaRepositoryImpl(
                     throw FileAlreadyExistsException(newFile, null, "Target name already exists")
                 }
 
-                var success = oldFile.renameTo(newFile)
-                if (!success && isCaseOnlyRename) {
-                    // Fallback for case-folding filesystems: rename through a temporary file
+                var success = false
+                if (isCaseOnlyRename) {
+                    // Force a two-step rename for case-only changes to bypass FUSE/case-folding filesystem no-ops
                     val tempFile = File(parent, "${oldFile.name}.tmp_${System.currentTimeMillis()}")
                     if (oldFile.renameTo(tempFile)) {
                         success = tempFile.renameTo(newFile)
@@ -458,6 +458,8 @@ class LocalMediaRepositoryImpl(
                             tempFile.renameTo(oldFile)
                         }
                     }
+                } else {
+                    success = oldFile.renameTo(newFile)
                 }
 
                 if (!success) {
