@@ -347,7 +347,8 @@ class BrowserViewModel(
                                 MediaBrowserState.Content(request.path, files, scrollPos)
                             }
                         }.catch { e ->
-                            emit(MediaBrowserState.Error(e.localizedMessage ?: "Unknown Error"))
+                            Log.e("BrowserViewModel", "Error observing media files for path: ${request.path}", e)
+                            emit(MediaBrowserState.Error(e.localizedMessage ?: e.message ?: e.toString()))
                         }
                     }
                 }

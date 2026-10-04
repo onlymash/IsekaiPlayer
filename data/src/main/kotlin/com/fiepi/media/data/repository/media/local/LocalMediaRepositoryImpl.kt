@@ -25,6 +25,7 @@ import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
+import android.util.Log
 import com.fiepi.media.data.utils.resolveMimeType
 import com.fiepi.media.domain.config.AppConstants
 import com.fiepi.media.domain.model.media.MediaFile
@@ -41,6 +42,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.nio.file.Files
@@ -102,17 +105,30 @@ class LocalMediaRepositoryImpl(
         _updateEvent.tryEmit(Unit)
     }
 
+    private val cacheMutex = Mutex()
+
     /**
      * Ensures all local video files are loaded from MediaStore and indexed into memory caches.
+     * Uses double-checked locking with a Mutex to prevent race conditions during concurrent cache refreshes.
      */
     private suspend fun ensureVideosLoaded(force: Boolean = false): List<MediaFile.Video> =
         withContext(Dispatchers.IO) {
-            if (force || isCacheDirty || allVideosCache == null) {
+            val snapshot = allVideosCache
+            if (!force && !isCacheDirty && snapshot != null) {
+                return@withContext snapshot
+            }
+
+            cacheMutex.withLock {
+                val current = allVideosCache
+                if (!force && !isCacheDirty && current != null) {
+                    return@withContext current
+                }
+
                 val all = queryVideos()
-                allVideosCache = all
                 val grouped = all.groupBy { File(it.path).parent ?: "" }
                 videosByParentCache = grouped
                 allParentPathsCache = grouped.keys
+                allVideosCache = all
 
                 if (force) {
                     subtitleCache.clear()
@@ -120,8 +136,8 @@ class LocalMediaRepositoryImpl(
                 }
 
                 isCacheDirty = false
+                all
             }
-            allVideosCache!!
         }
 
     /**
@@ -137,7 +153,7 @@ class LocalMediaRepositoryImpl(
         val items = if (path == null) {
             // Root view: Return parent folders that contain indexed video files
             allParentPathsCache.asSequence()
-                .filter { it.isNotEmpty() }
+                .filter { it.isNotEmpty() && File(it).exists() }
                 .map { folderPath -> createFolderItem(folderPath, options) }
                 .toList()
         } else {
@@ -156,6 +172,7 @@ class LocalMediaRepositoryImpl(
                     if (path.endsWith("/")) path + directSubName else "$path/$directSubName"
                 }
                 .distinct()
+                .filter { File(it).exists() }
                 .map { subFolderPath -> createFolderItem(subFolderPath, options) }
             folderItems.addAll(directSubFolders)
 
@@ -293,7 +310,7 @@ class LocalMediaRepositoryImpl(
     }
 
     /**
-     * Scans local directory for subtitle files matching the base names of videos in that directory.
+     * Scans local directory for subtitle files matching the base names of videos in that directory using Java NIO.
      */
     private fun getOrScanSubtitles(path: String): List<MediaFile.Subtitle> {
         return subtitleCache.getOrPut(path) {
@@ -307,42 +324,41 @@ class LocalMediaRepositoryImpl(
             try {
                 val dirPath = Paths.get(path)
                 if (Files.exists(dirPath) && Files.isDirectory(dirPath)) {
-                    Files.newDirectoryStream(dirPath) { entry ->
-                        val fileName = entry.fileName.toString()
-                        val subtitleInfo = SubtitleUtils.parse(fileName)
-                        val ext = subtitleInfo.extension ?: ""
-                        ext in AppConstants.SUBTITLE_EXTENSIONS &&
+                    Files.newDirectoryStream(dirPath).use { stream ->
+                        for (entry in stream) {
+                            if (!Files.isRegularFile(entry)) continue
+                            val fileName = entry.fileName.toString()
+                            val subtitleInfo = SubtitleUtils.parse(fileName)
+                            val ext = subtitleInfo.extension ?: ""
+                            if (ext in AppConstants.SUBTITLE_EXTENSIONS &&
                                 videoBaseNames.any {
                                     SubtitleUtils.isAssociatedWithVideo(
                                         subtitleInfo.baseName,
                                         it
                                     )
-                                } &&
-                                Files.isRegularFile(entry)
-                    }.use { stream ->
-                        for (entry in stream) {
-                            val file = entry.toFile()
-                            val fileName = file.name
-                            val subtitleInfo = SubtitleUtils.parse(fileName)
-                            val mimeType = resolveMimeType(subtitleInfo.extension)
+                                }
+                            ) {
+                                val file = entry.toFile()
+                                val mimeType = resolveMimeType(subtitleInfo.extension)
 
-                            subtitles.add(
-                                MediaFile.Subtitle(
-                                    path = file.absolutePath,
-                                    name = subtitleInfo.baseName,
-                                    sourceType = SourceType.Local,
-                                    size = file.length(),
-                                    lastModified = file.lastModified(),
-                                    language = subtitleInfo.language,
-                                    extension = subtitleInfo.extension,
-                                    mimeType = mimeType
+                                subtitles.add(
+                                    MediaFile.Subtitle(
+                                        path = file.absolutePath,
+                                        name = subtitleInfo.baseName,
+                                        sourceType = SourceType.Local,
+                                        size = file.length(),
+                                        lastModified = file.lastModified(),
+                                        language = subtitleInfo.language,
+                                        extension = subtitleInfo.extension,
+                                        mimeType = mimeType
+                                    )
                                 )
-                            )
+                            }
                         }
                     }
                 }
-            } catch (_: Exception) {
-                // Ignore or log error
+            } catch (_: Throwable) {
+                // Ignore any concurrent I/O or NIO DirectoryStream exceptions safely
             }
             subtitles
         }
@@ -350,6 +366,7 @@ class LocalMediaRepositoryImpl(
 
     /**
      * Queries local video items directly from MediaStore ContentProvider.
+     * Filters out non-existent files or null MediaStore columns resulting from recent file deletions.
      */
     private fun queryVideos(): List<MediaFile.Video> {
         val videos = mutableListOf<MediaFile.Video>()
@@ -383,11 +400,16 @@ class LocalMediaRepositoryImpl(
             val heightColumn = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.HEIGHT)
 
             while (cursor.moveToNext()) {
-                val videoId = cursor.getLong(idColumn)
                 val path = cursor.getString(pathColumn)
-                val rawName = cursor.getString(nameColumn)
-                val ext = FileUtils.extractExtension(rawName)
-                val nameWithoutExt = FileUtils.extractNameWithoutExtension(rawName)
+                if (path.isNullOrBlank()) continue
+
+                val file = File(path)
+                if (!file.exists()) continue
+
+                val videoId = cursor.getLong(idColumn)
+                val rawName = cursor.getString(nameColumn) ?: file.name
+                val ext = FileUtils.extractExtension(rawName) ?: FileUtils.extractExtension(file.name) ?: ""
+                val nameWithoutExt = FileUtils.extractNameWithoutExtension(rawName).ifBlank { FileUtils.extractNameWithoutExtension(file.name) }
                 val mimeType = cursor.getString(mimeColumn) ?: resolveMimeType(ext)
 
                 videos.add(
@@ -466,6 +488,9 @@ class LocalMediaRepositoryImpl(
                     throw IllegalStateException("Failed to rename file")
                 }
 
+                // Purge old MediaStore entries synchronously to prevent stale query results
+                purgeMediaStorePath(path)
+
                 scanMediaFiles(arrayOf(oldFile.absolutePath, newFile.absolutePath))
                 invalidateCache()
             }
@@ -482,6 +507,10 @@ class LocalMediaRepositoryImpl(
                     val file = File(path)
                     if (file.exists()) {
                         scannedPaths.add(file.absolutePath)
+
+                        // Synchronously purge MediaStore records for this file/folder before disk removal
+                        purgeMediaStorePath(path)
+
                         if (file.isDirectory) {
                             file.deleteRecursively()
                         } else {
@@ -563,6 +592,7 @@ class LocalMediaRepositoryImpl(
                     throw FileAlreadyExistsException(targetFile, null, "Target file already exists")
                 }
                 moveDirectoryContents(sourceFile, targetFile, true, onProgress)
+                purgeMediaStorePath(sourcePath)
             } else {
                 if (targetFile.exists()) {
                     if (!overwrite) {
@@ -584,6 +614,7 @@ class LocalMediaRepositoryImpl(
                     val size = if (sourceFile.isFile) sourceFile.length() else sourceFile.walk()
                         .filter { it.isFile }.sumOf { it.length() }
                     onProgress?.invoke(size)
+                    purgeMediaStorePath(sourcePath)
                 } else {
                     copyFileWithProgress(
                         sourceFile,
@@ -596,6 +627,7 @@ class LocalMediaRepositoryImpl(
                     } else {
                         sourceFile.delete()
                     }
+                    purgeMediaStorePath(sourcePath)
                 }
             }
 
@@ -767,8 +799,34 @@ class LocalMediaRepositoryImpl(
         if (paths.isEmpty()) return
         try {
             MediaScannerConnection.scanFile(context, paths, null, null)
-        } catch (_: Exception) {
+        } catch (_: Throwable) {
             // Ignore scan failure
+        }
+    }
+
+    /**
+     * Synchronously removes MediaStore ContentResolver records for a path or directory tree
+     * to prevent stale MediaStore query results after file operations.
+     */
+    private fun purgeMediaStorePath(path: String) {
+        try {
+            val file = File(path)
+            if (file.isDirectory) {
+                val searchPrefix = if (path.endsWith("/")) path else "$path/"
+                context.contentResolver.delete(
+                    MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                    "${MediaStore.Video.Media.DATA} LIKE ? OR ${MediaStore.Video.Media.DATA} = ?",
+                    arrayOf("$searchPrefix%", path)
+                )
+            } else {
+                context.contentResolver.delete(
+                    MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                    "${MediaStore.Video.Media.DATA} = ?",
+                    arrayOf(path)
+                )
+            }
+        } catch (e: Throwable) {
+            Log.w("LocalMediaRepo", "Failed to purge MediaStore entries for $path", e)
         }
     }
 }
