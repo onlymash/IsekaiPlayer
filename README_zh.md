@@ -4,8 +4,9 @@
 
 # IsekaiPlayer
 
-[![Get it on Google Play](https://img.shields.io/badge/Google_Play-Get_it_on_Google_Play-410099?style=for-the-badge&logo=google-play&logoColor=white)](https://play.google.com/store/apps/details?id=com.fiepi.media.app)
-[![Download APK](https://img.shields.io/badge/GitHub_Release-Download_APK-24292e?style=for-the-badge&logo=github&logoColor=white)](https://github.com/onlymash/IsekaiPlayer/releases)
+[![Google Play](https://img.shields.io/badge/Google_Play-Get_it_on_Google_Play-5E35B1?style=for-the-badge&logo=google-play&logoColor=00E5FF&labelColor=140B2D)](https://play.google.com/store/apps/details?id=com.fiepi.media.app)
+[![GitHub Release](https://img.shields.io/github/v/release/onlymash/IsekaiPlayer?include_prereleases&style=for-the-badge&logo=github&logoColor=00E5FF&labelColor=140B2D&color=7C4DFF)](https://github.com/onlymash/IsekaiPlayer/releases)
+[![GitHub Downloads](https://img.shields.io/github/downloads/onlymash/IsekaiPlayer/total?style=for-the-badge&logo=github&logoColor=00E5FF&labelColor=140B2D&label=Downloads&color=00B8D4)](https://github.com/onlymash/IsekaiPlayer/releases)
 
 > ### 滅世真理・零式原初解構
 > 
