@@ -103,7 +103,7 @@ data class PlayerOptions(
     @SerialName("button_effect")
     val buttonEffect: ButtonEffectOptions = ButtonEffectOptions(),
     @SerialName("always_full_screen")
-    val alwaysFullScreen: Boolean = false,
+    val alwaysFullScreen: Boolean = true,
     @SerialName("video_scale_mode")
     val videoScaleMode: VideoScaleMode = VideoScaleMode.Fit,
     @SerialName("playback_speed")

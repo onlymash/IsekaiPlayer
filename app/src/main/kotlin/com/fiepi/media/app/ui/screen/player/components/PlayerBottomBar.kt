@@ -41,17 +41,15 @@ import androidx.compose.material.icons.rounded.SkipPrevious
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.window.core.layout.WindowSizeClass
 import com.fiepi.media.app.R
 import com.fiepi.media.app.ui.hooks.rememberHapticClickHandler
 import com.fiepi.media.app.ui.screen.player.viewmodel.PlayerDrawerType
@@ -73,6 +71,12 @@ import com.kyant.backdrop.shadow.InnerShadow
 import com.kyant.backdrop.shadow.Shadow
 
 
+private object ContainerType {
+    const val SMALL = 0
+    const val MEDIUM = 1
+    const val LARGE = 2
+}
+
 @Composable
 fun PlayerBottomBar(
     modifier: Modifier = Modifier,
@@ -81,9 +85,12 @@ fun PlayerBottomBar(
     onOpenDrawer: (PlayerDrawerType) -> Unit,
     onBack: () -> Unit = {}
 ) {
-    val adaptiveInfo = currentWindowAdaptiveInfoV2()
-    val isWideScreen =
-        adaptiveInfo.windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND)
+    val containerWidth = LocalWindowInfo.current.containerDpSize.width
+    val containerType = when {
+        containerWidth >= 840.dp -> ContainerType.LARGE
+        containerWidth >= 720.dp -> ContainerType.MEDIUM
+        else -> ContainerType.SMALL
+    }
 
     val backdrop = LocalBackdrop.current
     val options = LocalButtonEffectOptions.current
@@ -96,14 +103,14 @@ fun PlayerBottomBar(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
             ) { /* No-op to block background gestures */ }
-            .padding(bottom = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            .padding(bottom = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        if (!isWideScreen) {
+        if (containerType < ContainerType.MEDIUM) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 12.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Bottom
             ) {
@@ -177,13 +184,14 @@ fun PlayerBottomBar(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(horizontal = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Box(
                 modifier = Modifier.weight(1f)
             ) {
-                if (isWideScreen) {
+                if (containerType >= ContainerType.MEDIUM) {
                     PlayerCornerActions(
                         modifier = Modifier.fillMaxWidth(),
                         actions = state.uiOptions.layoutOptions.bottomLeftActions,
@@ -198,13 +206,13 @@ fun PlayerBottomBar(
             }
             PlayerIconButtons(
                 state = state,
-                isWideScreen = isWideScreen,
+                containerType = containerType,
                 onIntent = onIntent
             )
             Box(
                 modifier = Modifier.weight(1f)
             ) {
-                if (isWideScreen) {
+                if (containerType >= ContainerType.MEDIUM) {
                     PlayerCornerActions(
                         modifier = Modifier.fillMaxWidth(),
                         actions = state.uiOptions.layoutOptions.bottomRightActions,
@@ -226,7 +234,7 @@ fun PlayerBottomBar(
 private fun PlayerIconButtons(
     modifier: Modifier = Modifier,
     state: PlayerState,
-    isWideScreen: Boolean,
+    containerType: Int = ContainerType.SMALL,
     onIntent: (PlayerIntent) -> Unit
 ) {
     // Playback Control Row
@@ -238,7 +246,7 @@ private fun PlayerIconButtons(
         val controllerButtonSize = 48.dp
         val controllerButtonIconSize = 30.dp
         val hasPlaylistNavigation = state.playback.hasPlaylistNavigation
-        val showSeekButtons = isWideScreen || !hasPlaylistNavigation
+        val showSeekButtons = containerType != ContainerType.MEDIUM || !hasPlaylistNavigation
 
         if (showSeekButtons) {
             val seekDurationMs = state.uiOptions.seekDurationSeconds * 1000L
@@ -256,7 +264,7 @@ private fun PlayerIconButtons(
                 )
             }
 
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(8.dp))
         }
 
         if (hasPlaylistNavigation) {
@@ -271,7 +279,7 @@ private fun PlayerIconButtons(
                 )
             }
 
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(8.dp))
         }
 
         PlayerIconButton(
@@ -288,7 +296,7 @@ private fun PlayerIconButtons(
         }
 
         if (hasPlaylistNavigation) {
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(8.dp))
 
             PlayerIconButton(
                 onClick = { onIntent(PlayerIntent.PlayNext) },
@@ -304,7 +312,7 @@ private fun PlayerIconButtons(
 
         if (showSeekButtons) {
             val seekDurationMs = state.uiOptions.seekDurationSeconds * 1000L
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(8.dp))
 
             PlayerIconButton(
                 onClick = { onIntent(PlayerIntent.SeekBy(seekDurationMs)) },
@@ -392,9 +400,28 @@ private fun PlayerBottomBarPreview() {
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, device = Devices.TABLET)
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, widthDp = 720, heightDp = 480)
 @Composable
 private fun PlayerBottomBarPausedPreview() {
+    val mockPlaylist = listOf(
+        MediaFile.Video(
+            path = "local/video1.mp4",
+            name = "Big Buck Bunny",
+            sourceType = SourceType.Local,
+            id = "1",
+            extension = "mp4",
+            duration = 3600000L
+        ),
+        MediaFile.Video(
+            path = "local/video2.mp4",
+            name = "Elephants Dream",
+            sourceType = SourceType.Local,
+            id = "2",
+            extension = "mp4",
+            duration = 1800000L
+        )
+    )
+
     AppTheme {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -407,7 +434,7 @@ private fun PlayerBottomBarPausedPreview() {
                         duration = 3600000L,
                         currentPosition = 600000L,
                         mediaMetadata = MediaMetadata(title = "Big Buck Bunny"),
-                        playlist = emptyList()
+                        playlist = mockPlaylist
                     ),
                     uiOptions = PlayerUiOptions(
                         layoutOptions = PlayerLayoutOptions(
