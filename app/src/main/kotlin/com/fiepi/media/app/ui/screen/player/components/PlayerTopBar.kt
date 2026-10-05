@@ -162,7 +162,7 @@ fun PlayerTopBar(
                     navigationIconContentColor = Color.White,
                     actionIconContentColor = Color.White
                 ),
-                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp),
+                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
                 windowInsets = WindowInsets()
             )
         } else {
