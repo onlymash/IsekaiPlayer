@@ -26,6 +26,8 @@ jobs:
 
       - name: Setup Android SDK & NDK
         uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools ndk;30.0.16248370'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
