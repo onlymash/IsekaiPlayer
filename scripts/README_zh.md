@@ -15,6 +15,7 @@
 | `versions.sh` | 统一定义原生 C/C++ 依赖库仓库地址、Tag/Branch、License 及其元数据，并联动 `gradle/libs.versions.toml` |
 | `sync-sources.sh` | 幂等同步、克隆与更新 `external/sources/` 下的原生依赖库源码（支持指定单组件及快速模式） |
 | `update-cacert.sh` | 自动下载、校验 SHA256 并更新 `player/src/main/assets/cacert.pem` 的 Mozilla CA 根证书包工具 |
+| `release.sh` | 版本发布工具脚本，自动检查 Git Tag 及已编译 Release APK，支持指定类型（`prerelease` 或 `release`）并通过 `gh` CLI 创建发布与上传 APK |
 | `utils.sh` | 通用工具函数（Meson Cross File 生成器、`vulkan.pc` 生成器以及 `libraries.json` 生成器） |
 | `components/` | 各 C/C++ 依赖库的单独编译脚本（`mbedtls.sh`, `lua.sh`, `ffmpeg.sh`, `mpv.sh` 等 16 个组件） |
 
