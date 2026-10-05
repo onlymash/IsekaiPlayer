@@ -46,7 +46,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            meson \
             ninja-build \
             pkg-config \
             autoconf \
@@ -54,7 +53,11 @@ jobs:
             libtool \
             gperf \
             yasm \
-            nasm
+            nasm \
+            python3-pip \
+            python3-setuptools \
+            python3-wheel
+          pip3 install --upgrade --break-system-packages meson
 
       - name: Sync Native Sources & Build Native Libraries
         if: steps.cache-prebuilt.outputs.cache-hit != 'true'
