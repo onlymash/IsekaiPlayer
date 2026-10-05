@@ -1,0 +1,81 @@
+name: CI Build & Native Check
+
+on:
+  push:
+    branches: [ main, master, dev ]
+  pull_request:
+    branches: [ main, master, dev ]
+
+jobs:
+  build:
+    name: Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '25'
+
+      - name: Setup Android SDK & NDK
+        uses: android-actions/setup-android@v3
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: wrapper
+
+      - name: Cache Prebuilt Native Libraries (.so)
+        id: cache-prebuilt
+        uses: actions/cache@v4
+        with:
+          path: external/prebuilt/
+          key: prebuilt-so-${{ runner.os }}-${{ hashFiles('scripts/versions.sh', 'gradle/config.versions.toml') }}
+
+      - name: Install Host Build Tools
+        if: steps.cache-prebuilt.outputs.cache-hit != 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            meson \
+            ninja-build \
+            pkg-config \
+            autoconf \
+            automake \
+            libtool \
+            gperf \
+            yasm \
+            nasm
+
+      - name: Sync Native Sources & Build Native Libraries
+        if: steps.cache-prebuilt.outputs.cache-hit != 'true'
+        run: |
+          chmod +x scripts/*.sh scripts/components/*.sh
+          # Sync external C/C++ dependency sources
+          ./scripts/sync-sources.sh --fast
+          # Build C/C++ native libraries for arm64-v8a architecture
+          ./scripts/build-native.sh arm64 all
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Run Unit Tests
+        run: ./gradlew test
+
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug
+
+      - name: Upload Debug APK Artifact
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: app-arm64-debug
+          path: app/build/outputs/apk/debug/*.apk
+          retention-days: 7
