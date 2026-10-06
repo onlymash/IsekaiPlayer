@@ -23,24 +23,51 @@ import android.app.Activity
 /**
  * Screen refresh rate adaptation utility
  */
-@Suppress("unused")
 object DisplayUtils {
 
     /**
      * Sets high refresh rate mode for Activity (typically the system maximum)
-     * Suitable for pages requiring smooth UI interaction like MainActivity
+     * Suitable for pages requiring smooth UI interaction like MainActivity.
+     * Safely prefers higher refresh rates without altering physical display resolution.
      */
     fun setHighRefreshRate(activity: Activity) {
         val window = activity.window
         val display = activity.display ?: return
 
-        // Query all supported modes and find the one with the highest refresh rate
-        val modes = display.supportedModes
-        val highestMode = modes.maxByOrNull { it.refreshRate } ?: return
+        val currentMode = display.mode ?: return
+        val modes = display.supportedModes ?: emptyArray()
+
+        // Query all supported modes and find the highest refresh rate supported by the display
+        val maxRefreshRate = modes.maxOfOrNull { it.refreshRate } ?: return
 
         val params = window.attributes
-        if (params.preferredDisplayModeId != highestMode.modeId) {
-            params.preferredDisplayModeId = highestMode.modeId
+        var changed = false
+
+        // Set preferred refresh rate without forcing a specific display mode resolution
+        if (params.preferredRefreshRate != maxRefreshRate) {
+            params.preferredRefreshRate = maxRefreshRate
+            changed = true
+        }
+
+        // Safely set preferredDisplayModeId ONLY if there is a mode matching the current physical resolution
+        // with a strictly higher refresh rate than the active mode, ensuring display resolution is never changed
+        val highestModeInCurrentRes = modes
+            .filter { it.physicalWidth == currentMode.physicalWidth && it.physicalHeight == currentMode.physicalHeight }
+            .maxByOrNull { it.refreshRate }
+
+        val targetModeId =
+            if (highestModeInCurrentRes != null && highestModeInCurrentRes.refreshRate > currentMode.refreshRate) {
+                highestModeInCurrentRes.modeId
+            } else {
+                0 // 0 clears preferred mode override, preserving user and system display resolution
+            }
+
+        if (params.preferredDisplayModeId != targetModeId) {
+            params.preferredDisplayModeId = targetModeId
+            changed = true
+        }
+
+        if (changed) {
             window.attributes = params
         }
     }
