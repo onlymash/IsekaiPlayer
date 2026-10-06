@@ -102,11 +102,14 @@ fun SplitPaneLayout(
     ) {
         BoxWithConstraints(modifier = modifier) {
             val totalWidth = maxWidth
-            val maxLeftWidth = totalWidth - state.minRightWidth
+            val effectiveMinLeftWidth = state.minLeftWidth.coerceAtMost(totalWidth)
+            val effectiveMaxLeftWidth = (totalWidth - state.minRightWidth)
+                .coerceIn(effectiveMinLeftWidth, totalWidth)
 
-            // Core logic: when screen rotates, total width may shrink causing leftPaneWidth overflow; auto-correct here
+            // Core logic: when screen rotates or window resizes, total width may shrink causing leftPaneWidth overflow; auto-correct here
             LaunchedEffect(totalWidth) {
-                state.leftPaneWidth = state.leftPaneWidth.coerceIn(state.minLeftWidth, maxLeftWidth)
+                state.leftPaneWidth =
+                    state.leftPaneWidth.coerceIn(effectiveMinLeftWidth, effectiveMaxLeftWidth)
             }
 
             Row(modifier = Modifier.fillMaxSize()) {
@@ -149,7 +152,7 @@ fun SplitPaneLayout(
                                 change.consume()
                                 val dragAmountDp = with(density) { dragAmount.toDp() }
                                 state.leftPaneWidth = (state.leftPaneWidth + dragAmountDp)
-                                    .coerceIn(state.minLeftWidth, maxLeftWidth)
+                                    .coerceIn(effectiveMinLeftWidth, effectiveMaxLeftWidth)
                             }
                         },
                     contentAlignment = Alignment.Center
@@ -206,7 +209,7 @@ fun Modifier.fractionalHeightIn(
     // Calculate target fractional height and clamp between [minPx, maxPx]
     val targetHeight = (parentHeight * fraction).toInt()
     val minPx = minHeight.roundToPx()
-    val maxPx = maxHeight.roundToPx()
+    val maxPx = maxHeight.roundToPx().coerceAtLeast(minPx)
     val finalHeight = targetHeight.coerceIn(minPx, maxPx)
 
     // Force child component to measure using calculated final height
