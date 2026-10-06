@@ -82,7 +82,7 @@ fun OsdDrawerPage(
             )
 
             PreferencesGroup(
-                title = stringResource(R.string.player_osd_stats_page_header),
+                title = stringResource(R.string.player_osd_stats_header_title),
                 items = pages.map { (page, labelRes) ->
                     val content: @Composable (ListItemShapes) -> Unit =
                         { shapes: ListItemShapes ->

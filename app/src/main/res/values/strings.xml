@@ -285,7 +285,7 @@
     <string name="player_control_enter_pip">Enter PiP</string>
     <string name="player_control_osd">OSD</string>
     <string name="player_osd_none">Off</string>
-    <string name="player_osd_stats_page_header">Page</string>
+    <string name="player_osd_stats_header_title">Info</string>
     <string name="player_osd_stats_general">General Stats (P1)</string>
     <string name="player_osd_stats_timings">Frame Timings (P2)</string>
     <string name="player_osd_stats_cache">Input/Cache Stats (P3)</string>
