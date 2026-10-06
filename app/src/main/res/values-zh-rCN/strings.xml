@@ -285,6 +285,7 @@
     <string name="player_control_enter_pip">进入画中画</string>
     <string name="player_control_osd">状态显示</string>
     <string name="player_osd_none">关闭</string>
+    <string name="player_osd_stats_page_header">页面</string>
     <string name="player_osd_stats_general">常规统计 (P1)</string>
     <string name="player_osd_stats_timings">帧时间统计 (P2)</string>
     <string name="player_osd_stats_cache">输入/缓存统计 (P3)</string>
