@@ -1,0 +1,757 @@
+<!--
+  ~ IsekaiPlayer - Sovereign above myriad realms; shatter every mortal cipher.
+  ~ Copyright (C) 2026 onlymash
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="app_name">Isekai Player</string>
+    <string name="app_slogan_short">Властвуй над бесчисленными мирами; сокруши любой смертный шифр.</string>
+
+    <string name="settings_category_appearance">Внешний вид</string>
+    <string name="settings_category_appearance_summary">Настройка темы, тёмного режима и высокой контрастности</string>
+    <string name="settings_category_player">Плеер</string>
+    <string name="settings_category_player_summary">Настройка воспроизведения, интерфейса и эффектов кнопок</string>
+    <string name="settings_category_gestures">Жесты</string>
+    <string name="settings_category_gestures_summary">Управление перемоткой, громкостью и яркостью с помощью свайпов и касаний</string>
+    <string name="settings_category_decoder">Декодер</string>
+    <string name="settings_category_decoder_summary">Настройка аппаратного ускорения, видеовыхода и алгоритмов масштабирования</string>
+    <string name="settings_category_audio">Аудио</string>
+    <string name="settings_category_audio_summary">Управление звуковыми дорожками, приоритетом вывода и ночным режимом</string>
+    <string name="settings_category_subtitle">Субтитры</string>
+    <string name="settings_category_subtitle_summary">Настройка языка, внешнего вида и кодировки субтитров</string>
+    <string name="settings_category_advanced">Расширенные</string>
+    <string name="settings_category_advanced_summary">Размер буфера, прямое и обратное кэширование, сеть и безопасность</string>
+    <string name="settings_category_general">Общие</string>
+    <string name="settings_category_general_summary">Изменение языка приложения, тактильного отклика и навигации</string>
+    <string name="settings_category_about">О приложении</string>
+    <string name="settings_category_about_summary">Версия приложения, лицензии с открытым исходным кодом и ссылки</string>
+
+    <string name="settings_appearance_header_theme">Тема</string>
+
+    <string name="settings_appearance_theme_mode">Режим темы</string>
+    <string name="settings_appearance_theme_mode_system">Как в системе</string>
+    <string name="settings_appearance_theme_mode_light">Светлая</string>
+    <string name="settings_appearance_theme_mode_dark">Тёмная</string>
+    <string name="settings_appearance_theme_high_contrast">Высококонтрастная тёмная тема</string>
+    <string name="settings_appearance_theme_high_contrast_summary">Сделать фон глубже для увеличения контрастности</string>
+
+    <string name="settings_general_header_general">Общие</string>
+    <string name="settings_general_app_language">Язык приложения</string>
+    <string name="settings_general_app_language_summary">Изменить язык интерфейса приложения</string>
+    <string name="settings_general_header_navigation">Навигация</string>
+
+    <string name="settings_general_haptics">Тактильный отклик</string>
+    <string name="settings_general_haptics_summary">Включить вибрацию при нажатиях</string>
+    <string name="settings_general_intercept_back">Навигация кнопкой «Назад»</string>
+    <string name="settings_general_intercept_back_summary">Если включено, жест «Назад» поднимается вверх по структуре папок перед выходом</string>
+
+    <!-- Backup & Restore -->
+    <string name="settings_general_header_backup">Резервное копирование и восстановление</string>
+    <string name="settings_general_export_settings">Экспорт настроек</string>
+    <string name="settings_general_export_settings_summary">Сохранить текущие настройки в резервный JSON-файл</string>
+    <string name="settings_general_import_settings">Импорт настроек</string>
+    <string name="settings_general_import_settings_summary">Восстановить настройки из резервного JSON-файла (текущие будут перезаписаны)</string>
+    <string name="settings_backup_export_success">Настройки успешно экспортированы</string>
+    <string name="settings_backup_export_failed">Не удалось экспортировать настройки</string>
+    <string name="settings_backup_import_success">Настройки успешно восстановлены</string>
+    <string name="settings_backup_import_failed">Не удалось импортировать настройки. Проверьте формат файла</string>
+
+    <string name="settings_gestures_header_drag">Свайпы</string>
+    <string name="settings_gestures_header_tap">Касания</string>
+    <string name="settings_gestures_horizontal_drag">Перемотка</string>
+    <string name="settings_gestures_horizontal_drag_summary">Горизонтальный свайп для изменения позиции воспроизведения</string>
+    <string name="settings_gestures_vertical_drag_volume">Громкость</string>
+    <string name="settings_gestures_vertical_drag_volume_summary">Вертикальный свайп в левой части экрана для регулировки громкости</string>
+    <string name="settings_gestures_vertical_drag_brightness">Яркость</string>
+    <string name="settings_gestures_vertical_drag_brightness_summary">Вертикальный свайп в правой части экрана для регулировки яркости</string>
+    <string name="settings_gestures_swap_volume_brightness">Поменять зоны громкости и яркости</string>
+    <string name="settings_gestures_swap_volume_brightness_summary">Поменять местами левую и правую области управления</string>
+    <string name="settings_gestures_double_tap_seek">Двойное касание для перемотки</string>
+    <string name="settings_gestures_double_tap_seek_summary">Двойное касание по краям экрана для перемотки вперед/назад</string>
+    <string name="settings_gestures_double_tap_play_pause">Двойное касание для паузы/воспроизведения</string>
+    <string name="settings_gestures_double_tap_play_pause_summary">Двойное касание в центре экрана для паузы или продолжения воспроизведения</string>
+    <string name="settings_gestures_long_press">Ускорение по долгому нажатию</string>
+    <string name="settings_gestures_long_press_summary">Удерживайте экран для ускоренной перемотки/воспроизведения</string>
+    <string name="settings_gestures_long_press_speed">Скорость при долгом нажатии</string>
+    <string name="settings_gestures_long_press_speed_summary">Настройка скорости ускорения при удержании</string>
+    <string name="settings_gestures_double_tap_seek_duration">Интервал двойного касания</string>
+    <string name="settings_gestures_double_tap_seek_duration_summary">Интервал перемотки при двойном касании: %d с</string>
+
+    <string name="browser_view_options_title">Параметры отображения</string>
+    <string name="browser_view_options_sort_by">Сортировка</string>
+    <string name="browser_view_options_sort_type_name">Имя</string>
+    <string name="browser_view_options_sort_type_date">Дата</string>
+    <string name="browser_view_options_sort_type_size">Размер</string>
+    <string name="browser_view_options_sort_type_duration">Длительность</string>
+    <string name="browser_view_options_order">Порядок</string>
+    <string name="browser_view_options_order_ascending">По возрастанию</string>
+    <string name="browser_view_options_order_descending">По убыванию</string>
+    <string name="browser_view_options_folders_first">Сначала папки</string>
+    <string name="browser_view_options_show_hidden">Показывать скрытые файлы</string>
+    <string name="browser_view_options_show_subtitles">Показывать файлы субтитров</string>
+    <string name="browser_view_options_filters">Фильтры</string>
+    <string name="browser_view_options_fields">Отображаемые поля</string>
+    <string name="browser_view_options_field_thumbnail">Миниатюра</string>
+    <string name="browser_view_options_field_item_count">Количество элементов</string>
+    <string name="browser_view_options_field_size">Размер</string>
+    <string name="browser_view_options_field_duration">Длительность</string>
+    <string name="browser_view_options_field_resolution">Разрешение</string>
+    <string name="browser_view_options_field_date">Дата</string>
+    <string name="browser_view_options_field_extension">Расширение</string>
+
+    <string name="browser_view_options_order_name_asc">А-Я / A-Z</string>
+    <string name="browser_view_options_order_name_desc">Я-А / Z-A</string>
+    <string name="browser_view_options_order_date_asc">Сначала старые</string>
+    <string name="browser_view_options_order_date_desc">Сначала новые</string>
+    <string name="browser_view_options_order_size_asc">Сначала меньшие</string>
+    <string name="browser_view_options_order_size_desc">Сначала большие</string>
+    <string name="browser_view_options_order_duration_asc">Сначала короткие</string>
+    <string name="browser_view_options_order_duration_desc">Сначала длинные</string>
+    <string name="browser_view_options_done">Готово</string>
+
+    <string name="source_editor_title_add">Добавить источник</string>
+    <string name="source_editor_title_edit">Изменить источник</string>
+    <string name="source_editor_save">Сохранить</string>
+    <string name="source_editor_label_name">Отображаемое имя</string>
+    <string name="source_editor_label_protocol">Протокол</string>
+    <string name="source_editor_label_host">Хост / IP</string>
+    <string name="source_editor_label_port">Порт (необязательно)</string>
+    <string name="source_editor_label_path_default">Начальный путь</string>
+    <string name="source_editor_label_path_smb">Имя сетевого ресурса (Share)</string>
+    <string name="source_editor_label_https">Использовать HTTPS</string>
+    <string name="source_editor_label_username">Имя пользователя (необязательно)</string>
+    <string name="source_editor_label_password">Пароль (необязательно)</string>
+    <string name="source_editor_error_required">Имя и хост обязательны для заполнения</string>
+    <string name="source_editor_error_smb_share_required">Для SMB требуется указать имя общего ресурса</string>
+
+    <!-- Common Strings -->
+    <string name="common_close">Закрыть</string>
+    <string name="common_more">Ещё</string>
+    <string name="common_expand">Развернуть</string>
+    <string name="common_collapse">Свернуть</string>
+    <string name="common_edit">Изменить</string>
+    <string name="common_delete">Удалить</string>
+    <string name="common_back">Назад</string>
+    <string name="common_cancel">Отмена</string>
+    <string name="common_retry">Повторить</string>
+    <string name="common_refresh">Обновить</string>
+    <string name="common_settings">Настройки</string>
+    <string name="common_replay">Сначала</string>
+    <string name="common_move_up">Вверх</string>
+    <string name="common_move_down">Вниз</string>
+    <string name="common_none">Нет</string>
+    <string name="common_all">Все</string>
+    <string name="common_reset">Сброс</string>
+    <string name="common_on">Вкл</string>
+    <string name="common_off">Выкл</string>
+    <string name="common_preview">Предпросмотр</string>
+
+    <!-- Browser Screen -->
+    <string name="browser_menu_sources">Источники</string>
+    <string name="browser_menu_sort">Сортировка</string>
+    <string name="browser_menu_search">Поиск</string>
+    <string name="browser_permission_grant">Предоставить доступ ко всем файлам</string>
+    <string name="browser_permission_required">Доступ ко всем файлам необходим для сканирования видео и автоматической загрузки внешних субтитров</string>
+    <string name="browser_media_list_empty">Видео не найдены</string>
+    <string name="browser_search_placeholder_collapsed">Поиск</string>
+    <string name="browser_search_placeholder_expanded">Поиск в текущей папке</string>
+    <string name="browser_search_prompt">Введите ключевые слова для поиска</string>
+    <string name="browser_media_items_count">Элементов: %1$d</string>
+    <string name="browser_subtitle_no_matching_video">Подходящий видеофайл не найден</string>
+    <string name="browser_fab_menu_add_source">Добавить удалённый источник</string>
+    <string name="browser_fab_menu_play_network_stream">Открыть сетевой поток</string>
+    <string name="browser_fab_toggle_menu_content_description">Переключить меню</string>
+    <string name="browser_fab_toggle_menu_expanded_description">Развернуто</string>
+    <string name="browser_fab_toggle_menu_collapsed_description">Свернуто</string>
+    <string name="browser_fab_toggle_menu_close_action_label">Закрыть меню</string>
+
+    <string name="network_stream_title">Сетевой поток</string>
+    <string name="network_stream_input_label">URL потока</string>
+    <string name="network_stream_input_placeholder">Введите URL (http://, https:// и т. д.)</string>
+    <string name="network_stream_play_button">Воспроизвести</string>
+    <string name="network_stream_history_title">История потоков</string>
+    <string name="network_stream_history_empty">История сетевых потоков пуста</string>
+    <string name="network_stream_clear_history">Очистить историю</string>
+    <string name="network_stream_invalid_url">Пожалуйста, введите корректный URL</string>
+    <string name="network_stream_copy_link">Копировать ссылку</string>
+    <string name="network_stream_link_copied">Ссылка скопирована в буфер обмена</string>
+    <string name="network_stream_delete_single_dialog_title">Удалить запись</string>
+    <string name="network_stream_delete_single_dialog_message">Вы действительно хотите удалить эту запись воспроизведения?</string>
+    <string name="network_stream_clear_all_dialog_title">Очистить все записи</string>
+    <string name="network_stream_clear_all_dialog_message">Очистить всю историю сетевых потоков? Это действие нельзя отменить.</string>
+
+    <!-- Source -->
+    <string name="source_selection_devices_list_title">Устройства хранения</string>
+    <string name="source_selection_manage">Управление источниками</string>
+    <string name="source_storage_usage">Доступно: %1$s / Всего: %2$s</string>
+    <string name="source_local_internal_desc">Память устройства</string>
+    <string name="source_local_external_desc">Внешний накопитель</string>
+    <string name="source_remote_header">Удалённые источники</string>
+    <string name="source_internal_storage_name">Внутренняя память</string>
+    <string name="source_manager_title">Управление источниками</string>
+    <string name="source_manager_empty">Удалённые источники не добавлены</string>
+    <string name="source_manager_add">Добавить удалённый источник</string>
+    <string name="source_manager_delete_title">Удалить источник</string>
+    <string name="source_manager_delete_message">Вы действительно хотите удалить «%1$s»? Это действие нельзя отменить.</string>
+
+    <!-- Drawer Categories & History & Playlist -->
+    <string name="drawer_library_section_title">Медиатека</string>
+    <string name="playlist_title">Плейлисты</string>
+    <string name="playlist_subtitle">Коллекции мультимедиа</string>
+    <string name="playlist_create_dialog_title">Новый плейлист</string>
+    <string name="playlist_create_dialog_placeholder">Название плейлиста</string>
+    <string name="playlist_create_option_blank">Создать пустой плейлист</string>
+    <string name="playlist_create_option_m3u_link">Добавить плейлист M3U по ссылке</string>
+    <string name="playlist_create_option_m3u_file">Импортировать из файла M3U</string>
+    <string name="playlist_create_title_blank">Новый плейлист</string>
+    <string name="playlist_create_title_m3u_link">Импорт M3U по ссылке</string>
+    <string name="playlist_create_title_m3u_file">Импорт M3U из файла</string>
+    <string name="playlist_create_m3u_url_placeholder">Ссылка URL (http://, https://…)</string>
+    <string name="playlist_create_m3u_file_select">Выбрать файл M3U</string>
+    <string name="playlist_create_m3u_file_selected">Выбранный файл: %s</string>
+    <string name="playlist_create_import_button">Импортировать</string>
+    <string name="playlist_create_next_button">Далее</string>
+    <string name="playlist_create_previous_button">Назад</string>
+    <string name="playlist_import_error_invalid_url">Пожалуйста, введите корректную ссылку HTTP или HTTPS</string>
+    <string name="playlist_import_error_network">Не удалось загрузить плейлист. Проверьте сеть или URL</string>
+    <string name="playlist_import_error_parse">Не удалось разобрать содержимое M3U. Проверьте формат файла</string>
+    <string name="playlist_import_error_title_empty">Название плейлиста не может быть пустым</string>
+    <string name="playlist_type_m3u_link">Ссылка M3U</string>
+    <string name="playlist_type_m3u_file">Файл M3U</string>
+    <string name="playlist_move_up">Переместить вверх</string>
+    <string name="playlist_move_down">Переместить вниз</string>
+    <string name="playlist_rename_dialog_title">Переименовать плейлист</string>
+    <string name="playlist_empty">Плейлисты ещё не созданы</string>
+    <string name="playlist_items_empty">В этом плейлисте нет видео</string>
+    <string name="playlist_play_all">Воспроизвести всё</string>
+    <string name="playlist_item_count">Элементов: %d</string>
+    <string name="playlist_delete_dialog_title">Удалить плейлист</string>
+    <string name="playlist_delete_dialog_message">Вы уверены, что хотите удалить «%s»?</string>
+    <string name="playback_history_title">История воспроизведения</string>
+    <string name="playback_history_subtitle">Прогресс и история просмотров</string>
+    <string name="playback_history_search_placeholder_expanded">Поиск по истории</string>
+    <string name="playlist_search_placeholder_expanded">Поиск видео в плейлисте</string>
+    <string name="playback_history_empty">История воспроизведения пуста</string>
+    <string name="playback_history_clear_all">Очистить историю</string>
+    <string name="playback_history_clear_dialog_title">Очистить историю</string>
+    <string name="playback_history_clear_dialog_message">Вы действительно хотите удалить всю историю просмотров? Это действие нельзя отменить.</string>
+    <string name="playback_history_delete_dialog_title">Удалить запись</string>
+    <string name="playback_history_delete_dialog_message">Удалить эту запись из истории?</string>
+
+    <!-- Multi-Selection & Action Toolbar -->
+    <string name="browser_selection_count">Выбрано: %d</string>
+    <string name="browser_selection_select_all">Выбрать все</string>
+    <string name="browser_selection_deselect_all">Инвертировать выбор</string>
+    <string name="browser_selection_exit">Выйти из режима выбора</string>
+    <string name="playlist_add_to">Добавить в плейлист</string>
+    <string name="playlist_select_target_title">Добавить в плейлист</string>
+    <string name="playlist_added_toast">Добавлено элементов в «%2$s»: %1$d</string>
+    <string name="playlist_readonly">Только для чтения</string>
+
+    <!-- Player Quick Controls -->
+    <string name="player_control_brightness">Яркость</string>
+    <string name="player_control_system_volume">Системная громкость</string>
+    <string name="player_control_player_volume">Громкость плеера</string>
+    <string name="player_control_rewind">Перемотка назад на %d с</string>
+    <string name="player_control_forward">Перемотка вперед на %d с</string>
+    <string name="player_control_previous">Предыдущий</string>
+    <string name="player_control_next">Следующий</string>
+    <string name="player_control_play_pause">Воспроизведение/Пауза</string>
+    <string name="player_control_play">Воспроизвести</string>
+    <string name="player_control_pause">Пауза</string>
+    <string name="player_control_playback_speed">Скорость воспроизведения</string>
+    <string name="player_control_adjust_temporary">Временная регулировка</string>
+    <string name="player_audio_delay">Задержка звука</string>
+    <string name="player_subtitle_delay">Задержка субтитров</string>
+    <string name="settings_player_playback_speed_summary">Настройка скорости воспроизведения по умолчанию для всех видео</string>
+    <string name="player_control_screenshot">Снимок экрана</string>
+    <string name="player_control_frame_step_forward">Следующий кадр</string>
+    <string name="player_control_frame_step_backward">Предыдущий кадр</string>
+    <string name="player_control_lock">Заблокировать управление</string>
+    <string name="player_control_unlock">Разблокировать</string>
+    <string name="player_control_enter_pip">Режим «Картинка в картинке»</string>
+    <string name="player_control_osd">Информация OSD</string>
+    <string name="player_osd_none">Выкл</string>
+    <string name="player_osd_stats_header_title">Информация</string>
+    <string name="player_osd_stats_general">Общая статистика (P1)</string>
+    <string name="player_osd_stats_timings">Тайминги кадров (P2)</string>
+    <string name="player_osd_stats_cache">Ввод/Кэш (P3)</string>
+    <string name="player_osd_stats_key_bindings">Горячие клавиши (P4)</string>
+    <string name="player_osd_stats_tracks">Выбранные дорожки (P5)</string>
+    <string name="player_status_seek_forward">+%d с</string>
+    <string name="player_status_seek_backward">-%d с</string>
+    <string name="player_status_fast_forwarding">Ускоренная перемотка %1$.1fX</string>
+    <string name="player_settings_player">Настройки плеера</string>
+    <string name="player_settings_decoder">Настройки декодера</string>
+    <string name="player_settings_audio">Настройки звука</string>
+    <string name="player_settings_subtitle">Настройки субтитров</string>
+    <string name="player_settings_gestures">Настройки жестов</string>
+    <string name="player_settings_advanced">Расширенные настройки</string>
+
+    <!-- Player Tracks Drawer -->
+    <string name="player_drawer_tracks_title">Дорожки</string>
+    <string name="player_drawer_playlist_title">Плейлист</string>
+    <string name="player_drawer_audio_tracks">Аудио</string>
+    <string name="player_drawer_subtitle_tracks">Субтитры</string>
+    <string name="player_add_external_subtitle">Добавить внешние субтитры</string>
+    <string name="player_error_unsupported_subtitle">Неподдерживаемый формат субтитров</string>
+    <string name="player_error_load_failed">Не удалось загрузить медиафайл. Проверьте сеть или адрес сервера</string>
+    <string name="player_drawer_video_tracks">Видео</string>
+    <string name="player_drawer_tracks_button">Выбор дорожек</string>
+    <string name="player_drawer_playlist_button">Плейлист</string>
+
+    <!-- Player Settings -->
+    <string name="settings_search_empty">Ничего не найдено</string>
+    <string name="settings_player_header_controls">Управление</string>
+    <string name="settings_player_seek_duration">Интервал перемотки</string>
+    <string name="settings_player_seek_duration_summary">Интервал перемотки при нажатии на кнопки: %d с</string>
+    <string name="settings_player_auto_hide_duration">Автоскрытие элементов управления</string>
+    <string name="settings_player_auto_hide_duration_summary">Скрывать панель управления через %1$d с бездействия</string>
+    <string name="settings_player_enable_pip">«Картинка в картинке» (PiP)</string>
+    <string name="settings_player_enable_pip_summary">Автоматический переход в режим PiP при сворачивании приложения</string>
+    <string name="settings_player_screenshot_format">Формат снимков экрана</string>
+    <string name="settings_player_screenshot_format_jpg">JPEG (.jpg)</string>
+    <string name="settings_player_screenshot_format_png">PNG (.png)</string>
+    <string name="settings_player_screenshot_format_webp">WebP (.webp)</string>
+
+    <string name="settings_player_header_ui">Интерфейс</string>
+    <string name="settings_player_always_full_screen">Всегда во весь экран</string>
+    <string name="settings_player_always_full_screen_summary">Скрывать системные панели даже при отображении элементов управления</string>
+
+    <string name="settings_player_layout">Макет плеера</string>
+    <string name="settings_player_layout_summary">Настройка кнопок управления в углах экрана</string>
+    <string name="settings_player_layout_show_title_bar">Показывать заголовок</string>
+    <string name="settings_player_layout_all_buttons">Все кнопки</string>
+
+    <string name="settings_player_scale_mode">Масштабирование экрана</string>
+    <string name="settings_player_scale_mode_fit">Вписать в экран</string>
+    <string name="settings_player_scale_mode_fill">Заполнить экран</string>
+    <string name="settings_player_scale_mode_original">Оригинальный размер</string>
+
+    <string name="settings_player_button_effects">Эффекты кнопок</string>
+    <string name="settings_player_button_effects_summary">Настройка внешнего вида и анимаций взаимодействия кнопок</string>
+    <string name="settings_player_button_effects_blur">Эффект размытия</string>
+    <string name="settings_player_button_effects_blur_summary">Включить размытие под матовое стекло</string>
+    <string name="settings_player_button_effects_lens">Эффект линзы</string>
+    <string name="settings_player_button_effects_lens_summary">Включить преломление и искажение по краям</string>
+    <string name="settings_player_button_effects_alpha">Непрозрачность</string>
+    <string name="settings_player_button_effects_alpha_summary">Настройка прозрачности кнопок</string>
+    <string name="settings_player_button_effects_show_border">Показывать рамку</string>
+    <string name="settings_player_button_effects_show_border_summary">Показывать акцентную контурную рамку на кнопках</string>
+    <string name="settings_player_button_effects_border_style">Стиль подсветки</string>
+    <string name="settings_player_button_effects_border_style_directional">Направленная</string>
+    <string name="settings_player_button_effects_border_style_ambient">Рассеянная</string>
+    <string name="settings_player_button_effects_border_style_plain">Сплошная</string>
+    <string name="settings_player_button_effects_use_texture_view">Использовать TextureView</string>
+    <string name="settings_player_button_effects_use_texture_view_summary">Рендеринг через TextureView для размытия и эффекта линзы без задержек</string>
+    <string name="settings_player_button_effects_note" formatted="false">Типы контейнеров и особенности\n• SurfaceView + PixelCopy (по умолчанию)\nВидео обрабатывается аппаратным компоновщиком (HWC), что обеспечивает максимальную энергоэффективность. Однако фоновое размытие стекла создается с небольшой задержкой.\n• TextureView\nОбеспечивает плавное размытие и преломление стекла в реальном времени без задержек, но повышает нагрузку на GPU.\n• Примечание для ExoPlayer\nВ ExoPlayer контейнер SurfaceView использует ограничения макета для управления соотношением сторон, поэтому размытие через PixelCopy отключено, если не активен TextureView.</string>
+    <string name="settings_player_seek_bar_style">Стиль полосы перемотки</string>
+    <string name="settings_player_seek_bar_style_wavy">Волнистая</string>
+    <string name="settings_player_seek_bar_style_straight">Прямая</string>
+
+    <string name="settings_player_resume_playback">Возобновлять воспроизведение</string>
+    <string name="settings_player_resume_playback_summary">Автоматически продолжать с последней сохранённой позиции</string>
+
+    <string name="settings_player_loop_mode">Режим повтора</string>
+    <string name="settings_player_loop_mode_none">Выключен</string>
+    <string name="settings_player_loop_mode_current">Повтор одного видео</string>
+    <string name="settings_player_loop_mode_sequential">Последовательно</string>
+    <string name="settings_player_loop_mode_list">Повтор всего списка</string>
+    <string name="settings_player_loop_mode_shuffle">Случайно</string>
+    <string name="settings_player_loop_mode_shuffle_repeat">Случайный повтор</string>
+
+    <string name="settings_player_remember_brightness">Запоминать яркость</string>
+    <string name="settings_player_remember_brightness_summary">Сохранять уровень яркости из предыдущего сеанса</string>
+
+    <string name="settings_player_orientation">Ориентация экрана</string>
+    <string name="settings_player_orientation_default">По умолчанию в системе</string>
+    <string name="settings_player_orientation_default_summary">Следовать системным настройкам автоповорота</string>
+    <string name="settings_player_orientation_sensor">По датчику</string>
+    <string name="settings_player_orientation_sensor_summary">Всегда вращать в зависимости от положения устройства</string>
+    <string name="settings_player_orientation_landscape">Альбомная</string>
+    <string name="settings_player_orientation_landscape_summary">Зафиксировать альбомную ориентацию (с учётом датчика)</string>
+    <string name="settings_player_orientation_portrait">Портретная</string>
+    <string name="settings_player_orientation_portrait_summary">Зафиксировать портретную ориентацию (с учётом датчика)</string>
+    <string name="settings_player_orientation_video">По соотношению сторон видео</string>
+    <string name="settings_player_orientation_video_summary">Автоматически переключать ориентацию в зависимости от видео</string>
+
+    <string name="settings_audio_header_playback">Воспроизведение</string>
+    <string name="settings_audio_header_exoplayer">Звук ExoPlayer</string>
+    <string name="settings_audio_header_mpv">Звук mpv</string>
+    <string name="settings_audio_request_focus">Запрашивать аудиофокус</string>
+    <string name="settings_audio_request_focus_summary">Приостанавливать видео, когда другие приложения воспроизводят звук</string>
+    <string name="settings_audio_enable_background_audio">Фоновое воспроизведение</string>
+    <string name="settings_audio_enable_background_audio_summary">Продолжать воспроизведение звука при сворачивании приложения</string>
+    <string name="settings_audio_exo_volume">Громкость плеера</string>
+    <string name="settings_audio_exo_volume_summary">Громкость ExoPlayer (0–100%)</string>
+    <string name="settings_audio_mpv_volume">Громкость плеера</string>
+    <string name="settings_audio_mpv_volume_summary">Громкость mpv (0–200%)</string>
+    <string name="settings_audio_preferred_language">Предпочитаемый язык аудио</string>
+    <string name="settings_audio_preferred_language_summary">Язык аудиодорожки по умолчанию</string>
+    <string name="settings_audio_delay">Задержка звука</string>
+    <string name="settings_audio_delay_summary">Настройка задержки звука по умолчанию для устранения рассинхронизации</string>
+    <string name="settings_audio_output_order">Приоритет вывода звука</string>
+    <string name="settings_audio_output_order_summary">Настройка приоритета бэкендов вывода звука</string>
+    <string name="settings_audio_dynamic_normalize">Сжатие динамического диапазона</string>
+    <string name="settings_audio_dynamic_normalize_summary">Нормализация громкости для улучшения диалогов и приглушения громких звуков (ночной режим)</string>
+    <string name="settings_audio_pitch_correction">Коррекция высоты тона</string>
+    <string name="settings_audio_pitch_correction_summary">Сохранять исходную тональность звука при изменении скорости</string>
+
+    <string name="settings_subtitle_header_selection">Выбор субтитров</string>
+    <string name="settings_subtitle_header_rendering">Рендеринг и внешний вид</string>
+    <string name="settings_subtitle_preferred_language">Предпочитаемый язык субтитров</string>
+    <string name="settings_subtitle_preferred_language_summary">Язык дорожки субтитров по умолчанию</string>
+    <string name="settings_subtitle_fallback">Автоматический выбор субтитров</string>
+    <string name="settings_subtitle_fallback_summary">Автоматически выбирать первые доступные субтитры, если предпочитаемый язык не найден</string>
+
+    <string name="settings_subtitle_header_mpv">Субтитры mpv</string>
+    <string name="settings_subtitle_mpv_style">Стиль субтитров</string>
+    <string name="settings_subtitle_mpv_style_summary">Размер шрифта, цвет текста, обводка и отступы</string>
+
+    <string name="settings_subtitle_header_exo">Субтитры ExoPlayer</string>
+    <string name="settings_subtitle_exo_style">Стиль субтитров</string>
+    <string name="settings_subtitle_exo_style_summary">Размер шрифта, цвет текста, обводка, фон и нижний отступ</string>
+    <string name="settings_subtitle_exo_preview_sample">Это пример субтитров ExoPlayer</string>
+
+    <string name="settings_subtitle_mpv_ass_override">Переопределение стилей ASS</string>
+    <string name="settings_subtitle_mpv_ass_override_summary">Определяет, будут ли пользовательские настройки переопределять встроенные стили ASS</string>
+    <string name="settings_subtitle_mpv_ass_override_scale">Только масштабирование (рекомендуется)</string>
+    <string name="settings_subtitle_mpv_ass_override_scale_summary">Применяет базовое масштабирование и стиль, сохраняя авторский дизайн субтитров</string>
+    <string name="settings_subtitle_mpv_ass_override_yes">Переопределять базовые стили</string>
+    <string name="settings_subtitle_mpv_ass_override_yes_summary">Применяет пользовательские стили, сохраняя по возможности исходную верстку</string>
+    <string name="settings_subtitle_mpv_ass_override_no">Не переопределять (оригинал ASS)</string>
+    <string name="settings_subtitle_mpv_ass_override_no_summary">Отображать субтитры строго со стилями, эффектами и позиционированием из файла</string>
+    <string name="settings_subtitle_mpv_ass_override_force">Принудительно применять свои стили</string>
+    <string name="settings_subtitle_mpv_ass_override_force_summary">Игнорировать стили из файла и принудительно применять глобальный стиль субтитров</string>
+    <string name="settings_subtitle_mpv_ass_override_strip">Очищать теги ASS (простой текст)</string>
+    <string name="settings_subtitle_mpv_ass_override_strip_summary">Удалять все теги эффектов ASS и пользовательские шрифты, превращая субтитры в чистый текст</string>
+    <string name="settings_subtitle_mpv_preview_sample">Это пример субтитров mpv</string>
+
+    <string name="settings_subtitle_font_size">Размер шрифта</string>
+    <string name="settings_subtitle_font_size_summary">Настройка размера отображения субтитров (sp)</string>
+    <string name="settings_subtitle_text_color">Цвет текста</string>
+    <string name="settings_subtitle_bg_color">Цвет фона</string>
+    <string name="settings_subtitle_bg_opacity">Непрозрачность фона</string>
+    <string name="settings_subtitle_bg_opacity_summary">Настройка прозрачности фоновой плашки субтитров</string>
+    <string name="settings_subtitle_bottom_padding">Отступ снизу</string>
+    <string name="settings_subtitle_bottom_padding_summary">Расстояние от нижнего края экрана (dp)</string>
+    <string name="settings_subtitle_font_weight">Толщина шрифта</string>
+    <string name="settings_subtitle_outline_color">Цвет контура</string>
+    <string name="settings_subtitle_outline_width">Ширина контура</string>
+    <string name="settings_subtitle_shadow_color">Цвет тени</string>
+    <string name="settings_subtitle_shadow_offset">Смещение тени</string>
+    <string name="settings_subtitle_bottom_margin">Нижний отступ субтитров</string>
+    <string name="settings_subtitle_bottom_margin_summary">Вертикальное расстояние от нижнего края экрана</string>
+    <string name="settings_subtitle_bold">Жирный текст</string>
+    <string name="settings_subtitle_bold_summary">Отображать текст субтитров полужирным шрифтом</string>
+    <string name="settings_subtitle_italic">Курсив</string>
+    <string name="settings_subtitle_italic_summary">Отображать текст субтитров курсивом</string>
+    <string name="settings_subtitle_font">Шрифт субтитров</string>
+    <string name="settings_subtitle_font_summary">Выбор семейства шрифтов для рендеринга субтитров в mpv</string>
+    <string name="settings_subtitle_font_default">Системный по умолчанию (sans-serif)</string>
+    <string name="settings_subtitle_font_permission_required">Требуется доступ ко всем файлам</string>
+    <string name="settings_subtitle_font_permission_summary">Предоставьте разрешение для поиска файлов шрифтов в каталоге /Fonts</string>
+    <string name="settings_subtitle_font_grant_permission">Предоставить доступ</string>
+    <string name="settings_subtitle_font_no_fonts_found">Пользовательские шрифты не найдены</string>
+    <string name="settings_subtitle_font_no_fonts_summary">Поместите файлы шрифтов .ttf или .otf в папку %s</string>
+    <string name="settings_subtitle_font_directory_hint">Совет: поместите файлы шрифтов .ttf или .otf в папку %s, и они автоматически появятся в списке выше.</string>
+
+    <string name="settings_decoder_header_engine">Движок</string>
+    <string name="settings_decoder_player_engine_type">Движок воспроизведения</string>
+    <string name="settings_decoder_player_engine_mpv">Движок mpv</string>
+    <string name="settings_decoder_player_engine_mpv_summary">Мощный и функциональный. Поддерживает расширенные стилизованные субтитры ASS/SSA, программное усиление звука, все форматы и шейдерные фильтры.</string>
+    <string name="settings_decoder_player_engine_exo">Движок ExoPlayer (Media3)</string>
+    <string name="settings_decoder_player_engine_exo_summary">Аппаратное декодирование. Работает на MediaCodec и кэшировании Android. Энергоэффективный, плавный и стабильный для стандартных видео.</string>
+
+    <string name="settings_decoder_header_rendering">Ядро рендеринга</string>
+    <string name="settings_decoder_header_performance">Оборудование и производительность</string>
+    <string name="settings_decoder_header_processing">Обработка видео</string>
+    <string name="settings_decoder_profile">Профиль mpv</string>
+    <string name="settings_decoder_profile_summary">Предустановка общей конфигурации mpv</string>
+    <string name="settings_decoder_profile_fast">Быстрый (Fast)</string>
+    <string name="settings_decoder_profile_fast_summary">Максимальная производительность и низкое энергопотребление. Рекомендуется для большинства устройств.</string>
+    <string name="settings_decoder_profile_default">По умолчанию (Default)</string>
+    <string name="settings_decoder_profile_default_summary">Конфигурация mpv по умолчанию. Сбалансированные параметры.</string>
+    <string name="settings_decoder_profile_high_quality">Высокое качество (High Quality)</string>
+    <string name="settings_decoder_profile_high_quality_summary">Включает высококачественные фильтры масштабирования и дебандинга. Может увеличить нагрев и разряд батареи.</string>
+    <string name="settings_decoder_profile_gpu_hq">GPU Высокое качество (GPU High Quality)</string>
+    <string name="settings_decoder_profile_gpu_hq_summary">Профиль высокого качества, специально оптимизированный для современных видеопроцессоров.</string>
+    <string name="settings_decoder_profile_low_latency">Низкая задержка (Low Latency)</string>
+    <string name="settings_decoder_profile_low_latency_summary">Минимальная задержка воспроизведения. Идеально подходит для прямых трансляций и стриминга игр.</string>
+    <string name="settings_decoder_profile_sw_fast">Программный быстрый (Software Fast)</string>
+    <string name="settings_decoder_profile_sw_fast_summary">Самый быстрый профиль программного декодирования. Используется при недоступности аппаратного ускорения.</string>
+
+    <string name="settings_decoder_override_profile">Переопределить настройки профиля</string>
+    <string name="settings_decoder_override_profile_summary">Ручная настройка масштабирования и дебандинга вместо предустановок</string>
+
+    <string name="settings_decoder_vo">Видеовыход (VO)</string>
+    <string name="settings_decoder_vo_summary">Драйвер вывода, используемый для рендеринга видео</string>
+    <string name="settings_decoder_vo_gpu">GPU (Legacy)</string>
+    <string name="settings_decoder_vo_gpu_summary">Стандартный GPU-рендерер. Высокая стабильность и совместимость.</string>
+    <string name="settings_decoder_vo_gpu_next">GPU Next (Новое поколение)</string>
+    <string name="settings_decoder_vo_gpu_next_summary">Экспериментальный рендерер на базе libplacebo. Поддерживает передовые возможности.</string>
+
+    <string name="settings_decoder_gpu_api">Графический API (GPU)</string>
+    <string name="settings_decoder_gpu_api_summary">Графический API, используемый рендерером</string>
+    <string name="settings_decoder_gpu_api_opengl">OpenGL ES</string>
+    <string name="settings_decoder_gpu_api_opengl_summary">Графический API по умолчанию. Быстрый и повсеместно поддерживаемый.</string>
+    <string name="settings_decoder_gpu_api_vulkan">Vulkan</string>
+    <string name="settings_decoder_gpu_api_vulkan_summary">Современный API с низкими накладными расходами. Обеспечивает лучшую производительность на совместимых устройствах.</string>
+
+    <string name="settings_decoder_hwdec">Аппаратное декодирование</string>
+    <string name="settings_decoder_hwdec_summary">Политика аппаратного ускорения видео</string>
+    <string name="settings_decoder_hwdec_mediacodec">MediaCodec (Surface)</string>
+    <string name="settings_decoder_hwdec_mediacodec_summary">Рендеринг напрямую в Android Surface. Максимальная производительность и энергоэффективность.</string>
+    <string name="settings_decoder_hwdec_mediacodec_copy">MediaCodec Copy (RAM)</string>
+    <string name="settings_decoder_hwdec_mediacodec_copy_summary">Копирует кадры в системную память. Позволяет применять пост-обработку mpv, но работает медленнее.</string>
+    <string name="settings_decoder_hwdec_no">Отключено (Программное)</string>
+    <string name="settings_decoder_hwdec_no_summary">Декодирование силами процессора. Медленнее, но позволяет обойти аппаратные сбои.</string>
+
+    <string name="settings_decoder_video_sync">Синхронизация видео</string>
+    <string name="settings_decoder_video_sync_summary">Способ синхронизации аудио и видео</string>
+    <string name="settings_decoder_video_sync_audio">По звуку (Audio)</string>
+    <string name="settings_decoder_video_sync_audio_summary">Подгонка видеокадров под аудиопоток. Самый стабильный режим.</string>
+    <string name="settings_decoder_video_sync_display_resample">Ресэмплинг дисплея (Display Resample)</string>
+    <string name="settings_decoder_video_sync_display_resample_summary">Ресэмплинг звука под частоту обновления экрана с автоматической компенсацией рассинхронизации.</string>
+    <string name="settings_decoder_video_sync_display_resample_vdrop">Display Resample V-Drop</string>
+    <string name="settings_decoder_video_sync_display_resample_vdrop_summary">Ресэмплинг звука с пропуском видеокадров для компенсации смещения.</string>
+    <string name="settings_decoder_video_sync_display_resample_desync">Display Resample Desync</string>
+    <string name="settings_decoder_video_sync_display_resample_desync_summary">Ресэмплинг звука без жесткой компенсации аудио/видео рассинхронизации.</string>
+    <string name="settings_decoder_video_sync_display_tempo">Display Tempo</string>
+    <string name="settings_decoder_video_sync_display_tempo_summary">Аналогично Display Resample, но предотвращает изменение высоты тона звука.</string>
+    <string name="settings_decoder_video_sync_display_vdrop">Display V-Drop</string>
+    <string name="settings_decoder_video_sync_display_vdrop_summary">Пропуск или дублирование видеокадров для синхронизации.</string>
+    <string name="settings_decoder_video_sync_display_adrop">Display A-Drop</string>
+    <string name="settings_decoder_video_sync_display_adrop_summary">Пропуск или повтор аудиоданных для компенсации рассинхронизации с видео.</string>
+    <string name="settings_decoder_video_sync_display_desync">Display Desync</string>
+    <string name="settings_decoder_video_sync_display_desync_summary">Синхронизация видео с экраном, звук воспроизводится независимо.</string>
+
+    <string name="settings_decoder_scale">Алгоритм увеличения (scale)</string>
+    <string name="settings_decoder_scale_summary">Алгоритм ресэмплинга при увеличении разрешения видео</string>
+    <string name="settings_decoder_dscale">Алгоритм уменьшения (dscale)</string>
+    <string name="settings_decoder_dscale_summary">Алгоритм ресэмплинга при уменьшении разрешения видео</string>
+    <string name="settings_decoder_cscale">Масштабирование цветности (cscale)</string>
+    <string name="settings_decoder_cscale_summary">Алгоритм масштабирования цветоразностных компонентов (хрома)</string>
+    <string name="settings_decoder_scale_antiring">Анти-звон (scale-antiring)</string>
+    <string name="settings_decoder_scale_antiring_summary">Снижение артефактов ореолов и звона по краям контуров при масштабировании</string>
+    <string name="settings_decoder_scale_bilinear">Bilinear</string>
+    <string name="settings_decoder_scale_bilinear_summary">Билинейная фильтрация (самая быстрая, низкое качество). По умолчанию в быстром профиле.</string>
+    <string name="settings_decoder_scale_spline36">Spline36</string>
+    <string name="settings_decoder_scale_spline36_summary">Масштабирование Spline36. Четкий алгоритм с отличным балансом качества и скорости.</string>
+    <string name="settings_decoder_scale_ewa_lanczos">EWA Lanczos (Jinc)</string>
+    <string name="settings_decoder_scale_ewa_lanczos_summary">Эллиптический средневзвешенный Lanczos. Ресурсоемкий, но великолепное качество.</string>
+    <string name="settings_decoder_scale_lanczos">Lanczos</string>
+    <string name="settings_decoder_scale_lanczos_summary">Масштабирование Lanczos. Хороший баланс между четкостью и быстродействием.</string>
+    <string name="settings_decoder_scale_ewa_lanczos_sharp">EWA Lanczos Sharp</string>
+    <string name="settings_decoder_scale_ewa_lanczos_sharp_summary">Более четкая версия EWA Lanczos. По умолчанию в профиле высокого качества.</string>
+    <string name="settings_decoder_scale_ewa_lanczos_4sharpest">EWA Lanczos 4Sharpest</string>
+    <string name="settings_decoder_scale_ewa_lanczos_4sharpest_summary">Предельно резкий фильтр, подвержен появлению звона.</string>
+    <string name="settings_decoder_scale_mitchell">Mitchell-Netravali</string>
+    <string name="settings_decoder_scale_mitchell_summary">Кубический сплайн. Оптимальный компромисс между размытием и артефактами.</string>
+    <string name="settings_decoder_scale_hermite">Hermite</string>
+    <string name="settings_decoder_scale_hermite_summary">Сплайн Эрмита. Очень быстрый, но может вызывать блочность.</string>
+    <string name="settings_decoder_scale_catmull_rom">Catmull-Rom</string>
+    <string name="settings_decoder_scale_catmull_rom_summary">Более резкий, чем Mitchell, но может приводить к появлению артефактов звона.</string>
+    <string name="settings_decoder_scale_oversample">Oversample</string>
+    <string name="settings_decoder_scale_oversample_summary">Устраняет эффект дрожания (judder) за счет небольшого смягчения резкости.</string>
+
+    <string name="settings_decoder_deband">Дебандинг (Debanding)</string>
+    <string name="settings_decoder_deband_summary">Сглаживание ступенчатых цветовых переходов и градиентов</string>
+    <string name="settings_decoder_deband_iterations">Количество проходов (Iterations)</string>
+    <string name="settings_decoder_deband_iterations_summary">Количество шагов фильтрации на пиксель. Больше — качественнее, но выше нагрузка. (По умолчанию: 1)</string>
+    <string name="settings_decoder_deband_threshold">Порог (Threshold)</string>
+    <string name="settings_decoder_deband_threshold_summary">Порог срабатывания фильтра. Выше — сильнее сглаживание, но теряются мелкие детали. (По умолчанию: 48)</string>
+    <string name="settings_decoder_deband_range">Радиус (Range)</string>
+    <string name="settings_decoder_deband_range_summary">Начальный радиус поиска градиентов. Больший радиус лучше находит мягкие градиенты. (По умолчанию: 16)</string>
+    <string name="settings_decoder_deband_grain">Зернистость (Grain)</string>
+    <string name="settings_decoder_deband_grain_summary">Добавление легкого шума для маскировки остаточных полос градиента. (По умолчанию: 32)</string>
+
+    <string name="settings_decoder_hdr_settings">Настройки HDR</string>
+    <string name="settings_decoder_hdr_settings_summary">Настройка аппаратного вывода HDR, тональной компрессии, усиления и охвата</string>
+    <string name="settings_decoder_hdr_passthrough">Прямой вывод HDR (Passthrough)</string>
+    <string name="settings_decoder_hdr_passthrough_summary">Передача исходного сигнала HDR напрямую на экран для пиковой аппаратной яркости. Программный тонемаппинг отключается.</string>
+    <string name="settings_decoder_tone_mapping">Алгоритм тональной компрессии</string>
+    <string name="settings_decoder_tone_mapping_auto">Авто</string>
+    <string name="settings_decoder_tone_mapping_auto_summary">Автоматический выбор наилучшего отображения для контента</string>
+    <string name="settings_decoder_tone_mapping_bt2446a">BT.2446a</string>
+    <string name="settings_decoder_tone_mapping_bt2446a_summary">Современный эталонный стандарт преобразования HDR в SDR</string>
+    <string name="settings_decoder_tone_mapping_spline">Spline</string>
+    <string name="settings_decoder_tone_mapping_spline_summary">Плавное криволинейное отображение. Сохраняет больше деталей в ярких зонах</string>
+    <string name="settings_decoder_tone_mapping_reinhard">Reinhard</string>
+    <string name="settings_decoder_tone_mapping_reinhard_summary">Классический алгоритм тональной компрессии. Предотвращает пересветы</string>
+    <string name="settings_decoder_tone_mapping_max_boost">Максимальное усиление яркости</string>
+    <string name="settings_decoder_tone_mapping_max_boost_summary">Позволяет бликам превышать кривую тонов для более сочного контраста. (По умолчанию: 1.50)</string>
+    <string name="settings_decoder_gamut_mapping_mode">Отображение цветового охвата</string>
+    <string name="settings_decoder_gamut_mapping_mode_summary">Стратегия сжатия широкого пространства HDR (BT.2020) в охват SDR экранов</string>
+    <string name="settings_decoder_gamut_mapping_perceptual">Перцепционный (Perceptual)</string>
+    <string name="settings_decoder_gamut_mapping_perceptual_summary">Сохраняет естественные цветовые отношения для гармоничных переходов</string>
+    <string name="settings_decoder_gamut_mapping_clip">Отсечение (Clip)</string>
+    <string name="settings_decoder_gamut_mapping_clip_summary">Жестко обрезает цвета, выходящие за пределы диапазона SDR</string>
+    <string name="settings_decoder_gamut_mapping_relative">Относительный (Relative)</string>
+    <string name="settings_decoder_gamut_mapping_relative_summary">Масштабирует цвета на основе сопоставления точки белого</string>
+    <string name="settings_decoder_gamut_mapping_saturation">Насыщенность (Saturation)</string>
+    <string name="settings_decoder_gamut_mapping_saturation_summary">Приоритет сохранения максимальной насыщенности цветов</string>
+    <string name="settings_decoder_gamut_mapping_desaturate">Обесцвечивание (Desaturate)</string>
+    <string name="settings_decoder_gamut_mapping_desaturate_summary">Смещает яркие оттенки к белому цвету для укладки в цветовой охват</string>
+
+    <string name="settings_decoder_framedrop">Политика пропуска кадров</string>
+    <string name="settings_decoder_framedrop_summary">Стратегия при нехватке производительности</string>
+    <string name="settings_decoder_framedrop_vo">VO (рекомендуется)</string>
+    <string name="settings_decoder_framedrop_vo_summary">Пропуск кадров на этапе видеовыхода. Оптимальный баланс производительности и синхронизации.</string>
+    <string name="settings_decoder_framedrop_decoder">Декодер (агрессивно)</string>
+    <string name="settings_decoder_framedrop_decoder_summary">Пропуск кадров на этапе декодирования. Эффективно, но может вызывать артефакты изображения.</string>
+    <string name="settings_decoder_framedrop_no">Отключено</string>
+    <string name="settings_decoder_framedrop_no_summary">Никогда не пропускать кадры. Рекомендуется только для мощных устройств во избежание рассинхронизации.</string>
+
+    <string name="settings_decoder_header_info">Информация</string>
+    <string name="settings_decoder_codec_info">Информация о кодеках</string>
+    <string name="settings_decoder_codec_info_summary">Просмотр поддерживаемых аудио/видео декодеров и возможностей аппаратного ускорения</string>
+    <string name="settings_decoder_codec_group_all">Все</string>
+    <string name="settings_decoder_codec_group_video">Видео</string>
+    <string name="settings_decoder_codec_group_audio">Аудио</string>
+    <string name="settings_decoder_codec_group_hardware">Аппаратные</string>
+    <string name="settings_decoder_hw_decoding">Аппаратное декодирование</string>
+    <string name="settings_decoder_sw_decoding">Программное декодирование</string>
+    <string name="settings_decoder_codec_count">Декодеров: %1$d</string>
+    <string name="settings_decoder_codec_empty">Подходящие декодеры не найдены</string>
+
+    <string name="settings_subtitle_codepage">Кодировка субтитров</string>
+    <string name="settings_subtitle_codepage_summary">Кодировка символов для внешних файлов субтитров</string>
+    <string name="settings_subtitle_codepage_auto">Автоопределение (универсальная)</string>
+    <string name="settings_subtitle_codepage_auto_summary">Автоматическое определение (UTF-8/универсальная). Подходит для большинства файлов.</string>
+    <string name="settings_subtitle_codepage_utf8">UTF-8</string>
+    <string name="settings_subtitle_codepage_utf8_summary">Современный стандарт. Используйте, если субтитры отображаются некорректно.</string>
+    <string name="settings_subtitle_codepage_gbk">GBK (упрощенный китайский)</string>
+    <string name="settings_subtitle_codepage_gbk_summary">Традиционная кодировка для старых файлов субтитров на упрощенном китайском.</string>
+    <string name="settings_subtitle_codepage_big5">BIG5 (традиционный китайский)</string>
+    <string name="settings_subtitle_codepage_big5_summary">Стандартная кодировка для традиционного китайского (Тайвань/Гонконг).</string>
+
+    <string name="settings_audio_output_aaudio_summary">Современный API низкозадержечного вывода звука в Android.</string>
+    <string name="settings_audio_output_audiotrack_summary">Стандартный вывод звука Android на базе Java. Надежный и совместимый.</string>
+    <string name="settings_audio_output_opensles_summary">Низкоуровневый C API. Используйте, если возникают проблемы с другими бэкендами.</string>
+
+    <string name="settings_lang_preferred_language_none">По умолчанию (не выбрано)</string>
+    <string name="settings_lang_add_language">Добавить язык</string>
+    <string name="settings_lang_select_language">Выбрать язык</string>
+    <string name="settings_lang_all_languages">Все языки</string>
+
+    <string name="settings_about_version">Версия</string>
+    <string name="settings_about_description">Мощный современный медиаплеер для Android, объединяющий локальные файлы и удаленные сетевые ресурсы.</string>
+
+    <string name="settings_about_header_legal">Юридическая информация</string>
+    <string name="settings_about_libraries">Сторонние библиотеки</string>
+    <string name="settings_about_libraries_summary">Версии используемых библиотек движка и открытые лицензии</string>
+    <string name="settings_about_copyright">Авторские права</string>
+    <string name="settings_about_copyright_summary">Информация об авторских правах и условиях лицензии</string>
+
+    <string name="settings_about_header_links">Ссылки</string>
+    <string name="settings_about_developer">Разработчик</string>
+    <string name="settings_about_developer_summary">Перейти в профиль разработчика на GitHub</string>
+    <string name="settings_about_github">Репозиторий GitHub</string>
+    <string name="settings_about_github_summary">Исходный код, отчеты об ошибках и вклад в развитие проекта</string>
+    <string name="settings_about_telegram">Канал в Telegram</string>
+    <string name="settings_about_telegram_summary">Присоединяйтесь к сообществу для новостей и обсуждений</string>
+
+    <string name="settings_advanced_header_security">Безопасность mpv</string>
+    <string name="settings_advanced_tls_verify">Проверка сертификатов TLS</string>
+    <string name="settings_advanced_tls_verify_summary">Проверять сертификаты TLS/SSL при подключении по HTTPS. Отключите для самоподписанных сертификатов в локальной сети.</string>
+
+    <string name="settings_advanced_header_connection">Сетевое подключение</string>
+    <string name="settings_advanced_user_agent">User-Agent</string>
+    <string name="settings_advanced_user_agent_summary">Пользовательская строка User-Agent для HTTP-запросов</string>
+    <string name="settings_advanced_user_agent_empty_error">User-Agent не может быть пустым</string>
+    <string name="settings_advanced_timeout">Тайм-аут подключения</string>
+    <string name="settings_advanced_timeout_summary">Максимальное время ожидания ответа сети (в секундах)</string>
+
+    <string name="settings_advanced_header_cache">Буфер и кэш mpv</string>
+    <string name="settings_advanced_cache_secs">Время прямого кэширования</string>
+    <string name="settings_advanced_cache_secs_summary">Длительность невоспроизведенного видео для предзагрузки в буфер (в секундах)</string>
+    <string name="settings_advanced_cache_back_secs">Время обратного кэширования</string>
+    <string name="settings_advanced_cache_back_secs_summary">Длительность уже просмотренного видео, сохраняемого в буфере (в секундах)</string>
+    <string name="settings_advanced_demuxer_max_bytes">Размер прямого буфера</string>
+    <string name="settings_advanced_demuxer_max_bytes_summary">Максимальный объем памяти для буферизации предстоящего контента</string>
+    <string name="settings_advanced_demuxer_max_back_bytes">Размер обратного буфера</string>
+    <string name="settings_advanced_demuxer_max_back_bytes_summary">Максимальный объем памяти для буфера уже просмотренного контента</string>
+
+    <!-- Storage and Cache -->
+    <string name="settings_advanced_header_storage_cache">Память и кэш</string>
+    <string name="settings_advanced_clear_thumbnails">Кэш миниатюр</string>
+    <string name="settings_advanced_clear_thumbnails_summary">Очистить кэшированные кадры предпросмотра видео</string>
+    <string name="settings_advanced_clear_video_cache">Кэш видеопотоков</string>
+    <string name="settings_advanced_clear_video_cache_summary">Очистить буферные файлы сетевых видеопотоков ExoPlayer</string>
+    <string name="settings_advanced_clear_history">Очистить историю воспроизведения</string>
+    <string name="settings_advanced_clear_history_summary">Удалить весь сохраненный прогресс и историю просмотров</string>
+    <string name="settings_advanced_history_count_format">Всего элементов: %d</string>
+    <string name="settings_advanced_history_cleared">История воспроизведения очищена</string>
+    <string name="settings_cache_cleared">Кэш успешно очищен</string>
+
+    <!-- Notification -->
+    <string name="notification_playback_channel_name">Управление воспроизведением</string>
+    <string name="notification_playback_channel_description">Уведомление для управления фоновым воспроизведением</string>
+
+    <string name="notification_screenshot_channel_name">Снимки экрана</string>
+    <string name="notification_screenshot_channel_description">Уведомления о сохраненных снимках экрана</string>
+    <string name="notification_screenshot_saved">Снимок экрана сохранен</string>
+
+    <string name="error_permission_denied_storage">Доступ запрещен: требуется разрешение на доступ к накопителю</string>
+
+    <!-- File Management -->
+    <string name="file_action_copy">Копировать</string>
+    <string name="file_action_move">Переместить</string>
+    <string name="file_action_rename">Переименовать</string>
+    <string name="file_action_delete">Удалить</string>
+    <string name="file_action_add_to_playlist">Добавить в плейлист</string>
+    <string name="file_action_clear_selection">Снять выбор</string>
+    <string name="file_action_create_folder">Новая папка</string>
+
+    <string name="file_dialog_rename_title">Переименовать</string>
+    <string name="file_dialog_delete_title">Удалить выбранные элементы?</string>
+    <string name="file_dialog_delete_confirm">Удалить</string>
+    <string name="file_dialog_create_folder_title">Создать новую папку</string>
+    <string name="file_dialog_create_folder_hint">Имя папки</string>
+    <string name="file_dialog_select_target_directory">Выберите папку назначения</string>
+    <string name="file_dialog_device_home_path">Устройство хранения</string>
+    <string name="file_dialog_empty_folder">Нет вложенных папок</string>
+    <string name="file_dialog_copy_here">Копировать сюда</string>
+    <string name="file_dialog_move_here">Переместить сюда</string>
+    <string name="file_dialog_conflict_title">Конфликт имен файлов</string>
+    <string name="file_dialog_conflict_message">В месте назначения уже есть файл с именем «%1$s».</string>
+    <string name="file_dialog_conflict_overwrite">Заменить</string>
+    <string name="file_dialog_conflict_skip">Пропустить</string>
+    <string name="file_dialog_conflict_apply_all">Применить ко всем конфликтам</string>
+
+    <string name="file_operation_copying">Копирование файлов…</string>
+    <string name="file_operation_moving">Перемещение файлов…</string>
+    <string name="file_operation_deleting">Удаление файлов…</string>
+    <string name="file_operation_cancel">Отмена</string>
+    <string name="file_operation_completed">Файловая операция завершена</string>
+    <string name="file_operation_failed">Ошибка файловой операции: %1$s</string>
+    <string name="file_operation_notification_channel_name">Фоновые операции с файлами</string>
+    <string name="file_operation_notification_channel_desc">Отображает ход выполнения операций копирования, перемещения и удаления файлов.</string>
+
+    <!-- File Task Queue -->
+    <string name="file_task_queue_title">Очередь операций с файлами</string>
+    <string name="file_task_clear_completed">Очистить завершенные</string>
+    <string name="file_task_section_active">Активная задача</string>
+    <string name="file_task_section_pending">Ожидающие задачи (%d)</string>
+    <string name="file_task_section_completed">История завершенных (%d)</string>
+    <string name="file_task_cancel">Отмена</string>
+    <string name="file_task_empty">Нет операций с файлами</string>
+    <string name="file_task_status_pending">В очереди</string>
+    <string name="file_task_status_completed">Завершено</string>
+    <string name="file_task_status_failed">Ошибка</string>
+    <string name="file_task_status_cancelled">Отменено</string>
+</resources>
