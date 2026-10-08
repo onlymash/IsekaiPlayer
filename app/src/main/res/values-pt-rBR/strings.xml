@@ -1,0 +1,757 @@
+<!--
+  ~ IsekaiPlayer - Sovereign above myriad realms; shatter every mortal cipher.
+  ~ Copyright (C) 2026 onlymash
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="app_name">Isekai Player</string>
+    <string name="app_slogan_short">Soberano sobre inúmeros reinos; quebre toda cifra mortal.</string>
+
+    <string name="settings_category_appearance">Aparência</string>
+    <string name="settings_category_appearance_summary">Personalize tema, modo escuro e configurações de alto contraste</string>
+    <string name="settings_category_player">Player</string>
+    <string name="settings_category_player_summary">Configure o comportamento de reprodução, layout da interface e efeitos de botões</string>
+    <string name="settings_category_gestures">Gestos</string>
+    <string name="settings_category_gestures_summary">Gerencie ações de deslize e toque para busca, volume e brilho</string>
+    <string name="settings_category_decoder">Decodificador</string>
+    <string name="settings_category_decoder_summary">Ajuste aceleração de hardware, saída de vídeo e algoritmos de redimensionamento</string>
+    <string name="settings_category_audio">Áudio</string>
+    <string name="settings_category_audio_summary">Gerencie faixas de áudio, prioridade de saída e normalização de modo noturno</string>
+    <string name="settings_category_subtitle">Legendas</string>
+    <string name="settings_category_subtitle_summary">Personalize idioma, aparência e codificação de texto das legendas</string>
+    <string name="settings_category_advanced">Avançado</string>
+    <string name="settings_category_advanced_summary">Configure tamanhos de buffer, cache prévio e posterior, conexões de rede e segurança</string>
+    <string name="settings_category_general">Geral</string>
+    <string name="settings_category_general_summary">Altere o idioma do aplicativo, resposta tátil e navegação</string>
+    <string name="settings_category_about">Sobre</string>
+    <string name="settings_category_about_summary">Veja a versão do aplicativo, licenças de código aberto e links</string>
+
+    <string name="settings_appearance_header_theme">Tema</string>
+
+    <string name="settings_appearance_theme_mode">Modo do tema</string>
+    <string name="settings_appearance_theme_mode_system">Padrão do sistema</string>
+    <string name="settings_appearance_theme_mode_light">Claro</string>
+    <string name="settings_appearance_theme_mode_dark">Escuro</string>
+    <string name="settings_appearance_theme_high_contrast">Tema escuro de alto contraste</string>
+    <string name="settings_appearance_theme_high_contrast_summary">Aprofunda o fundo para maior contraste</string>
+
+    <string name="settings_general_header_general">Geral</string>
+    <string name="settings_general_app_language">Idioma do app</string>
+    <string name="settings_general_app_language_summary">Altere o idioma de exibição do aplicativo</string>
+    <string name="settings_general_header_navigation">Navegação</string>
+
+    <string name="settings_general_haptics">Resposta tátil</string>
+    <string name="settings_general_haptics_summary">Ativa a vibração ao tocar</string>
+    <string name="settings_general_intercept_back">Navegação do botão Voltar</string>
+    <string name="settings_general_intercept_back_summary">Quando ativado, o gesto de voltar sobe na hierarquia de pastas antes de sair</string>
+
+    <!-- Backup & Restore -->
+    <string name="settings_general_header_backup">Backup e restauração</string>
+    <string name="settings_general_export_settings">Exportar backup de configurações</string>
+    <string name="settings_general_export_settings_summary">Salva todas as configurações atuais em um arquivo de backup JSON</string>
+    <string name="settings_general_import_settings">Importar backup de configurações</string>
+    <string name="settings_general_import_settings_summary">Restaura configurações a partir de um arquivo JSON (as atuais serão substituídas)</string>
+    <string name="settings_backup_export_success">Configurações exportadas com sucesso</string>
+    <string name="settings_backup_export_failed">Falha ao exportar configurações</string>
+    <string name="settings_backup_import_success">Configurações restauradas com sucesso</string>
+    <string name="settings_backup_import_failed">Falha ao importar configurações. Verifique o formato do arquivo</string>
+
+    <string name="settings_gestures_header_drag">Controles por deslizamento</string>
+    <string name="settings_gestures_header_tap">Controles por toque</string>
+    <string name="settings_gestures_horizontal_drag">Busca / Avanço</string>
+    <string name="settings_gestures_horizontal_drag_summary">Deslize horizontalmente para avançar ou retroceder a reprodução</string>
+    <string name="settings_gestures_vertical_drag_volume">Volume</string>
+    <string name="settings_gestures_vertical_drag_volume_summary">Deslize verticalmente no lado esquerdo para ajustar o volume</string>
+    <string name="settings_gestures_vertical_drag_brightness">Brilho</string>
+    <string name="settings_gestures_vertical_drag_brightness_summary">Deslize verticalmente no lado direito para ajustar o brilho</string>
+    <string name="settings_gestures_swap_volume_brightness">Inverter áreas de volume e brilho</string>
+    <string name="settings_gestures_swap_volume_brightness_summary">Inverte as áreas de controle de volume e brilho entre esquerda e direita</string>
+    <string name="settings_gestures_double_tap_seek">Toque duplo para avançar/retroceder</string>
+    <string name="settings_gestures_double_tap_seek_summary">Toque duas vezes nas laterais para avançar ou retroceder</string>
+    <string name="settings_gestures_double_tap_play_pause">Toque duplo para reproduzir/pausar</string>
+    <string name="settings_gestures_double_tap_play_pause_summary">Toque duas vezes no centro para reproduzir ou pausar</string>
+    <string name="settings_gestures_long_press">Pressione e segure para acelerar</string>
+    <string name="settings_gestures_long_press_summary">Mantenha a tela pressionada para avançar em velocidade rápida</string>
+    <string name="settings_gestures_long_press_speed">Velocidade ao pressionar e segurar</string>
+    <string name="settings_gestures_long_press_speed_summary">Ajuste a velocidade de avanço rápido durante o toque contínuo</string>
+    <string name="settings_gestures_double_tap_seek_duration">Intervalo do toque duplo</string>
+    <string name="settings_gestures_double_tap_seek_duration_summary">Tempo de salto no toque duplo: %d segundos</string>
+
+    <string name="browser_view_options_title">Opções de visualização</string>
+    <string name="browser_view_options_sort_by">Ordenar por</string>
+    <string name="browser_view_options_sort_type_name">Nome</string>
+    <string name="browser_view_options_sort_type_date">Data</string>
+    <string name="browser_view_options_sort_type_size">Tamanho</string>
+    <string name="browser_view_options_sort_type_duration">Duração</string>
+    <string name="browser_view_options_order">Ordem</string>
+    <string name="browser_view_options_order_ascending">Crescente</string>
+    <string name="browser_view_options_order_descending">Decrescente</string>
+    <string name="browser_view_options_folders_first">Pastas primeiro</string>
+    <string name="browser_view_options_show_hidden">Mostrar arquivos ocultos</string>
+    <string name="browser_view_options_show_subtitles">Mostrar arquivos de legendas</string>
+    <string name="browser_view_options_filters">Filtros</string>
+    <string name="browser_view_options_fields">Campos visíveis</string>
+    <string name="browser_view_options_field_thumbnail">Miniatura</string>
+    <string name="browser_view_options_field_item_count">Contagem de itens</string>
+    <string name="browser_view_options_field_size">Tamanho</string>
+    <string name="browser_view_options_field_duration">Duração</string>
+    <string name="browser_view_options_field_resolution">Resolução</string>
+    <string name="browser_view_options_field_date">Data</string>
+    <string name="browser_view_options_field_extension">Extensão</string>
+
+    <string name="browser_view_options_order_name_asc">A-Z</string>
+    <string name="browser_view_options_order_name_desc">Z-A</string>
+    <string name="browser_view_options_order_date_asc">Mais antigos primeiro</string>
+    <string name="browser_view_options_order_date_desc">Mais recentes primeiro</string>
+    <string name="browser_view_options_order_size_asc">Menores primeiro</string>
+    <string name="browser_view_options_order_size_desc">Maiores primeiro</string>
+    <string name="browser_view_options_order_duration_asc">Mais curtos primeiro</string>
+    <string name="browser_view_options_order_duration_desc">Mais longos primeiro</string>
+    <string name="browser_view_options_done">Concluído</string>
+
+    <string name="source_editor_title_add">Adicionar fonte</string>
+    <string name="source_editor_title_edit">Editar fonte</string>
+    <string name="source_editor_save">Salvar</string>
+    <string name="source_editor_label_name">Nome de exibição</string>
+    <string name="source_editor_label_protocol">Protocolo</string>
+    <string name="source_editor_label_host">Host / IP</string>
+    <string name="source_editor_label_port">Porta (opcional)</string>
+    <string name="source_editor_label_path_default">Caminho inicial</string>
+    <string name="source_editor_label_path_smb">Nome do compartilhamento</string>
+    <string name="source_editor_label_https">Usar HTTPS</string>
+    <string name="source_editor_label_username">Nome de usuário (opcional)</string>
+    <string name="source_editor_label_password">Senha (opcional)</string>
+    <string name="source_editor_error_required">Nome e Host são obrigatórios</string>
+    <string name="source_editor_error_smb_share_required">O nome do compartilhamento é obrigatório para SMB</string>
+
+    <!-- Common Strings -->
+    <string name="common_close">Fechar</string>
+    <string name="common_more">Mais</string>
+    <string name="common_expand">Expandir</string>
+    <string name="common_collapse">Recolher</string>
+    <string name="common_edit">Editar</string>
+    <string name="common_delete">Excluir</string>
+    <string name="common_back">Voltar</string>
+    <string name="common_cancel">Cancelar</string>
+    <string name="common_retry">Tentar novamente</string>
+    <string name="common_refresh">Atualizar</string>
+    <string name="common_settings">Configurações</string>
+    <string name="common_replay">Repetir</string>
+    <string name="common_move_up">Mover para cima</string>
+    <string name="common_move_down">Mover para baixo</string>
+    <string name="common_none">Nenhum</string>
+    <string name="common_all">Todos</string>
+    <string name="common_reset">Redefinir</string>
+    <string name="common_on">Ativado</string>
+    <string name="common_off">Desativado</string>
+    <string name="common_preview">Pré-visualização</string>
+
+    <!-- Browser Screen -->
+    <string name="browser_menu_sources">Fontes</string>
+    <string name="browser_menu_sort">Ordenar</string>
+    <string name="browser_menu_search">Pesquisar</string>
+    <string name="browser_permission_grant">Conceder permissão de acesso a todos os arquivos</string>
+    <string name="browser_permission_required">A permissão de acesso a todos os arquivos é necessária para escanear vídeos locais e carregar legendas externas automaticamente</string>
+    <string name="browser_media_list_empty">Nenhum vídeo encontrado</string>
+    <string name="browser_search_placeholder_collapsed">Pesquisar</string>
+    <string name="browser_search_placeholder_expanded">Pesquisar na pasta atual</string>
+    <string name="browser_search_prompt">Digite os termos de pesquisa</string>
+    <string name="browser_media_items_count">%1$d itens</string>
+    <string name="browser_subtitle_no_matching_video">Nenhum vídeo correspondente encontrado</string>
+    <string name="browser_fab_menu_add_source">Adicionar fonte remota</string>
+    <string name="browser_fab_menu_play_network_stream">Reproduzir link de rede</string>
+    <string name="browser_fab_toggle_menu_content_description">Alternar menu</string>
+    <string name="browser_fab_toggle_menu_expanded_description">Expandido</string>
+    <string name="browser_fab_toggle_menu_collapsed_description">Recolhido</string>
+    <string name="browser_fab_toggle_menu_close_action_label">Fechar menu</string>
+
+    <string name="network_stream_title">Transmissão de rede</string>
+    <string name="network_stream_input_label">URL do stream</string>
+    <string name="network_stream_input_placeholder">Digite a URL (http://, https://, etc.)</string>
+    <string name="network_stream_play_button">Reproduzir</string>
+    <string name="network_stream_history_title">Histórico de streams</string>
+    <string name="network_stream_history_empty">Nenhum histórico de transmissões</string>
+    <string name="network_stream_clear_history">Limpar histórico</string>
+    <string name="network_stream_invalid_url">Digite uma URL válida</string>
+    <string name="network_stream_copy_link">Copiar link</string>
+    <string name="network_stream_link_copied">Link copiado para a área de transferência</string>
+    <string name="network_stream_delete_single_dialog_title">Excluir registro</string>
+    <string name="network_stream_delete_single_dialog_message">Tem certeza de que deseja excluir este registro de reprodução?</string>
+    <string name="network_stream_clear_all_dialog_title">Limpar todos os registros</string>
+    <string name="network_stream_clear_all_dialog_message">Tem certeza de que deseja limpar todo o histórico de transmissões? Esta ação não pode ser desfeita.</string>
+
+    <!-- Source -->
+    <string name="source_selection_devices_list_title">Dispositivos de armazenamento</string>
+    <string name="source_selection_manage">Gerenciar fontes</string>
+    <string name="source_storage_usage">%1$s disponíveis de %2$s</string>
+    <string name="source_local_internal_desc">Arquivos do dispositivo local</string>
+    <string name="source_local_external_desc">Armazenamento externo</string>
+    <string name="source_remote_header">Fontes remotas</string>
+    <string name="source_internal_storage_name">Armazenamento interno</string>
+    <string name="source_manager_title">Gerenciar fontes</string>
+    <string name="source_manager_empty">Nenhuma fonte remota adicionada</string>
+    <string name="source_manager_add">Adicionar fonte remota</string>
+    <string name="source_manager_delete_title">Excluir fonte</string>
+    <string name="source_manager_delete_message">Tem certeza de que deseja excluir \"%1$s\"? Esta ação não pode ser desfeita.</string>
+
+    <!-- Drawer Categories & History & Playlist -->
+    <string name="drawer_library_section_title">Biblioteca</string>
+    <string name="playlist_title">Listas de reprodução</string>
+    <string name="playlist_subtitle">Coleções de mídia personalizadas</string>
+    <string name="playlist_create_dialog_title">Nova lista de reprodução</string>
+    <string name="playlist_create_dialog_placeholder">Nome da lista</string>
+    <string name="playlist_create_option_blank">Criar lista vazia</string>
+    <string name="playlist_create_option_m3u_link">Adicionar lista M3U por link</string>
+    <string name="playlist_create_option_m3u_file">Adicionar lista via arquivo M3U</string>
+    <string name="playlist_create_title_blank">Nova lista de reprodução</string>
+    <string name="playlist_create_title_m3u_link">Importar lista M3U via link</string>
+    <string name="playlist_create_title_m3u_file">Importar lista M3U via arquivo</string>
+    <string name="playlist_create_m3u_url_placeholder">URL do link (http://, https://…)</string>
+    <string name="playlist_create_m3u_file_select">Selecionar arquivo M3U</string>
+    <string name="playlist_create_m3u_file_selected">Arquivo selecionado: %s</string>
+    <string name="playlist_create_import_button">Importar</string>
+    <string name="playlist_create_next_button">Avançar</string>
+    <string name="playlist_create_previous_button">Voltar</string>
+    <string name="playlist_import_error_invalid_url">Digite um link HTTP ou HTTPS válido</string>
+    <string name="playlist_import_error_network">Falha ao carregar lista. Verifique a rede ou a URL</string>
+    <string name="playlist_import_error_parse">Falha ao processar conteúdo M3U. Verifique o formato do arquivo</string>
+    <string name="playlist_import_error_title_empty">O nome da lista de reprodução não pode ficar vazio</string>
+    <string name="playlist_type_m3u_link">Link M3U</string>
+    <string name="playlist_type_m3u_file">Arquivo M3U</string>
+    <string name="playlist_move_up">Mover para cima</string>
+    <string name="playlist_move_down">Mover para baixo</string>
+    <string name="playlist_rename_dialog_title">Renomear lista de reprodução</string>
+    <string name="playlist_empty">Nenhuma lista criada ainda</string>
+    <string name="playlist_items_empty">Não há vídeos nesta lista de reprodução</string>
+    <string name="playlist_play_all">Reproduzir tudo</string>
+    <string name="playlist_item_count">%d itens</string>
+    <string name="playlist_delete_dialog_title">Excluir lista de reprodução</string>
+    <string name="playlist_delete_dialog_message">Tem certeza de que deseja excluir \"%s\"?</string>
+    <string name="playback_history_title">Histórico de reprodução</string>
+    <string name="playback_history_subtitle">Progresso e histórico de exibição</string>
+    <string name="playback_history_search_placeholder_expanded">Pesquisar no histórico</string>
+    <string name="playlist_search_placeholder_expanded">Pesquisar vídeos na lista</string>
+    <string name="playback_history_empty">Nenhum histórico de reprodução ainda</string>
+    <string name="playback_history_clear_all">Limpar histórico</string>
+    <string name="playback_history_clear_dialog_title">Limpar histórico de reprodução</string>
+    <string name="playback_history_clear_dialog_message">Tem certeza de que deseja limpar todo o histórico de reprodução de vídeos? Esta ação não pode ser desfeita.</string>
+    <string name="playback_history_delete_dialog_title">Excluir registro</string>
+    <string name="playback_history_delete_dialog_message">Tem certeza de que deseja excluir este registro do histórico?</string>
+
+    <!-- Multi-Selection & Action Toolbar -->
+    <string name="browser_selection_count">%d selecionados</string>
+    <string name="browser_selection_select_all">Selecionar tudo</string>
+    <string name="browser_selection_deselect_all">Inverter seleção</string>
+    <string name="browser_selection_exit">Sair do modo de seleção</string>
+    <string name="playlist_add_to">Adicionar à lista</string>
+    <string name="playlist_select_target_title">Adicionar à lista</string>
+    <string name="playlist_added_toast">%1$d item(ns) adicionado(s) a \"%2$s\"</string>
+    <string name="playlist_readonly">Somente leitura</string>
+
+    <!-- Player Quick Controls -->
+    <string name="player_control_brightness">Brilho</string>
+    <string name="player_control_system_volume">Volume do sistema</string>
+    <string name="player_control_player_volume">Volume do player</string>
+    <string name="player_control_rewind">Retroceder %d segundos</string>
+    <string name="player_control_forward">Avançar %d segundos</string>
+    <string name="player_control_previous">Anterior</string>
+    <string name="player_control_next">Próximo</string>
+    <string name="player_control_play_pause">Reproduzir/Pausar</string>
+    <string name="player_control_play">Reproduzir</string>
+    <string name="player_control_pause">Pausar</string>
+    <string name="player_control_playback_speed">Velocidade de reprodução</string>
+    <string name="player_control_adjust_temporary">Ajuste temporário</string>
+    <string name="player_audio_delay">Atraso de áudio</string>
+    <string name="player_subtitle_delay">Atraso da legenda</string>
+    <string name="settings_player_playback_speed_summary">Ajusta a velocidade de reprodução padrão para todos os vídeos</string>
+    <string name="player_control_screenshot">Captura de tela</string>
+    <string name="player_control_frame_step_forward">Próximo quadro</string>
+    <string name="player_control_frame_step_backward">Quadro anterior</string>
+    <string name="player_control_lock">Bloquear controles</string>
+    <string name="player_control_unlock">Desbloquear controles</string>
+    <string name="player_control_enter_pip">Modo PiP (Picture-in-Picture)</string>
+    <string name="player_control_osd">Informações OSD</string>
+    <string name="player_osd_none">Desativado</string>
+    <string name="player_osd_stats_header_title">Informações</string>
+    <string name="player_osd_stats_general">Estatísticas gerais (P1)</string>
+    <string name="player_osd_stats_timings">Temporização de quadros (P2)</string>
+    <string name="player_osd_stats_cache">Entrada / Cache (P3)</string>
+    <string name="player_osd_stats_key_bindings">Atalhos de teclado (P4)</string>
+    <string name="player_osd_stats_tracks">Informações das faixas ativas (P5)</string>
+    <string name="player_status_seek_forward">+%d s</string>
+    <string name="player_status_seek_backward">-%d s</string>
+    <string name="player_status_fast_forwarding">Avanço rápido a %1$.1fX</string>
+    <string name="player_settings_player">Configurações do player</string>
+    <string name="player_settings_decoder">Configurações do decodificador</string>
+    <string name="player_settings_audio">Configurações de áudio</string>
+    <string name="player_settings_subtitle">Configurações de legenda</string>
+    <string name="player_settings_gestures">Configurações de gestos</string>
+    <string name="player_settings_advanced">Configurações avançadas</string>
+
+    <!-- Player Tracks Drawer -->
+    <string name="player_drawer_tracks_title">Faixas</string>
+    <string name="player_drawer_playlist_title">Lista de reprodução</string>
+    <string name="player_drawer_audio_tracks">Áudio</string>
+    <string name="player_drawer_subtitle_tracks">Legendas</string>
+    <string name="player_add_external_subtitle">Adicionar legenda externa</string>
+    <string name="player_error_unsupported_subtitle">Formato de legenda não suportado</string>
+    <string name="player_error_load_failed">Falha ao carregar a mídia. Verifique a rede ou o endereço do servidor</string>
+    <string name="player_drawer_video_tracks">Vídeo</string>
+    <string name="player_drawer_tracks_button">Seleção de faixas</string>
+    <string name="player_drawer_playlist_button">Lista de reprodução</string>
+
+    <!-- Player Settings -->
+    <string name="settings_search_empty">Nenhuma configuração encontrada</string>
+    <string name="settings_player_header_controls">Controles</string>
+    <string name="settings_player_seek_duration">Intervalo de busca</string>
+    <string name="settings_player_seek_duration_summary">Tempo de salto ao usar botões de busca: %d segundos</string>
+    <string name="settings_player_auto_hide_duration">Ocultar controles automaticamente</string>
+    <string name="settings_player_auto_hide_duration_summary">Ocultar controles após %1$d segundos de inatividade</string>
+    <string name="settings_player_enable_pip">Picture-in-Picture (PiP)</string>
+    <string name="settings_player_enable_pip_summary">Ativa o modo PiP automaticamente ao sair do app durante a reprodução</string>
+    <string name="settings_player_screenshot_format">Formato de captura de tela</string>
+    <string name="settings_player_screenshot_format_jpg">JPEG (.jpg)</string>
+    <string name="settings_player_screenshot_format_png">PNG (.png)</string>
+    <string name="settings_player_screenshot_format_webp">WebP (.webp)</string>
+
+    <string name="settings_player_header_ui">Interface</string>
+    <string name="settings_player_always_full_screen">Sempre em tela cheia</string>
+    <string name="settings_player_always_full_screen_summary">Oculta as barras do sistema mesmo quando os controles estiverem visíveis</string>
+
+    <string name="settings_player_layout">Layout do player</string>
+    <string name="settings_player_layout_summary">Personalize os botões de ação nos cantos da tela</string>
+    <string name="settings_player_layout_show_title_bar">Mostrar barra de título</string>
+    <string name="settings_player_layout_all_buttons">Todos os botões</string>
+
+    <string name="settings_player_scale_mode">Modo de dimensionamento</string>
+    <string name="settings_player_scale_mode_fit">Ajustar à tela</string>
+    <string name="settings_player_scale_mode_fill">Preencher tela</string>
+    <string name="settings_player_scale_mode_original">Tamanho original</string>
+
+    <string name="settings_player_button_effects">Efeitos visuais dos botões</string>
+    <string name="settings_player_button_effects_summary">Personalize a aparência e animações interativas dos botões</string>
+    <string name="settings_player_button_effects_blur">Efeito de desfoque</string>
+    <string name="settings_player_button_effects_blur_summary">Ativa o efeito de desfoque estilo vidro fosco (frosted glass)</string>
+    <string name="settings_player_button_effects_lens">Efeito de lente</string>
+    <string name="settings_player_button_effects_lens_summary">Ativa a distorção de lente nas bordas</string>
+    <string name="settings_player_button_effects_alpha">Opacidade</string>
+    <string name="settings_player_button_effects_alpha_summary">Ajuste a transparência dos botões</string>
+    <string name="settings_player_button_effects_show_border">Mostrar borda</string>
+    <string name="settings_player_button_effects_show_border_summary">Exibe uma borda de destaque ao redor dos botões</string>
+    <string name="settings_player_button_effects_border_style">Estilo de destaque</string>
+    <string name="settings_player_button_effects_border_style_directional">Direcional</string>
+    <string name="settings_player_button_effects_border_style_ambient">Luz ambiente</string>
+    <string name="settings_player_button_effects_border_style_plain">Sólido</string>
+    <string name="settings_player_button_effects_use_texture_view">Usar contêiner TextureView</string>
+    <string name="settings_player_button_effects_use_texture_view_summary">Renderiza com TextureView para obter desfoque e efeito de lente com latência zero</string>
+    <string name="settings_player_button_effects_note" formatted="false">Opções de contêiner e características\n• SurfaceView + PixelCopy (Padrão)\nO vídeo roda com o compositor de hardware (HWC), garantindo máxima eficiência energética e sem consumo extra de bateria. No entanto, a captura de fundo para o desfoque de vidro tem leve atraso de quadros.\n• TextureView\nOferece refração e desfoque de vidro em tempo real sem latência, mas aumenta o uso da GPU durante a reprodução.\n• Nota para o motor ExoPlayer\nO SurfaceView do ExoPlayer depende de restrições de layout para controlar a proporção, o que impede que o PixelCopy capture as coordenadas corretas para desfoque e distorção em tempo real. Portanto, no ExoPlayer, esses efeitos ficam desativados a menos que o TextureView esteja ativado.</string>
+    <string name="settings_player_seek_bar_style">Estilo da barra de progresso</string>
+    <string name="settings_player_seek_bar_style_wavy">Ondulada</string>
+    <string name="settings_player_seek_bar_style_straight">Reta</string>
+
+    <string name="settings_player_resume_playback">Retomar reprodução</string>
+    <string name="settings_player_resume_playback_summary">Retoma automaticamente da última posição salva</string>
+
+    <string name="settings_player_loop_mode">Modo de repetição</string>
+    <string name="settings_player_loop_mode_none">Não repetir</string>
+    <string name="settings_player_loop_mode_current">Repetir atual</string>
+    <string name="settings_player_loop_mode_sequential">Sequencial</string>
+    <string name="settings_player_loop_mode_list">Repetir lista</string>
+    <string name="settings_player_loop_mode_shuffle">Aleatório</string>
+    <string name="settings_player_loop_mode_shuffle_repeat">Repetir aleatório</string>
+
+    <string name="settings_player_remember_brightness">Lembrar brilho</string>
+    <string name="settings_player_remember_brightness_summary">Mantém o nível de brilho da sessão anterior</string>
+
+    <string name="settings_player_orientation">Orientação da tela</string>
+    <string name="settings_player_orientation_default">Padrão do sistema</string>
+    <string name="settings_player_orientation_default_summary">Segue a configuração de rotação automática do sistema</string>
+    <string name="settings_player_orientation_sensor">Automática por sensor</string>
+    <string name="settings_player_orientation_sensor_summary">Gira sempre com base nos sensores do dispositivo</string>
+    <string name="settings_player_orientation_landscape">Horizontal</string>
+    <string name="settings_player_orientation_landscape_summary">Fixar no modo horizontal (sensível ao sensor)</string>
+    <string name="settings_player_orientation_portrait">Vertical</string>
+    <string name="settings_player_orientation_portrait_summary">Fixar no modo vertical (sensível ao sensor)</string>
+    <string name="settings_player_orientation_video">Ajustar ao vídeo</string>
+    <string name="settings_player_orientation_video_summary">Alterna automaticamente com base na proporção do vídeo</string>
+
+    <string name="settings_audio_header_playback">Comportamento de reprodução</string>
+    <string name="settings_audio_header_exoplayer">Áudio do ExoPlayer</string>
+    <string name="settings_audio_header_mpv">Áudio do mpv</string>
+    <string name="settings_audio_request_focus">Solicitar foco de áudio</string>
+    <string name="settings_audio_request_focus_summary">Pausa a reprodução quando outros aplicativos emitem som</string>
+    <string name="settings_audio_enable_background_audio">Áudio em segundo plano</string>
+    <string name="settings_audio_enable_background_audio_summary">Continua reproduzindo áudio ao sair do aplicativo</string>
+    <string name="settings_audio_exo_volume">Volume do player</string>
+    <string name="settings_audio_exo_volume_summary">Define o volume do ExoPlayer (0–100%)</string>
+    <string name="settings_audio_mpv_volume">Volume do player</string>
+    <string name="settings_audio_mpv_volume_summary">Define o volume do mpv (0–200%)</string>
+    <string name="settings_audio_preferred_language">Idioma de áudio preferido</string>
+    <string name="settings_audio_preferred_language_summary">Selecione o idioma padrão da faixa de áudio</string>
+    <string name="settings_audio_delay">Atraso de áudio</string>
+    <string name="settings_audio_delay_summary">Ajuste o atraso de áudio padrão para corrigir dessincronizações</string>
+    <string name="settings_audio_output_order">Prioridade de saída de áudio</string>
+    <string name="settings_audio_output_order_summary">Ajusta a prioridade dos módulos de saída de áudio</string>
+    <string name="settings_audio_dynamic_normalize">Compressão de faixa dinâmica</string>
+    <string name="settings_audio_dynamic_normalize_summary">Normaliza o volume para realçar diálogos e atenuar sons altos (Modo Noturno)</string>
+    <string name="settings_audio_pitch_correction">Correção de tom</string>
+    <string name="settings_audio_pitch_correction_summary">Mantém o tom original do áudio ao alterar a velocidade de reprodução</string>
+
+    <string name="settings_subtitle_header_selection">Seleção</string>
+    <string name="settings_subtitle_header_rendering">Renderização e aparência</string>
+    <string name="settings_subtitle_preferred_language">Idioma de legendas preferido</string>
+    <string name="settings_subtitle_preferred_language_summary">Selecione o idioma padrão da faixa de legendas</string>
+    <string name="settings_subtitle_fallback">Seleção automática de legendas</string>
+    <string name="settings_subtitle_fallback_summary">Seleciona automaticamente a primeira legenda disponível se o idioma preferido não for encontrado</string>
+
+    <string name="settings_subtitle_header_mpv">Legendas do mpv</string>
+    <string name="settings_subtitle_mpv_style">Estilo das legendas</string>
+    <string name="settings_subtitle_mpv_style_summary">Personalize tamanho da fonte, cor do texto, contorno e margens</string>
+
+    <string name="settings_subtitle_header_exo">Legendas do ExoPlayer</string>
+    <string name="settings_subtitle_exo_style">Estilo das legendas</string>
+    <string name="settings_subtitle_exo_style_summary">Personalize tamanho da fonte, cor do texto, contorno, fundo e margem inferior</string>
+    <string name="settings_subtitle_exo_preview_sample">Este é um exemplo de legenda do ExoPlayer</string>
+
+    <string name="settings_subtitle_mpv_ass_override">Substituição de estilos ASS</string>
+    <string name="settings_subtitle_mpv_ass_override_summary">Define se as configurações do usuário substituem os estilos embutidos das legendas ASS</string>
+    <string name="settings_subtitle_mpv_ass_override_scale">Apenas redimensionamento (Recomendado)</string>
+    <string name="settings_subtitle_mpv_ass_override_scale_summary">Aplica redimensionamento básico mantendo a maior parte do design original do script</string>
+    <string name="settings_subtitle_mpv_ass_override_yes">Substituir estilos básicos</string>
+    <string name="settings_subtitle_mpv_ass_override_yes_summary">Aplica estilos definidos pelo usuário preservando ao máximo o layout original</string>
+    <string name="settings_subtitle_mpv_ass_override_no">Não substituir (Original ASS)</string>
+    <string name="settings_subtitle_mpv_ass_override_no_summary">Renderiza as legendas usando exatamente os estilos, posições e efeitos definidos no arquivo</string>
+    <string name="settings_subtitle_mpv_ass_override_force">Forçar estilos do usuário</string>
+    <string name="settings_subtitle_mpv_ass_override_force_summary">Ignora a formatação do script e impõe o estilo global de legendas</string>
+    <string name="settings_subtitle_mpv_ass_override_strip">Remover tags ASS (Texto simples)</string>
+    <string name="settings_subtitle_mpv_ass_override_strip_summary">Remove todas as tags de efeitos e fontes personalizadas, exibindo texto simples</string>
+    <string name="settings_subtitle_mpv_preview_sample">Este é um exemplo de legenda do mpv</string>
+
+    <string name="settings_subtitle_font_size">Tamanho da fonte</string>
+    <string name="settings_subtitle_font_size_summary">Ajuste o tamanho de exibição das legendas (sp)</string>
+    <string name="settings_subtitle_text_color">Cor do texto</string>
+    <string name="settings_subtitle_bg_color">Cor do fundo</string>
+    <string name="settings_subtitle_bg_opacity">Opacidade do fundo</string>
+    <string name="settings_subtitle_bg_opacity_summary">Ajuste a transparência da caixa de fundo das legendas</string>
+    <string name="settings_subtitle_bottom_padding">Margem inferior</string>
+    <string name="settings_subtitle_bottom_padding_summary">Distância vertical em relação à parte inferior da tela (dp)</string>
+    <string name="settings_subtitle_font_weight">Espessura da fonte</string>
+    <string name="settings_subtitle_outline_color">Cor do contorno</string>
+    <string name="settings_subtitle_outline_width">Espessura do contorno</string>
+    <string name="settings_subtitle_shadow_color">Cor da sombra</string>
+    <string name="settings_subtitle_shadow_offset">Deslocamento da sombra</string>
+    <string name="settings_subtitle_bottom_margin">Margem inferior das legendas</string>
+    <string name="settings_subtitle_bottom_margin_summary">Ajuste a distância vertical a partir do rodapé da tela</string>
+    <string name="settings_subtitle_bold">Negrito</string>
+    <string name="settings_subtitle_bold_summary">Exibe o texto das legendas em negrito</string>
+    <string name="settings_subtitle_italic">Itálico</string>
+    <string name="settings_subtitle_italic_summary">Exibe o texto das legendas em itálico</string>
+    <string name="settings_subtitle_font">Fonte das legendas</string>
+    <string name="settings_subtitle_font_summary">Selecione a família de fontes para a renderização de legendas no mpv</string>
+    <string name="settings_subtitle_font_default">Padrão do sistema (sans-serif)</string>
+    <string name="settings_subtitle_font_permission_required">Permissão de acesso a todos os arquivos necessária</string>
+    <string name="settings_subtitle_font_permission_summary">Conceda permissão para buscar fontes na pasta /Fonts</string>
+    <string name="settings_subtitle_font_grant_permission">Conceder permissão</string>
+    <string name="settings_subtitle_font_no_fonts_found">Nenhuma fonte personalizada encontrada</string>
+    <string name="settings_subtitle_font_no_fonts_summary">Coloque arquivos de fonte .ttf ou .otf na pasta %s</string>
+    <string name="settings_subtitle_font_directory_hint">Dica: Adicione arquivos .ttf ou .otf na pasta %s e eles aparecerão automaticamente na lista acima.</string>
+
+    <string name="settings_decoder_header_engine">Motor</string>
+    <string name="settings_decoder_player_engine_type">Motor de reprodução</string>
+    <string name="settings_decoder_player_engine_mpv">Motor mpv</string>
+    <string name="settings_decoder_player_engine_mpv_summary">Poderoso e repleto de recursos. Suporta legendas estilizadas ASS/SSA avançadas, ganho de áudio por software, todos os formatos e filtros Shader personalizados.</string>
+    <string name="settings_decoder_player_engine_exo">Motor ExoPlayer (Media3)</string>
+    <string name="settings_decoder_player_engine_exo_summary">Decodificação nativa por hardware. Baseado no MediaCodec do Android e cache de disco. Econômico em bateria, suave e estável para vídeos padrão.</string>
+
+    <string name="settings_decoder_header_rendering">Núcleo do motor</string>
+    <string name="settings_decoder_header_performance">Hardware e desempenho</string>
+    <string name="settings_decoder_header_processing">Processamento de vídeo</string>
+    <string name="settings_decoder_profile">Perfil do mpv</string>
+    <string name="settings_decoder_profile_summary">Predefinição de configuração geral para o mpv</string>
+    <string name="settings_decoder_profile_fast">Rápido (Fast)</string>
+    <string name="settings_decoder_profile_fast_summary">Prioriza desempenho e menor consumo de energia. Recomendado para a maioria dos dispositivos móveis.</string>
+    <string name="settings_decoder_profile_default">Padrão (Default)</string>
+    <string name="settings_decoder_profile_default_summary">Configuração padrão do mpv. Ajustes equilibrados para a maioria dos conteúdos.</string>
+    <string name="settings_decoder_profile_high_quality">Alta qualidade (High Quality)</string>
+    <string name="settings_decoder_profile_high_quality_summary">Ativa filtros de redimensionamento e debanding de alta qualidade. Pode aumentar o calor e o consumo de bateria.</string>
+    <string name="settings_decoder_profile_gpu_hq">GPU Alta qualidade (GPU High Quality)</string>
+    <string name="settings_decoder_profile_gpu_hq_summary">Perfil de alta qualidade otimizado especialmente para GPUs modernas.</string>
+    <string name="settings_decoder_profile_low_latency">Baixa latência (Low Latency)</string>
+    <string name="settings_decoder_profile_low_latency_summary">Minimiza o atraso de reprodução. Ideal para transmissões ao vivo ou jogos.</string>
+    <string name="settings_decoder_profile_sw_fast">Software rápido (Software Fast)</string>
+    <string name="settings_decoder_profile_sw_fast_summary">Perfil de decodificação por software mais rápido. Use quando a aceleração por hardware não estiver disponível.</string>
+
+    <string name="settings_decoder_override_profile">Substituir configurações do perfil</string>
+    <string name="settings_decoder_override_profile_summary">Configure manualmente redimensionamento e debanding em vez de usar os perfis prontos</string>
+
+    <string name="settings_decoder_vo">Saída de vídeo (VO)</string>
+    <string name="settings_decoder_vo_summary">O driver de saída usado para renderizar o vídeo</string>
+    <string name="settings_decoder_vo_gpu">GPU (Legado)</string>
+    <string name="settings_decoder_vo_gpu_summary">Renderizador de GPU padrão. Alta estabilidade e compatibilidade comprovada.</string>
+    <string name="settings_decoder_vo_gpu_next">GPU Next (Nova geração)</string>
+    <string name="settings_decoder_vo_gpu_next_summary">Novo renderizador experimental baseado na libplacebo. Suporta recursos modernos.</string>
+
+    <string name="settings_decoder_gpu_api">API gráfica (GPU)</string>
+    <string name="settings_decoder_gpu_api_summary">API gráfica utilizada pelo renderizador</string>
+    <string name="settings_decoder_gpu_api_opengl">OpenGL ES</string>
+    <string name="settings_decoder_gpu_api_opengl_summary">API gráfica padrão. Rápida e amplamente suportada.</string>
+    <string name="settings_decoder_gpu_api_vulkan">Vulkan</string>
+    <string name="settings_decoder_gpu_api_vulkan_summary">API moderna de baixo overhead. Pode oferecer melhor desempenho em aparelhos compatíveis.</string>
+
+    <string name="settings_decoder_hwdec">Decodificação por hardware</string>
+    <string name="settings_decoder_hwdec_summary">Política de decodificação acelerada por hardware</string>
+    <string name="settings_decoder_hwdec_mediacodec">MediaCodec (Surface)</string>
+    <string name="settings_decoder_hwdec_mediacodec_summary">Renderiza diretamente na Surface do Android. Melhor desempenho e eficiência energética.</string>
+    <string name="settings_decoder_hwdec_mediacodec_copy">MediaCodec Copy (RAM)</string>
+    <string name="settings_decoder_hwdec_mediacodec_copy_summary">Copia os quadros para a memória do sistema. Permite pós-processamento no mpv, mas é mais lento.</string>
+    <string name="settings_decoder_hwdec_no">Desativada (Por software)</string>
+    <string name="settings_decoder_hwdec_no_summary">Decodifica via CPU. Mais lento, porém contorna falhas dos decodificadores de hardware.</string>
+
+    <string name="settings_decoder_video_sync">Modo de sincronização de vídeo</string>
+    <string name="settings_decoder_video_sync_summary">Como o player sincroniza o áudio e o vídeo</string>
+    <string name="settings_decoder_video_sync_audio">Pelo áudio (Audio)</string>
+    <string name="settings_decoder_video_sync_audio_summary">Sincroniza os quadros com o relógio de áudio. Modo mais estável e recomendado.</string>
+    <string name="settings_decoder_video_sync_display_resample">Reamostragem de tela (Display Resample)</string>
+    <string name="settings_decoder_video_sync_display_resample_summary">Reamostra o áudio para coincidir com a taxa de atualização da tela, compensando o desvio.</string>
+    <string name="settings_decoder_video_sync_display_resample_vdrop">Display Resample V-Drop</string>
+    <string name="settings_decoder_video_sync_display_resample_vdrop_summary">Reamostra o áudio e descarta quadros de vídeo para compensar o descompasso.</string>
+    <string name="settings_decoder_video_sync_display_resample_desync">Display Resample Desync</string>
+    <string name="settings_decoder_video_sync_display_resample_desync_summary">Reamostra o áudio sem forçar compensação rigorosa de A/V.</string>
+    <string name="settings_decoder_video_sync_display_tempo">Display Tempo</string>
+    <string name="settings_decoder_video_sync_display_tempo_summary">Semelhante ao Display Resample, mas evita alterações no tom do áudio.</string>
+    <string name="settings_decoder_video_sync_display_vdrop">Display V-Drop</string>
+    <string name="settings_decoder_video_sync_display_vdrop_summary">Ignora ou repete quadros de vídeo para corrigir a sincronia.</string>
+    <string name="settings_decoder_video_sync_display_adrop">Display A-Drop</string>
+    <string name="settings_decoder_video_sync_display_adrop_summary">Ignora ou repete dados de áudio para sincronizar com o vídeo.</string>
+    <string name="settings_decoder_video_sync_display_desync">Display Desync</string>
+    <string name="settings_decoder_video_sync_display_desync_summary">Sincroniza o vídeo com a tela e deixa o áudio tocar independentemente.</string>
+
+    <string name="settings_decoder_scale">Algoritmo de ampliação (scale)</string>
+    <string name="settings_decoder_scale_summary">Algoritmo de reamostragem usado para aumentar a resolução do vídeo</string>
+    <string name="settings_decoder_dscale">Algoritmo de redução (dscale)</string>
+    <string name="settings_decoder_dscale_summary">Algoritmo de reamostragem usado para diminuir a resolução do vídeo</string>
+    <string name="settings_decoder_cscale">Escalador de croma (cscale)</string>
+    <string name="settings_decoder_cscale_summary">Algoritmo usado no processamento dos canais de cor (croma)</string>
+    <string name="settings_decoder_scale_antiring">Força antirressonância (scale-antiring)</string>
+    <string name="settings_decoder_scale_antiring_summary">Reduz artefatos de halo e bordas serrilhadas (ringing) durante o escalonamento</string>
+    <string name="settings_decoder_scale_bilinear">Bilinear</string>
+    <string name="settings_decoder_scale_bilinear_summary">Filtragem bilinear por hardware (mais rápida, qualidade básica). Padrão do perfil rápido.</string>
+    <string name="settings_decoder_scale_spline36">Spline36</string>
+    <string name="settings_decoder_scale_spline36_summary">Escalonador Spline36. Ótima nitidez com equilíbrio ideal entre qualidade e velocidade.</string>
+    <string name="settings_decoder_scale_ewa_lanczos">EWA Lanczos (Jinc)</string>
+    <string name="settings_decoder_scale_ewa_lanczos_summary">Lanczos elíptico ponderado. Mais exigente, mas entrega excelente qualidade visual.</string>
+    <string name="settings_decoder_scale_lanczos">Lanczos</string>
+    <string name="settings_decoder_scale_lanczos_summary">Escalonador Lanczos. Bom equilíbrio entre nitidez e desempenho geral.</string>
+    <string name="settings_decoder_scale_ewa_lanczos_sharp">EWA Lanczos Sharp</string>
+    <string name="settings_decoder_scale_ewa_lanczos_sharp_summary">Versão mais nítida do EWA Lanczos. Padrão do perfil de alta qualidade.</string>
+    <string name="settings_decoder_scale_ewa_lanczos_4sharpest">EWA Lanczos 4Sharpest</string>
+    <string name="settings_decoder_scale_ewa_lanczos_4sharpest_summary">Escalonador extremamente nítido, suscetível a produzir artefatos de contorno.</string>
+    <string name="settings_decoder_scale_mitchell">Mitchell-Netravali</string>
+    <string name="settings_decoder_scale_mitchell_summary">Filtro cúbico por partes. Reduz artefatos visuais de forma equilibrada.</string>
+    <string name="settings_decoder_scale_hermite">Hermite</string>
+    <string name="settings_decoder_scale_hermite_summary">Spline de Hermite. Muito rápido, mas propenso a blocos de compressão.</string>
+    <string name="settings_decoder_scale_catmull_rom">Catmull-Rom</string>
+    <string name="settings_decoder_scale_catmull_rom_summary">Mais nítido que o Mitchell, mas pode gerar artefatos em bordas contrastantes.</string>
+    <string name="settings_decoder_scale_oversample">Oversample</string>
+    <string name="settings_decoder_scale_oversample_summary">Sobreamostra pixels para remover trepidação (judder), aplicando suave desfoque.</string>
+
+    <string name="settings_decoder_deband">Debanding (Bandas de cor)</string>
+    <string name="settings_decoder_deband_summary">Atenua faixas escalonadas em gradientes de cor</string>
+    <string name="settings_decoder_deband_iterations">Iterações (Iterations)</string>
+    <string name="settings_decoder_deband_iterations_summary">Número de etapas de debanding por amostra. Valores maiores reduzem mais faixas com maior custo. (Padrão: 1)</string>
+    <string name="settings_decoder_deband_threshold">Limite (Threshold)</string>
+    <string name="settings_decoder_deband_threshold_summary">Limite de corte do filtro. Mais alto suaviza mais, mas pode atenuar detalhes finos. (Padrão: 48)</string>
+    <string name="settings_decoder_deband_range">Raio (Range)</string>
+    <string name="settings_decoder_deband_range_summary">Raio inicial do filtro. Valores maiores detectam gradientes mais suaves. (Padrão: 16)</string>
+    <string name="settings_decoder_deband_grain">Granulação / Ruído (Grain)</string>
+    <string name="settings_decoder_deband_grain_summary">Adiciona ruído imperceptível para disfarçar faixas remanescentes. (Padrão: 32)</string>
+
+    <string name="settings_decoder_hdr_settings">Configurações de HDR</string>
+    <string name="settings_decoder_hdr_settings_summary">Configure passagem direta de HDR, mapeamento de tons, ganho de brilho e gamut</string>
+    <string name="settings_decoder_hdr_passthrough">Passagem direta de HDR (Passthrough)</string>
+    <string name="settings_decoder_hdr_passthrough_summary">Envia sinal HDR original à tela para alcançar o brilho de pico. Ignora o mapeamento por software.</string>
+    <string name="settings_decoder_tone_mapping">Algoritmo de mapeamento de tons</string>
+    <string name="settings_decoder_tone_mapping_auto">Automático</string>
+    <string name="settings_decoder_tone_mapping_auto_summary">Seleciona automaticamente o melhor algoritmo de acordo com o vídeo</string>
+    <string name="settings_decoder_tone_mapping_bt2446a">BT.2446a</string>
+    <string name="settings_decoder_tone_mapping_bt2446a_summary">Padrão de referência moderno para conversão de HDR para SDR</string>
+    <string name="settings_decoder_tone_mapping_spline">Spline</string>
+    <string name="settings_decoder_tone_mapping_spline_summary">Mapeamento em curva suave. Preserva mais detalhes em realces de alta luminosidade</string>
+    <string name="settings_decoder_tone_mapping_reinhard">Reinhard</string>
+    <string name="settings_decoder_tone_mapping_reinhard_summary">Algoritmo clássico de mapeamento de tons. Eficaz contra áreas estouradas</string>
+    <string name="settings_decoder_tone_mapping_max_boost">Impulso máximo de brilho</string>
+    <string name="settings_decoder_tone_mapping_max_boost_summary">Permite que realces especulares excedam a curva de tons para contraste mais vivo. (Padrão: 1.50)</string>
+    <string name="settings_decoder_gamut_mapping_mode">Modo de mapeamento de gama (Gamut)</string>
+    <string name="settings_decoder_gamut_mapping_mode_summary">Estratégia para mapear o espaço amplo HDR (BT.2020) para telas SDR</string>
+    <string name="settings_decoder_gamut_mapping_perceptual">Perceptual</string>
+    <string name="settings_decoder_gamut_mapping_perceptual_summary">Preserva relações relativas de cores para gradientes naturais e saturados</string>
+    <string name="settings_decoder_gamut_mapping_clip">Corte (Clip)</string>
+    <string name="settings_decoder_gamut_mapping_clip_summary">Corta de forma rígida as cores fora da escala no limite SDR</string>
+    <string name="settings_decoder_gamut_mapping_relative">Colorimétrico relativo (Relative)</string>
+    <string name="settings_decoder_gamut_mapping_relative_summary">Dimensiona as cores com base no ajuste do ponto branco</string>
+    <string name="settings_decoder_gamut_mapping_saturation">Saturação (Saturation)</string>
+    <string name="settings_decoder_gamut_mapping_saturation_summary">Prioriza a preservação da vivacidade e saturação das cores</string>
+    <string name="settings_decoder_gamut_mapping_desaturate">Dessaturar (Desaturate)</string>
+    <string name="settings_decoder_gamut_mapping_desaturate_summary">Dessatura tons brilhantes em direção ao branco para caberem na gama</string>
+
+    <string name="settings_decoder_framedrop">Política de descarte de quadros</string>
+    <string name="settings_decoder_framedrop_summary">Estratégia adotada em gargalos de desempenho</string>
+    <string name="settings_decoder_framedrop_vo">VO (Recomendado)</string>
+    <string name="settings_decoder_framedrop_vo_summary">Descarta quadros na saída de vídeo. Melhor equilíbrio entre fluidez e sincronia.</string>
+    <string name="settings_decoder_framedrop_decoder">Decodificador (Agressivo)</string>
+    <string name="settings_decoder_framedrop_decoder_summary">Descarta quadros durante a decodificação. Muito eficaz, mas pode causar falhas visuais.</string>
+    <string name="settings_decoder_framedrop_no">Desativado</string>
+    <string name="settings_decoder_framedrop_no_summary">Nunca descarta quadros. Recomendado apenas em dispositivos potentes para evitar atraso de áudio.</string>
+
+    <string name="settings_decoder_header_info">Informações</string>
+    <string name="settings_decoder_codec_info">Informações de codecs</string>
+    <string name="settings_decoder_codec_info_summary">Veja decodificadores de áudio/vídeo e aceleração suportados neste aparelho</string>
+    <string name="settings_decoder_codec_group_all">Todos</string>
+    <string name="settings_decoder_codec_group_video">Vídeo</string>
+    <string name="settings_decoder_codec_group_audio">Áudio</string>
+    <string name="settings_decoder_codec_group_hardware">Hardware</string>
+    <string name="settings_decoder_hw_decoding">Decodificação por hardware</string>
+    <string name="settings_decoder_sw_decoding">Decodificação por software</string>
+    <string name="settings_decoder_codec_count">%1$d decodificadores</string>
+    <string name="settings_decoder_codec_empty">Nenhum decodificador compatível encontrado</string>
+
+    <string name="settings_subtitle_codepage">Codificação de legendas</string>
+    <string name="settings_subtitle_codepage_summary">Codificação de caracteres para arquivos de legendas externas</string>
+    <string name="settings_subtitle_codepage_auto">Detecção automática (Universal)</string>
+    <string name="settings_subtitle_codepage_auto_summary">Detecta a codificação automaticamente (UTF-8/Universal). Funciona na maioria dos arquivos.</string>
+    <string name="settings_subtitle_codepage_utf8">UTF-8</string>
+    <string name="settings_subtitle_codepage_utf8_summary">Padrão moderno. Use se os caracteres das legendas estiverem ilegíveis.</string>
+    <string name="settings_subtitle_codepage_gbk">GBK (Chinês simplificado)</string>
+    <string name="settings_subtitle_codepage_gbk_summary">Codificação tradicional para legendas antigas em chinês simplificado.</string>
+    <string name="settings_subtitle_codepage_big5">BIG5 (Chinês tradicional)</string>
+    <string name="settings_subtitle_codepage_big5_summary">Codificação padrão para legendas em chinês tradicional (Taiwan/HK).</string>
+
+    <string name="settings_audio_output_aaudio_summary">API moderna de áudio de baixa latência do Android.</string>
+    <string name="settings_audio_output_audiotrack_summary">Saída de áudio padrão do Android baseada em Java. Estável e compatível.</string>
+    <string name="settings_audio_output_opensles_summary">API C legada de baixo nível. Use se outros drivers apresentarem falhas.</string>
+
+    <string name="settings_lang_preferred_language_none">Padrão (Nenhum)</string>
+    <string name="settings_lang_add_language">Adicionar idioma</string>
+    <string name="settings_lang_select_language">Selecionar idioma</string>
+    <string name="settings_lang_all_languages">Todos os idiomas</string>
+
+    <string name="settings_about_version">Versão</string>
+    <string name="settings_about_description">Um reprodutor de mídia poderoso e moderno para Android, desenvolvido para integrar armazenamento local e redes remotas.</string>
+
+    <string name="settings_about_header_legal">Informações legais</string>
+    <string name="settings_about_libraries">Bibliotecas e licenças</string>
+    <string name="settings_about_libraries_summary">Veja bibliotecas do motor, versões e licenças de código aberto</string>
+    <string name="settings_about_copyright">Aviso de direitos autorais</string>
+    <string name="settings_about_copyright_summary">Veja os termos de direitos autorais e licença do aplicativo</string>
+
+    <string name="settings_about_header_links">Links</string>
+    <string name="settings_about_developer">Desenvolvedor</string>
+    <string name="settings_about_developer_summary">Visite o perfil do desenvolvedor no GitHub</string>
+    <string name="settings_about_github">Repositório do GitHub</string>
+    <string name="settings_about_github_summary">Ver código-fonte, reportar problemas e contribuir com o projeto</string>
+    <string name="settings_about_telegram">Canal do Telegram</string>
+    <string name="settings_about_telegram_summary">Participe da comunidade para atualizações e discussões</string>
+
+    <string name="settings_advanced_header_security">Segurança do mpv</string>
+    <string name="settings_advanced_tls_verify">Verificação de certificado TLS</string>
+    <string name="settings_advanced_tls_verify_summary">Verifica certificados TLS/SSL em conexões HTTPS. Desative se usar certificados autoassinados na rede local.</string>
+
+    <string name="settings_advanced_header_connection">Conexão de rede</string>
+    <string name="settings_advanced_user_agent">User-Agent</string>
+    <string name="settings_advanced_user_agent_summary">Sequência de User-Agent personalizada para requisições HTTP</string>
+    <string name="settings_advanced_user_agent_empty_error">O User-Agent não pode ficar vazio</string>
+    <string name="settings_advanced_timeout">Tempo limite de conexão</string>
+    <string name="settings_advanced_timeout_summary">Tempo máximo em segundos para aguardar resposta da rede</string>
+
+    <string name="settings_advanced_header_cache">Buffer e cache do mpv</string>
+    <string name="settings_advanced_cache_secs">Tempo de cache para frente</string>
+    <string name="settings_advanced_cache_secs_summary">Segundos de vídeo não reproduzido a serem pré-carregados no buffer</string>
+    <string name="settings_advanced_cache_back_secs">Tempo de cache para trás</string>
+    <string name="settings_advanced_cache_back_secs_summary">Segundos de vídeo já reproduzido mantidos no buffer</string>
+    <string name="settings_advanced_demuxer_max_bytes">Tamanho do buffer para frente</string>
+    <string name="settings_advanced_demuxer_max_bytes_summary">Memória máxima para o buffer de conteúdo a ser reproduzido</string>
+    <string name="settings_advanced_demuxer_max_back_bytes">Tamanho do buffer para trás</string>
+    <string name="settings_advanced_demuxer_max_back_bytes_summary">Memória máxima para o buffer de conteúdo já reproduzido</string>
+
+    <!-- Storage and Cache -->
+    <string name="settings_advanced_header_storage_cache">Armazenamento e cache</string>
+    <string name="settings_advanced_clear_thumbnails">Cache de miniaturas</string>
+    <string name="settings_advanced_clear_thumbnails_summary">Limpa quadros de pré-visualização salvos em cache</string>
+    <string name="settings_advanced_clear_video_cache">Cache de streaming de vídeo</string>
+    <string name="settings_advanced_clear_video_cache_summary">Limpa os arquivos de buffer de vídeo em rede do ExoPlayer</string>
+    <string name="settings_advanced_clear_history">Limpar histórico de reprodução</string>
+    <string name="settings_advanced_clear_history_summary">Exclui todo o progresso de visualização e registros salvos</string>
+    <string name="settings_advanced_history_count_format">%d itens no total</string>
+    <string name="settings_advanced_history_cleared">Histórico de reprodução limpo</string>
+    <string name="settings_cache_cleared">Cache limpo com sucesso</string>
+
+    <!-- Notification -->
+    <string name="notification_playback_channel_name">Controles de reprodução</string>
+    <string name="notification_playback_channel_description">Controles de reprodução de mídia em segundo plano</string>
+
+    <string name="notification_screenshot_channel_name">Capturas de tela</string>
+    <string name="notification_screenshot_channel_description">Notificações para capturas de tela salvas</string>
+    <string name="notification_screenshot_saved">Captura de tela salva</string>
+
+    <string name="error_permission_denied_storage">Permissão negada: É necessário acesso ao armazenamento</string>
+
+    <!-- File Management -->
+    <string name="file_action_copy">Copiar</string>
+    <string name="file_action_move">Mover</string>
+    <string name="file_action_rename">Renomear</string>
+    <string name="file_action_delete">Excluir</string>
+    <string name="file_action_add_to_playlist">Adicionar à lista</string>
+    <string name="file_action_clear_selection">Desmarcar</string>
+    <string name="file_action_create_folder">Nova pasta</string>
+
+    <string name="file_dialog_rename_title">Renomear</string>
+    <string name="file_dialog_delete_title">Excluir os itens selecionados?</string>
+    <string name="file_dialog_delete_confirm">Excluir</string>
+    <string name="file_dialog_create_folder_title">Criar nova pasta</string>
+    <string name="file_dialog_create_folder_hint">Nome da pasta</string>
+    <string name="file_dialog_select_target_directory">Selecione a pasta de destino</string>
+    <string name="file_dialog_device_home_path">Dispositivo de armazenamento</string>
+    <string name="file_dialog_empty_folder">Sem subpastas</string>
+    <string name="file_dialog_copy_here">Copiar aqui</string>
+    <string name="file_dialog_move_here">Mover para cá</string>
+    <string name="file_dialog_conflict_title">Conflito de nomes de arquivo</string>
+    <string name="file_dialog_conflict_message">O destino já contém um arquivo chamado \"%1$s\".</string>
+    <string name="file_dialog_conflict_overwrite">Substituir</string>
+    <string name="file_dialog_conflict_skip">Ignorar</string>
+    <string name="file_dialog_conflict_apply_all">Aplicar a todos os conflitos restantes</string>
+
+    <string name="file_operation_copying">Copiando arquivos…</string>
+    <string name="file_operation_moving">Movendo arquivos…</string>
+    <string name="file_operation_deleting">Excluindo arquivos…</string>
+    <string name="file_operation_cancel">Cancelar</string>
+    <string name="file_operation_completed">Operação de arquivo concluída</string>
+    <string name="file_operation_failed">Falha na operação de arquivo: %1$s</string>
+    <string name="file_operation_notification_channel_name">Operações de arquivos em segundo plano</string>
+    <string name="file_operation_notification_channel_desc">Mostra o progresso das tarefas de cópia, movimentação e exclusão de arquivos.</string>
+
+    <!-- File Task Queue -->
+    <string name="file_task_queue_title">Fila de operações de arquivos</string>
+    <string name="file_task_clear_completed">Limpar concluídas</string>
+    <string name="file_task_section_active">Tarefa ativa</string>
+    <string name="file_task_section_pending">Tarefas pendentes (%d)</string>
+    <string name="file_task_section_completed">Tarefas concluídas (%d)</string>
+    <string name="file_task_cancel">Cancelar</string>
+    <string name="file_task_empty">Nenhuma tarefa de arquivo</string>
+    <string name="file_task_status_pending">Pendente</string>
+    <string name="file_task_status_completed">Concluída</string>
+    <string name="file_task_status_failed">Falhou</string>
+    <string name="file_task_status_cancelled">Cancelada</string>
+</resources>
