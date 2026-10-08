@@ -31,101 +31,101 @@
 
         <!-- 外圈同心律令圆环 (主轨) -->
         <path
-            android:fillColor="#00000000"
+            android:fillColor="@android:color/transparent"
             android:pathData="M 512,182 A 330,330 0 1,1 511.9,182 Z"
             android:strokeWidth="14"
-            android:strokeColor="#7C4DFF" />
+            android:strokeColor="@color/ic_launcher_outer_ring" />
 
         <!-- 内层魔法阵八向符文刻度环 (8段弧长完全相等，每段严格跨越25度，四向八位绝对正心对称) -->
         <!-- 上方两侧弧 (70°~95° & 85°~110°) -->
         <path
-            android:fillColor="#00000000"
+            android:fillColor="@android:color/transparent"
             android:pathData="M 608,249 A 280,280 0 0,1 710,314"
             android:strokeWidth="8"
-            android:strokeColor="#00E5FF"
+            android:strokeColor="@color/ic_launcher_rune"
             android:strokeLineCap="round" />
         <path
-            android:fillColor="#00000000"
+            android:fillColor="@android:color/transparent"
             android:pathData="M 314,314 A 280,280 0 0,1 416,249"
             android:strokeWidth="8"
-            android:strokeColor="#00E5FF"
+            android:strokeColor="@color/ic_launcher_rune"
             android:strokeLineCap="round" />
 
         <!-- 右侧两侧弧 (25°~50° & 310°~335°) -->
         <path
-            android:fillColor="#00000000"
+            android:fillColor="@android:color/transparent"
             android:pathData="M 766,416 A 280,280 0 0,1 784,512"
             android:strokeWidth="8"
-            android:strokeColor="#00E5FF"
+            android:strokeColor="@color/ic_launcher_rune"
             android:strokeLineCap="round" />
         <path
-            android:fillColor="#00000000"
+            android:fillColor="@android:color/transparent"
             android:pathData="M 784,512 A 280,280 0 0,1 766,608"
             android:strokeWidth="8"
-            android:strokeColor="#00E5FF"
+            android:strokeColor="@color/ic_launcher_rune"
             android:strokeLineCap="round" />
 
         <!-- 下方两侧弧 (200°~225° & 245°~270°) -->
         <path
-            android:fillColor="#00000000"
+            android:fillColor="@android:color/transparent"
             android:pathData="M 710,710 A 280,280 0 0,1 608,775"
             android:strokeWidth="8"
-            android:strokeColor="#00E5FF"
+            android:strokeColor="@color/ic_launcher_rune"
             android:strokeLineCap="round" />
         <path
-            android:fillColor="#00000000"
+            android:fillColor="@android:color/transparent"
             android:pathData="M 416,775 A 280,280 0 0,1 314,710"
             android:strokeWidth="8"
-            android:strokeColor="#00E5FF"
+            android:strokeColor="@color/ic_launcher_rune"
             android:strokeLineCap="round" />
 
         <!-- 左侧两侧弧 (130°~155° & 175°~200°) -->
         <path
-            android:fillColor="#00000000"
+            android:fillColor="@android:color/transparent"
             android:pathData="M 258,608 A 280,280 0 0,1 240,512"
             android:strokeWidth="8"
-            android:strokeColor="#00E5FF"
+            android:strokeColor="@color/ic_launcher_rune"
             android:strokeLineCap="round" />
         <path
-            android:fillColor="#00000000"
+            android:fillColor="@android:color/transparent"
             android:pathData="M 240,512 A 280,280 0 0,1 258,416"
             android:strokeWidth="8"
-            android:strokeColor="#00E5FF"
+            android:strokeColor="@color/ic_launcher_rune"
             android:strokeLineCap="round" />
 
         <!-- 4个正向魔导坐标星芒点 (绝对中心对称) -->
         <!-- 上 -->
         <path
-            android:fillColor="#00E5FF"
+            android:fillColor="@color/ic_launcher_rune"
             android:pathData="M 512,142 L 522,182 L 512,222 L 502,182 Z" />
         <!-- 下 -->
         <path
-            android:fillColor="#00E5FF"
+            android:fillColor="@color/ic_launcher_rune"
             android:pathData="M 512,802 L 522,842 L 512,882 L 502,842 Z" />
         <!-- 左 -->
         <path
-            android:fillColor="#00E5FF"
+            android:fillColor="@color/ic_launcher_rune"
             android:pathData="M 142,512 L 182,522 L 222,512 L 182,502 Z" />
         <!-- 右 -->
         <path
-            android:fillColor="#00E5FF"
+            android:fillColor="@color/ic_launcher_rune"
             android:pathData="M 802,512 L 842,522 L 882,512 L 842,502 Z" />
 
         <!-- 反向辅助构图线 (六芒星阵交错感，关于Y=512严格镜像) -->
         <path
-            android:fillColor="#00000000"
+            android:fillColor="@android:color/transparent"
             android:pathData="M 640,320 L 330,512 L 640,704 Z"
             android:strokeWidth="8"
-            android:strokeColor="#50B388FF" />
+            android:strokeColor="@color/ic_launcher_auxiliary_line" />
 
         <!-- 核心解构播放三角 (实心主阵) -->
         <path
-            android:fillColor="#B388FF"
+            android:fillColor="@color/ic_launcher_play_triangle"
             android:pathData="M 400,320 L 730,512 L 400,704 Z" />
 
         <!-- 阵眼核心高亮内核 -->
         <path
-            android:fillColor="#FFFFFF"
+            android:fillColor="@color/ic_launcher_core_highlight"
             android:pathData="M 470,440 L 590,512 L 470,584 Z" />
     </group>
 </vector>

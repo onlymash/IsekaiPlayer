@@ -19,4 +19,13 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- App Launcher Icon Colors (Release) -->
+    <color name="ic_launcher_background_start">#261447</color>
+    <color name="ic_launcher_background_end">#0B0614</color>
+    <color name="ic_launcher_outer_ring">#7C4DFF</color>
+    <color name="ic_launcher_rune">#00E5FF</color>
+    <color name="ic_launcher_auxiliary_line">#50B388FF</color>
+    <color name="ic_launcher_play_triangle">#B388FF</color>
+    <color name="ic_launcher_core_highlight">#FFFFFF</color>
 </resources>

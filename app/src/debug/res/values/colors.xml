@@ -17,5 +17,12 @@
   -->
 
 <resources>
-    <string name="app_name">异界播放器 Debug</string>
+    <!-- App Launcher Icon Colors (Debug) -->
+    <color name="ic_launcher_background_start">#3E1F08</color>
+    <color name="ic_launcher_background_end">#140A03</color>
+    <color name="ic_launcher_outer_ring">#FF6D00</color>
+    <color name="ic_launcher_rune">#FFD600</color>
+    <color name="ic_launcher_auxiliary_line">#50FFB74D</color>
+    <color name="ic_launcher_play_triangle">#FFB74D</color>
+    <color name="ic_launcher_core_highlight">#FFFFFF</color>
 </resources>

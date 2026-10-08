@@ -21,8 +21,8 @@
     <gradient
         android:centerX="50%"
         android:centerY="50%"
-        android:endColor="#0B0614"
+        android:endColor="@color/ic_launcher_background_end"
         android:gradientRadius="70%p"
-        android:startColor="#261447"
+        android:startColor="@color/ic_launcher_background_start"
         android:type="radial" />
 </shape>
