@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ IsekaiPlayer - Sovereign above myriad realms; shatter every mortal cipher.
+  ~ Copyright (C) 2026 onlymash
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- 品牌特征1：4个正向魔导坐标星芒点 (Top, Bottom, Left, Right) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M 12,1.5 L 12.4,2.75 L 12,4.0 L 11.6,2.75 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M 12,22.5 L 12.4,21.25 L 12,20.0 L 11.6,21.25 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M 1.5,12 L 2.75,12.4 L 4.0,12 L 2.75,11.6 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M 22.5,12 L 21.25,12.4 L 20.0,12 L 21.25,11.6 Z" />
+
+    <!-- 品牌特征2：细线条四向符文取景弧 (改细为 1.0dp) -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1.0"
+        android:strokeLineCap="round"
+        android:pathData="M 14.0,5.0 A 8.0,8.0 0 0,1 19.0,10.0" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1.0"
+        android:strokeLineCap="round"
+        android:pathData="M 19.0,14.0 A 8.0,8.0 0 0,1 14.0,19.0" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1.0"
+        android:strokeLineCap="round"
+        android:pathData="M 10.0,19.0 A 8.0,8.0 0 0,1 5.0,14.0" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1.0"
+        android:strokeLineCap="round"
+        android:pathData="M 5.0,10.0 A 8.0,8.0 0 0,1 10.0,5.0" />
+
+    <!-- 品牌特征3：放大版中心镂空魔导快门闪光星芒 (大巧优雅) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="M 12,6.0 Q 12,12 18.0,12 Q 12,12 12,18.0 Q 12,12 6.0,12 Q 12,12 12,6.0 Z M 12,8.8 Q 12,12 15.2,12 Q 12,12 12,15.2 Q 12,12 8.8,12 Q 12,12 12,8.8 Z" />
+</vector>

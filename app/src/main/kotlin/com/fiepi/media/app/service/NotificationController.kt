@@ -152,7 +152,7 @@ class NotificationController(
         )
 
         return NotificationCompat.Builder(context, CHANNEL_ID_FILE_OPERATION)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_notification_file_op)
             .setContentTitle(title)
             .setContentText(contentText)
             .setProgress(100, progressPercent, totalBytes == 0L && type != FileOperationType.Delete)
@@ -194,7 +194,7 @@ class NotificationController(
         val bitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID_SCREENSHOT)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_notification_screenshot)
             .setContentTitle(context.getString(R.string.notification_screenshot_saved))
             .setContentText(mediaTitle)
             .setLargeIcon(bitmap)
@@ -249,7 +249,7 @@ class NotificationController(
         )
 
         return Notification.Builder(context, CHANNEL_ID_PLAYBACK)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_notification_playback)
             .setContentTitle(state.mediaTitle)
             .setContentText(state.mediaSubtitle)
             .apply {

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ IsekaiPlayer - Sovereign above myriad realms; shatter every mortal cipher.
+  ~ Copyright (C) 2026 onlymash
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- 清析文件夹主体轮廓：与截图通知图标统一为 1.0dp 纤细线条，无任何交叠 -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1.0"
+        android:strokeLineJoin="round"
+        android:pathData="M 4.5,6.0 C 4.5,5.2 5.1,4.5 6.0,4.5 L 9.5,4.5 L 11.5,6.5 L 18.0,6.5 C 18.9,6.5 19.5,7.2 19.5,8.0 L 19.5,18.0 C 19.5,18.9 18.9,19.5 18.0,19.5 L 6.0,19.5 C 5.1,19.5 4.5,18.9 4.5,18.0 Z" />
+
+    <!-- 文件夹盖板分隔线 (1.0dp 纤细线条) -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1.0"
+        android:pathData="M 4.5,9.5 L 19.5,9.5" />
+
+    <!-- 品牌特征1：文件夹下方盖板正中嵌入中空魔导三角 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="M 10.0,11.5 L 15.0,14.25 L 10.0,17.0 Z M 11.2,12.9 L 13.4,14.25 L 11.2,15.6 Z" />
+
+    <!-- 品牌特征2：文件夹顶标签上方点缀极简魔导星芒点 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M 12.0,2.0 L 12.3,3.0 L 12.0,4.0 L 11.7,3.0 Z" />
+</vector>
