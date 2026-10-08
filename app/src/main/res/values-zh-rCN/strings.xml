@@ -54,9 +54,9 @@
     <string name="settings_general_header_navigation">导航</string>
 
     <string name="settings_general_haptics">触感反馈</string>
-    <string name="settings_general_haptics_summary">启用触摸反馈</string>
+    <string name="settings_general_haptics_summary">开启触控操作与手势反馈</string>
     <string name="settings_general_intercept_back">返回键导航</string>
-    <string name="settings_general_intercept_back_summary">启用后，返回手势会先导航至上级目录，最后才退出</string>
+    <string name="settings_general_intercept_back_summary">启用后，按返回键或手势滑动将先逐层返回上一级目录，直到顶层才退出应用</string>
 
     <!-- Backup & Restore -->
     <string name="settings_general_header_backup">备份与恢复</string>
@@ -72,20 +72,20 @@
     <string name="settings_gestures_header_drag">滑动控制</string>
     <string name="settings_gestures_header_tap">点击控制</string>
     <string name="settings_gestures_horizontal_drag">进度调节</string>
-    <string name="settings_gestures_horizontal_drag_summary">支持通过水平滑动调节播放进度</string>
+    <string name="settings_gestures_horizontal_drag_summary">在屏幕水平滑动调节播放进度</string>
     <string name="settings_gestures_vertical_drag_volume">音量调节</string>
-    <string name="settings_gestures_vertical_drag_volume_summary">支持通过屏幕左侧垂直滑动调节音量</string>
+    <string name="settings_gestures_vertical_drag_volume_summary">在屏幕左侧上下滑动调节音量</string>
     <string name="settings_gestures_vertical_drag_brightness">亮度调节</string>
-    <string name="settings_gestures_vertical_drag_brightness_summary">支持通过屏幕右侧垂直滑动调节亮度</string>
+    <string name="settings_gestures_vertical_drag_brightness_summary">在屏幕右侧上下滑动调节亮度</string>
     <string name="settings_gestures_swap_volume_brightness">交换音量和亮度区域</string>
     <string name="settings_gestures_swap_volume_brightness_summary">调换左右两侧滑动调节音量和亮度的区域</string>
     <string name="settings_gestures_double_tap_seek">双击快进/快退</string>
-    <string name="settings_gestures_double_tap_seek_summary">支持在两侧双击以快进或快退</string>
+    <string name="settings_gestures_double_tap_seek_summary">双击屏幕两侧快进或快退</string>
     <string name="settings_gestures_double_tap_play_pause">双击播放/暂停</string>
-    <string name="settings_gestures_double_tap_play_pause_summary">支持在屏幕中间双击以播放或暂停</string>
+    <string name="settings_gestures_double_tap_play_pause_summary">双击屏幕中央播放或暂停</string>
     <string name="settings_gestures_long_press">长按倍速</string>
-    <string name="settings_gestures_long_press_summary">支持通过长按实现快进</string>
-    <string name="settings_gestures_long_press_speed">长按倍速值</string>
+    <string name="settings_gestures_long_press_summary">长按屏幕触发快进与倍速播放</string>
+    <string name="settings_gestures_long_press_speed">长按倍速</string>
     <string name="settings_gestures_long_press_speed_summary">调整长按时的快进速度</string>
     <string name="settings_gestures_double_tap_seek_duration">双击跳转时间</string>
     <string name="settings_gestures_double_tap_seek_duration_summary">调整两侧双击时的跳转时间：%d 秒</string>
@@ -163,8 +163,8 @@
     <string name="browser_menu_sources">数据源</string>
     <string name="browser_menu_sort">排序</string>
     <string name="browser_menu_search">搜索</string>
-    <string name="browser_permission_grant">授予全部文件访问权限</string>
-    <string name="browser_permission_required">扫描本地视频并自动加载外挂字幕需要全部文件访问权限</string>
+    <string name="browser_permission_grant">授予所有文件访问权限</string>
+    <string name="browser_permission_required">扫描本地视频及自动加载外挂字幕需要所有文件访问权限</string>
     <string name="browser_media_list_empty">未找到视频</string>
     <string name="browser_search_placeholder_collapsed">搜索</string>
     <string name="browser_search_placeholder_expanded">在当前文件夹中搜索</string>
@@ -392,12 +392,12 @@
     <string name="settings_audio_header_mpv">mpv 音频</string>
     <string name="settings_audio_request_focus">请求音频焦点</string>
     <string name="settings_audio_request_focus_summary">当其他应用播放音频时暂停播放</string>
-    <string name="settings_audio_enable_background_audio">后台播放音频</string>
-    <string name="settings_audio_enable_background_audio_summary">当应用切到后台时继续播放音频</string>
+    <string name="settings_audio_enable_background_audio">后台播放</string>
+    <string name="settings_audio_enable_background_audio_summary">应用切至后台时继续播放</string>
     <string name="settings_audio_exo_volume">播放器音量</string>
-    <string name="settings_audio_exo_volume_summary">设置 ExoPlayer 播放器音量 (0–100%)</string>
+    <string name="settings_audio_exo_volume_summary">设置 ExoPlayer 播放器音量 (0–100%%)</string>
     <string name="settings_audio_mpv_volume">播放器音量</string>
-    <string name="settings_audio_mpv_volume_summary">设置 mpv 播放器音量 (0–200%)</string>
+    <string name="settings_audio_mpv_volume_summary">设置 mpv 播放器音量 (0–200%%)</string>
     <string name="settings_audio_preferred_language">首选音轨语言</string>
     <string name="settings_audio_preferred_language_summary">选择默认音轨语言</string>
     <string name="settings_audio_delay">音频延迟</string>
@@ -428,7 +428,7 @@
     <string name="settings_subtitle_mpv_ass_override">ASS 特效字幕覆盖</string>
     <string name="settings_subtitle_mpv_ass_override_summary">控制自定义字体样式是否覆盖 ASS 字幕文件中自带的样式</string>
     <string name="settings_subtitle_mpv_ass_override_scale">仅按比例缩放 (推荐)</string>
-    <string name="settings_subtitle_mpv_ass_override_scale_summary">应用基础的用户自定义样式及放缩，同时保留字幕文件大部分原始排版与设计</string>
+    <string name="settings_subtitle_mpv_ass_override_scale_summary">应用基础的用户自定义样式及缩放，同时保留字幕文件大部分原始排版与设计</string>
     <string name="settings_subtitle_mpv_ass_override_yes">基础覆盖</string>
     <string name="settings_subtitle_mpv_ass_override_yes_summary">应用基础的用户自定义样式设置，同时保留字幕脚本的大部分原始设计</string>
     <string name="settings_subtitle_mpv_ass_override_no">不覆盖 (保留 ASS 原样式)</string>
@@ -521,9 +521,9 @@
 
     <string name="settings_decoder_video_sync">视频同步模式</string>
     <string name="settings_decoder_video_sync_summary">音视频播放同步策略</string>
-    <string name="settings_decoder_video_sync_audio">Audio（音频优先）</string>
+    <string name="settings_decoder_video_sync_audio">音频 (Audio)</string>
     <string name="settings_decoder_video_sync_audio_summary">按音频时钟定时匹配视频帧。最稳健的模式，无音频假设，可能偶发丢帧或重复帧。</string>
-    <string name="settings_decoder_video_sync_display_resample">Display Resample（显示重采样）</string>
+    <string name="settings_decoder_video_sync_display_resample">显示重采样 (Display Resample)</string>
     <string name="settings_decoder_video_sync_display_resample_summary">重采样音频以精确匹配显示器刷新率，自动消除音视频漂移。</string>
     <string name="settings_decoder_video_sync_display_resample_vdrop">Display Resample V-Drop</string>
     <string name="settings_decoder_video_sync_display_resample_vdrop_summary">重采样音频，并允许通过丢弃视频帧来补偿漂移。</string>
@@ -565,18 +565,18 @@
     <string name="settings_decoder_scale_catmull_rom">Catmull-Rom</string>
     <string name="settings_decoder_scale_catmull_rom_summary">比 Mitchell 更锐利，但容易产生振铃效应。</string>
     <string name="settings_decoder_scale_oversample">Oversample</string>
-    <string name="settings_decoder_scale_oversample_summary">像素超采样以消除抖动偽影，但会增加一些模糊。</string>
+    <string name="settings_decoder_scale_oversample_summary">像素超采样以消除抖动伪影，但会增加一些模糊。</string>
 
     <string name="settings_decoder_deband">去色带 (Debanding)</string>
     <string name="settings_decoder_deband_summary">减少视频中的色彩断层（色带）现象</string>
     <string name="settings_decoder_deband_iterations">迭代次数 (Iterations)</string>
-    <string name="settings_decoder_deband_iterations_summary">每个样本执行的去色带步数。值越高效果越好，但更耗性能。(默认 1)</string>
+    <string name="settings_decoder_deband_iterations_summary">每个样本执行的去色带步数。值越高效果越好，但更耗性能。(默认: 1)</string>
     <string name="settings_decoder_deband_threshold">阈值 (Threshold)</string>
-    <string name="settings_decoder_deband_threshold_summary">滤镜的截止阈值。较高的数值会显著增强去色带强度，但会逐渐减少图像细节。(默认 48)</string>
+    <string name="settings_decoder_deband_threshold_summary">滤镜的截止阈值。较高的数值会显著增强去色带强度，但会逐渐减少图像细节。(默认: 48)</string>
     <string name="settings_decoder_deband_range">范围 (Range)</string>
-    <string name="settings_decoder_deband_range_summary">滤镜的初始半径。半径越高能找到更多渐变，半径越低平滑效果越激进。(默认 16)</string>
+    <string name="settings_decoder_deband_range_summary">滤镜的初始半径。半径越高能找到更多渐变，半径越低平滑效果越激进。(默认: 16)</string>
     <string name="settings_decoder_deband_grain">噪点 (Grain)</string>
-    <string name="settings_decoder_deband_grain_summary">添加额外的噪点以掩盖残留的量化伪影。(默认 32)</string>
+    <string name="settings_decoder_deband_grain_summary">添加额外的噪点以掩盖残留的量化伪影。(默认: 32)</string>
 
     <string name="settings_decoder_hdr_settings">HDR 设置</string>
     <string name="settings_decoder_hdr_settings_summary">配置 HDR 硬件直通、色调映射算法、亮度增强上限及色域模式</string>
@@ -592,7 +592,7 @@
     <string name="settings_decoder_tone_mapping_reinhard">Reinhard</string>
     <string name="settings_decoder_tone_mapping_reinhard_summary">经典色调映射算法。擅长防止高光溢出</string>
     <string name="settings_decoder_tone_mapping_max_boost">亮度增强上限</string>
-    <string name="settings_decoder_tone_mapping_max_boost_summary">允许高光区域过冲色调曲线，增强亮度和对比度冲击感。(默认 1.50)</string>
+    <string name="settings_decoder_tone_mapping_max_boost_summary">允许高光区域过冲色调曲线，增强亮度和对比度冲击感。(默认: 1.50)</string>
     <string name="settings_decoder_gamut_mapping_mode">色域映射模式</string>
     <string name="settings_decoder_gamut_mapping_mode_summary">将 HDR 广色域 (BT.2020) 映射至 SDR 显示屏的策略</string>
     <string name="settings_decoder_gamut_mapping_perceptual">感知 (Perceptual)</string>
@@ -687,11 +687,11 @@
 
     <!-- Storage and Cache -->
     <string name="settings_advanced_header_storage_cache">存储与缓存</string>
-    <string name="settings_advanced_clear_thumbnails">清理缩略图缓存</string>
+    <string name="settings_advanced_clear_thumbnails">缩略图缓存</string>
     <string name="settings_advanced_clear_thumbnails_summary">清理本地缓存的视频预览海报帧</string>
-    <string name="settings_advanced_clear_video_cache">清理视频播放缓存</string>
+    <string name="settings_advanced_clear_video_cache">视频播放缓存</string>
     <string name="settings_advanced_clear_video_cache_summary">清理 ExoPlayer 产生的网络视频播放缓存文件</string>
-    <string name="settings_advanced_clear_history">清理播放记录</string>
+    <string name="settings_advanced_clear_history">播放记录</string>
     <string name="settings_advanced_clear_history_summary">删除所有保存的视频观看进度与记录</string>
     <string name="settings_advanced_history_count_format">共 %d 条</string>
     <string name="settings_advanced_history_cleared">播放记录已成功清理</string>

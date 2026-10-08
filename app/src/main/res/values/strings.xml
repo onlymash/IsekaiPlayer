@@ -30,7 +30,7 @@
     <string name="settings_category_decoder_summary">Adjust hardware acceleration, video output, and scaling algorithms</string>
     <string name="settings_category_audio">Audio</string>
     <string name="settings_category_audio_summary">Manage audio tracks, output priority, and night mode normalization</string>
-    <string name="settings_category_subtitle">Subtitle</string>
+    <string name="settings_category_subtitle">Subtitles</string>
     <string name="settings_category_subtitle_summary">Customize subtitle language, appearance, and encoding</string>
     <string name="settings_category_advanced">Advanced</string>
     <string name="settings_category_advanced_summary">Configure buffer sizes, forward and backward caching, network connections, and security</string>
@@ -53,7 +53,7 @@
     <string name="settings_general_app_language_summary">Change the language of the app</string>
     <string name="settings_general_header_navigation">Navigation</string>
 
-    <string name="settings_general_haptics">Haptics feedback</string>
+    <string name="settings_general_haptics">Haptic feedback</string>
     <string name="settings_general_haptics_summary">Enable touch feedback</string>
     <string name="settings_general_intercept_back">Back button navigation</string>
     <string name="settings_general_intercept_back_summary">When enabled, back gesture navigates up the directory tree before exiting</string>
@@ -74,15 +74,15 @@
     <string name="settings_gestures_horizontal_drag">Seeking</string>
     <string name="settings_gestures_horizontal_drag_summary">Enable horizontal swipe to seek</string>
     <string name="settings_gestures_vertical_drag_volume">Volume</string>
-    <string name="settings_gestures_vertical_drag_volume_summary">Enable vertical swipe on left side to adjust volume</string>
+    <string name="settings_gestures_vertical_drag_volume_summary">Enable vertical swipe on the left side to adjust volume</string>
     <string name="settings_gestures_vertical_drag_brightness">Brightness</string>
-    <string name="settings_gestures_vertical_drag_brightness_summary">Enable vertical swipe on right side to adjust brightness</string>
+    <string name="settings_gestures_vertical_drag_brightness_summary">Enable vertical swipe on the right side to adjust brightness</string>
     <string name="settings_gestures_swap_volume_brightness">Swap volume and brightness areas</string>
-    <string name="settings_gestures_swap_volume_brightness_summary">Swap left and right side gesture areas for volume and brightness control</string>
+    <string name="settings_gestures_swap_volume_brightness_summary">Swap left and right gesture areas for volume and brightness controls</string>
     <string name="settings_gestures_double_tap_seek">Double tap to seek</string>
-    <string name="settings_gestures_double_tap_seek_summary">Enable double tap on sides to seek forward or backward</string>
+    <string name="settings_gestures_double_tap_seek_summary">Enable double tap on the sides to seek forward or backward</string>
     <string name="settings_gestures_double_tap_play_pause">Double tap to play/pause</string>
-    <string name="settings_gestures_double_tap_play_pause_summary">Enable double tap on center to play or pause playback</string>
+    <string name="settings_gestures_double_tap_play_pause_summary">Enable double tap in the center to play or pause playback</string>
     <string name="settings_gestures_long_press">Long press</string>
     <string name="settings_gestures_long_press_summary">Enable long press to fast forward</string>
     <string name="settings_gestures_long_press_speed">Fast forward speed</string>
@@ -396,9 +396,9 @@
     <string name="settings_audio_enable_background_audio">Background audio</string>
     <string name="settings_audio_enable_background_audio_summary">Continue playing audio when the app is in the background</string>
     <string name="settings_audio_exo_volume">Player volume</string>
-    <string name="settings_audio_exo_volume_summary">Set ExoPlayer player volume (0–100%%)</string>
+    <string name="settings_audio_exo_volume_summary">Set ExoPlayer volume (0–100%%)</string>
     <string name="settings_audio_mpv_volume">Player volume</string>
-    <string name="settings_audio_mpv_volume_summary">Set mpv player volume (0–200%%)</string>
+    <string name="settings_audio_mpv_volume_summary">Set mpv volume (0–200%%)</string>
     <string name="settings_audio_preferred_language">Preferred audio language</string>
     <string name="settings_audio_preferred_language_summary">Select the default audio track language</string>
     <string name="settings_audio_delay">Audio delay</string>
@@ -566,18 +566,18 @@
     <string name="settings_decoder_scale_catmull_rom">Catmull-Rom</string>
     <string name="settings_decoder_scale_catmull_rom_summary">Sharper than Mitchell, but prone to ringing.</string>
     <string name="settings_decoder_scale_oversample">Oversample</string>
-    <string name="settings_decoder_scale_oversample_summary">Naively oversamples pixels to remove judder artifacts, adding some blur.</string>
+    <string name="settings_decoder_scale_oversample_summary">Naively oversample pixels to remove judder artifacts, adding some blur.</string>
 
     <string name="settings_decoder_deband">Debanding</string>
     <string name="settings_decoder_deband_summary">Reduce color banding artifacts in the video</string>
     <string name="settings_decoder_deband_iterations">Iterations</string>
-    <string name="settings_decoder_deband_iterations_summary">The number of debanding steps to perform per sample. Higher values reduce more banding but cost more performance. (Default 1)</string>
+    <string name="settings_decoder_deband_iterations_summary">The number of debanding steps to perform per sample. Higher values reduce more banding but cost more performance. (Default: 1)</string>
     <string name="settings_decoder_deband_threshold">Threshold</string>
-    <string name="settings_decoder_deband_threshold_summary">The filter\'s cut-off threshold. Higher values increase strength but diminish details. (Default 48)</string>
+    <string name="settings_decoder_deband_threshold_summary">The filter\'s cut-off threshold. Higher values increase strength but diminish details. (Default: 48)</string>
     <string name="settings_decoder_deband_range">Range</string>
-    <string name="settings_decoder_deband_range_summary">The filter\'s initial radius. Higher radius finds more gradients, lower radius smooths more aggressively. (Default 16)</string>
+    <string name="settings_decoder_deband_range_summary">The filter\'s initial radius. Higher radius finds more gradients, lower radius smooths more aggressively. (Default: 16)</string>
     <string name="settings_decoder_deband_grain">Grain</string>
-    <string name="settings_decoder_deband_grain_summary">Add extra noise to cover up remaining artifacts. (Default 32)</string>
+    <string name="settings_decoder_deband_grain_summary">Add extra noise to cover up remaining artifacts. (Default: 32)</string>
 
     <string name="settings_decoder_hdr_settings">HDR settings</string>
     <string name="settings_decoder_hdr_settings_summary">Configure HDR hardware passthrough, tone mapping, max boost, and gamut mapping</string>
@@ -593,7 +593,7 @@
     <string name="settings_decoder_tone_mapping_reinhard">Reinhard</string>
     <string name="settings_decoder_tone_mapping_reinhard_summary">Classic tone mapping algorithm. Good at preventing highlight clipping</string>
     <string name="settings_decoder_tone_mapping_max_boost">Tone mapping max boost</string>
-    <string name="settings_decoder_tone_mapping_max_boost_summary">Allows specular highlights to overshoot tone curve for punchier contrast. (Default 1.50)</string>
+    <string name="settings_decoder_tone_mapping_max_boost_summary">Allows specular highlights to overshoot tone curve for punchier contrast. (Default: 1.50)</string>
     <string name="settings_decoder_gamut_mapping_mode">Gamut mapping mode</string>
     <string name="settings_decoder_gamut_mapping_mode_summary">Strategy for mapping wide HDR color space (BT.2020) to SDR displays</string>
     <string name="settings_decoder_gamut_mapping_perceptual">Perceptual</string>
@@ -659,7 +659,7 @@
 
     <string name="settings_about_header_links">Links</string>
     <string name="settings_about_developer">Developer</string>
-    <string name="settings_about_developer_summary">Visit developer\'s GitHub profile</string>
+    <string name="settings_about_developer_summary">Visit the developer\'s GitHub profile</string>
     <string name="settings_about_github">GitHub repository</string>
     <string name="settings_about_github_summary">View source code, report issues, and contribute to the project</string>
     <string name="settings_about_telegram">Telegram channel</string>
