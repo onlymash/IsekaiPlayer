@@ -1,0 +1,757 @@
+<!--
+  ~ IsekaiPlayer - Sovereign above myriad realms; shatter every mortal cipher.
+  ~ Copyright (C) 2026 onlymash
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="app_name">Isekai Player</string>
+    <string name="app_slogan_short">数多の領域を超越せよ。あらゆる暗号を打ち砕け。</string>
+
+    <string name="settings_category_appearance">外観</string>
+    <string name="settings_category_appearance_summary">テーマ、ダークモード、高コントラスト設定をカスタマイズ</string>
+    <string name="settings_category_player">プレーヤー</string>
+    <string name="settings_category_player_summary">再生動作、UIレイアウト、ボタン効果を設定</string>
+    <string name="settings_category_gestures">ジェスチャー</string>
+    <string name="settings_category_gestures_summary">シーク、音量、明るさのコン方向・タップ操作を管理</string>
+    <string name="settings_category_decoder">デコーダー</string>
+    <string name="settings_category_decoder_summary">ハードウェアアクセラレーション、映像出力、スケーリングを調整</string>
+    <string name="settings_category_audio">オーディオ</string>
+    <string name="settings_category_audio_summary">音声トラック、出力優先度、夜間モード正規化を管理</string>
+    <string name="settings_category_subtitle">字幕</string>
+    <string name="settings_category_subtitle_summary">字幕の言語、外観、文字コードをカスタマイズ</string>
+    <string name="settings_category_advanced">詳細設定</string>
+    <string name="settings_category_advanced_summary">バッファサイズ、キャッシング、ネットワーク接続、セキュリティを設定</string>
+    <string name="settings_category_general">一般</string>
+    <string name="settings_category_general_summary">アプリ言語、触感フィードバック、ナビゲーションを変更</string>
+    <string name="settings_category_about">アプリについて</string>
+    <string name="settings_category_about_summary">アプリのバージョン、オープンソースライセンス、リンクを表示</string>
+
+    <string name="settings_appearance_header_theme">テーマ</string>
+
+    <string name="settings_appearance_theme_mode">テーマモード</string>
+    <string name="settings_appearance_theme_mode_system">システムに従う</string>
+    <string name="settings_appearance_theme_mode_light">ライト</string>
+    <string name="settings_appearance_theme_mode_dark">ダーク</string>
+    <string name="settings_appearance_theme_high_contrast">高コントラストダークテーマ</string>
+    <string name="settings_appearance_theme_high_contrast_summary">背景をより深くし、コントラストを高めます</string>
+
+    <string name="settings_general_header_general">一般</string>
+    <string name="settings_general_app_language">アプリの言語</string>
+    <string name="settings_general_app_language_summary">アプリの表示言語を変更します</string>
+    <string name="settings_general_header_navigation">ナビゲーション</string>
+
+    <string name="settings_general_haptics">触感フィードバック</string>
+    <string name="settings_general_haptics_summary">タッチ操作時の振動フィードバックを有効化</string>
+    <string name="settings_general_intercept_back">戻るボタンのナビゲーション</string>
+    <string name="settings_general_intercept_back_summary">有効にすると、ジェスチャーまたは戻るボタンで上の階層へ順に移動してから終了します</string>
+
+    <!-- Backup & Restore -->
+    <string name="settings_general_header_backup">バックアップと復元</string>
+    <string name="settings_general_export_settings">設定のバックアップをエクスポート</string>
+    <string name="settings_general_export_settings_summary">現在の設定を JSON バックアップファイルとして保存します</string>
+    <string name="settings_general_import_settings">設定のバックアップをインポート</string>
+    <string name="settings_general_import_settings_summary">JSON ファイルから設定を復元します（現在の設定は上書きされます）</string>
+    <string name="settings_backup_export_success">設定のエクスポートに成功しました</string>
+    <string name="settings_backup_export_failed">設定のエクスポートに失敗しました</string>
+    <string name="settings_backup_import_success">設定の復元に成功しました</string>
+    <string name="settings_backup_import_failed">設定の復元に失敗しました。ファイルの形式を確認してください</string>
+
+    <string name="settings_gestures_header_drag">スライド操作</string>
+    <string name="settings_gestures_header_tap">タップ操作</string>
+    <string name="settings_gestures_horizontal_drag">シーク操作</string>
+    <string name="settings_gestures_horizontal_drag_summary">画面を左右にスライドして再生位置を調整</string>
+    <string name="settings_gestures_vertical_drag_volume">音量調整</string>
+    <string name="settings_gestures_vertical_drag_volume_summary">画面左側を上下にスライドして音量を調整</string>
+    <string name="settings_gestures_vertical_drag_brightness">明るさ調整</string>
+    <string name="settings_gestures_vertical_drag_brightness_summary">画面右側を上下にスライドして明るさを調整</string>
+    <string name="settings_gestures_swap_volume_brightness">音量と明るさのエリアを反転</string>
+    <string name="settings_gestures_swap_volume_brightness_summary">左右のスライド調整エリアを入れ替えます</string>
+    <string name="settings_gestures_double_tap_seek">ダブルタップでシーク</string>
+    <string name="settings_gestures_double_tap_seek_summary">画面端をダブルタップして早送り/早戻し</string>
+    <string name="settings_gestures_double_tap_play_pause">ダブルタップで再生/一時停止</string>
+    <string name="settings_gestures_double_tap_play_pause_summary">画面中央をダブルタップして再生または一時停止</string>
+    <string name="settings_gestures_long_press">長押し倍速再生</string>
+    <string name="settings_gestures_long_press_summary">画面を長押しして倍速再生/早送り</string>
+    <string name="settings_gestures_long_press_speed">長押し時の再生速度</string>
+    <string name="settings_gestures_long_press_speed_summary">長押し時の再生倍速を設定します</string>
+    <string name="settings_gestures_double_tap_seek_duration">ダブルタップ移動時間</string>
+    <string name="settings_gestures_double_tap_seek_duration_summary">ダブルタップ時の移動時間: %d 秒</string>
+
+    <string name="browser_view_options_title">表示オプション</string>
+    <string name="browser_view_options_sort_by">並べ替え基準</string>
+    <string name="browser_view_options_sort_type_name">名前</string>
+    <string name="browser_view_options_sort_type_date">日付</string>
+    <string name="browser_view_options_sort_type_size">サイズ</string>
+    <string name="browser_view_options_sort_type_duration">再生時間</string>
+    <string name="browser_view_options_order">順序</string>
+    <string name="browser_view_options_order_ascending">昇順</string>
+    <string name="browser_view_options_order_descending">降順</string>
+    <string name="browser_view_options_folders_first">フォルダを先頭に表示</string>
+    <string name="browser_view_options_show_hidden">隠しファイルを表示</string>
+    <string name="browser_view_options_show_subtitles">字幕ファイルを表示</string>
+    <string name="browser_view_options_filters">フィルター</string>
+    <string name="browser_view_options_fields">表示項目</string>
+    <string name="browser_view_options_field_thumbnail">サムネイル</string>
+    <string name="browser_view_options_field_item_count">項目数</string>
+    <string name="browser_view_options_field_size">サイズ</string>
+    <string name="browser_view_options_field_duration">再生時間</string>
+    <string name="browser_view_options_field_resolution">解像度</string>
+    <string name="browser_view_options_field_date">日付</string>
+    <string name="browser_view_options_field_extension">拡張子</string>
+
+    <string name="browser_view_options_order_name_asc">A-Z</string>
+    <string name="browser_view_options_order_name_desc">Z-A</string>
+    <string name="browser_view_options_order_date_asc">古い順</string>
+    <string name="browser_view_options_order_date_desc">新しい順</string>
+    <string name="browser_view_options_order_size_asc">小さい順</string>
+    <string name="browser_view_options_order_size_desc">大きい順</string>
+    <string name="browser_view_options_order_duration_asc">短い順</string>
+    <string name="browser_view_options_order_duration_desc">長い順</string>
+    <string name="browser_view_options_done">完了</string>
+
+    <string name="source_editor_title_add">ソースの追加</string>
+    <string name="source_editor_title_edit">ソースの編集</string>
+    <string name="source_editor_save">保存</string>
+    <string name="source_editor_label_name">表示名</string>
+    <string name="source_editor_label_protocol">プロトコル</string>
+    <string name="source_editor_label_host">ホスト / IP</string>
+    <string name="source_editor_label_port">ポート (任意)</string>
+    <string name="source_editor_label_path_default">初期パス</string>
+    <string name="source_editor_label_path_smb">共有名</string>
+    <string name="source_editor_label_https">HTTPS を使用</string>
+    <string name="source_editor_label_username">ユーザー名 (任意)</string>
+    <string name="source_editor_label_password">パスワード (任意)</string>
+    <string name="source_editor_error_required">名前とホストは必須項目です</string>
+    <string name="source_editor_error_smb_share_required">SMB プロトコルには共有名が必要です</string>
+
+    <!-- Common Strings -->
+    <string name="common_close">閉じる</string>
+    <string name="common_more">その他</string>
+    <string name="common_expand">展開</string>
+    <string name="common_collapse">折りたたむ</string>
+    <string name="common_edit">編集</string>
+    <string name="common_delete">削除</string>
+    <string name="common_back">戻る</string>
+    <string name="common_cancel">キャンセル</string>
+    <string name="common_retry">再試行</string>
+    <string name="common_refresh">更新</string>
+    <string name="common_settings">設定</string>
+    <string name="common_replay">最初から再生</string>
+    <string name="common_move_up">上に移動</string>
+    <string name="common_move_down">下に移動</string>
+    <string name="common_none">なし</string>
+    <string name="common_all">すべて</string>
+    <string name="common_reset">リセット</string>
+    <string name="common_on">オン</string>
+    <string name="common_off">オフ</string>
+    <string name="common_preview">プレビュー</string>
+
+    <!-- Browser Screen -->
+    <string name="browser_menu_sources">ソース</string>
+    <string name="browser_menu_sort">並べ替え</string>
+    <string name="browser_menu_search">検索</string>
+    <string name="browser_permission_grant">すべてのファイルへのアクセス権限を許可</string>
+    <string name="browser_permission_required">ローカル動画の検出および外部字幕の自動読み込みには、すべてのファイルへのアクセス権限が必要です</string>
+    <string name="browser_media_list_empty">動画が見つかりません</string>
+    <string name="browser_search_placeholder_collapsed">検索</string>
+    <string name="browser_search_placeholder_expanded">現在のフォルダ内を検索</string>
+    <string name="browser_search_prompt">検索キーワードを入力</string>
+    <string name="browser_media_items_count">%1$d 個の項目</string>
+    <string name="browser_subtitle_no_matching_video">一致する動画ファイルが見つかりません</string>
+    <string name="browser_fab_menu_add_source">リモートソースを追加</string>
+    <string name="browser_fab_menu_play_network_stream">ネットワークリンクを再生</string>
+    <string name="browser_fab_toggle_menu_content_description">メニューの切り替え</string>
+    <string name="browser_fab_toggle_menu_expanded_description">展開済み</string>
+    <string name="browser_fab_toggle_menu_collapsed_description">折りたたみ済み</string>
+    <string name="browser_fab_toggle_menu_close_action_label">メニューを閉じる</string>
+
+    <string name="network_stream_title">ネットワークストリーム</string>
+    <string name="network_stream_input_label">ストリーム URL</string>
+    <string name="network_stream_input_placeholder">URL を入力 (http://, https:// など)</string>
+    <string name="network_stream_play_button">再生</string>
+    <string name="network_stream_history_title">再生履歴</string>
+    <string name="network_stream_history_empty">ストリームの再生履歴はありません</string>
+    <string name="network_stream_clear_history">履歴を消去</string>
+    <string name="network_stream_invalid_url">有効な URL を入力してください</string>
+    <string name="network_stream_copy_link">リンクをコピー</string>
+    <string name="network_stream_link_copied">リンクをクリップボードにコピーしました</string>
+    <string name="network_stream_delete_single_dialog_title">記録を削除</string>
+    <string name="network_stream_delete_single_dialog_message">この再生記録を削除してもよろしいですか？</string>
+    <string name="network_stream_clear_all_dialog_title">すべての記録を消去</string>
+    <string name="network_stream_clear_all_dialog_message">すべてのネットワークストリーム履歴を消去しますか？この操作は取り消せません。</string>
+
+    <!-- Source -->
+    <string name="source_selection_devices_list_title">ストレージデバイス</string>
+    <string name="source_selection_manage">ソースの管理</string>
+    <string name="source_storage_usage">空き容量 %1$s / 全体 %2$s</string>
+    <string name="source_local_internal_desc">ローカルデバイスストレージ</string>
+    <string name="source_local_external_desc">外部ストレージ</string>
+    <string name="source_remote_header">リモートソース</string>
+    <string name="source_internal_storage_name">内部ストレージ</string>
+    <string name="source_manager_title">ソースの管理</string>
+    <string name="source_manager_empty">リモートソースは追加されていません</string>
+    <string name="source_manager_add">リモートソースを追加</string>
+    <string name="source_manager_delete_title">ソースを削除</string>
+    <string name="source_manager_delete_message">「%1$s」を削除してもよろしいですか？この操作は取り消せません。</string>
+
+    <!-- Drawer Categories & History & Playlist -->
+    <string name="drawer_library_section_title">ライブラリ</string>
+    <string name="playlist_title">プレイリスト</string>
+    <string name="playlist_subtitle">メディアコレクション</string>
+    <string name="playlist_create_dialog_title">新規プレイリスト</string>
+    <string name="playlist_create_dialog_placeholder">プレイリスト名</string>
+    <string name="playlist_create_option_blank">空のプレイリストを作成</string>
+    <string name="playlist_create_option_m3u_link">URL から M3U プレイリストを追加</string>
+    <string name="playlist_create_option_m3u_file">M3U ファイルから追加</string>
+    <string name="playlist_create_title_blank">新規プレイリスト</string>
+    <string name="playlist_create_title_m3u_link">URL から M3U をインポート</string>
+    <string name="playlist_create_title_m3u_file">ファイルから M3U をインポート</string>
+    <string name="playlist_create_m3u_url_placeholder">リンク URL (http://, https://...)</string>
+    <string name="playlist_create_m3u_file_select">M3U ファイルを選択</string>
+    <string name="playlist_create_m3u_file_selected">選択されたファイル: %s</string>
+    <string name="playlist_create_import_button">インポート</string>
+    <string name="playlist_create_next_button">次へ</string>
+    <string name="playlist_create_previous_button">前へ</string>
+    <string name="playlist_import_error_invalid_url">有効な HTTP または HTTPS リンクを入力してください</string>
+    <string name="playlist_import_error_network">プレイリストの取得に失敗しました。ネットワークと URL を確認してください</string>
+    <string name="playlist_import_error_parse">M3U コンテンツの解析に失敗しました。ファイル形式を確認してください</string>
+    <string name="playlist_import_error_title_empty">プレイリスト名を入力してください</string>
+    <string name="playlist_type_m3u_link">M3U リンク</string>
+    <string name="playlist_type_m3u_file">M3U ファイル</string>
+    <string name="playlist_move_up">上に移動</string>
+    <string name="playlist_move_down">下に移動</string>
+    <string name="playlist_rename_dialog_title">プレイリスト名の変更</string>
+    <string name="playlist_empty">プレイリストがありません</string>
+    <string name="playlist_items_empty">このプレイリストに動画はありません</string>
+    <string name="playlist_play_all">すべて再生</string>
+    <string name="playlist_item_count">%d 件</string>
+    <string name="playlist_delete_dialog_title">プレイリストを削除</string>
+    <string name="playlist_delete_dialog_message">プレイリスト「%s」を削除してもよろしいですか？</string>
+    <string name="playback_history_title">再生履歴</string>
+    <string name="playback_history_subtitle">視聴進捗と履歴</string>
+    <string name="playback_history_search_placeholder_expanded">再生履歴を検索</string>
+    <string name="playlist_search_placeholder_expanded">プレイリスト内の動画を検索</string>
+    <string name="playback_history_empty">再生履歴はありません</string>
+    <string name="playback_history_clear_all">履歴を消去</string>
+    <string name="playback_history_clear_dialog_title">再生履歴を消去</string>
+    <string name="playback_history_clear_dialog_message">すべての動画再生履歴を消去してもよろしいですか？この操作は取り消せません。</string>
+    <string name="playback_history_delete_dialog_title">履歴を削除</string>
+    <string name="playback_history_delete_dialog_message">この再生履歴を削除してもよろしいですか？</string>
+
+    <!-- Multi-Selection & Action Toolbar -->
+    <string name="browser_selection_count">%d 件選択中</string>
+    <string name="browser_selection_select_all">すべて選択</string>
+    <string name="browser_selection_deselect_all">選択解除</string>
+    <string name="browser_selection_exit">選択モードを終了</string>
+    <string name="playlist_add_to">プレイリストに追加</string>
+    <string name="playlist_select_target_title">プレイリストに追加</string>
+    <string name="playlist_added_toast">%1$d 件を「%2$s」に追加しました</string>
+    <string name="playlist_readonly">読み取り専用</string>
+
+    <!-- Player Quick Controls -->
+    <string name="player_control_brightness">明るさ</string>
+    <string name="player_control_system_volume">システム音量</string>
+    <string name="player_control_player_volume">プレーヤー音量</string>
+    <string name="player_control_rewind">%d 秒早戻し</string>
+    <string name="player_control_forward">%d 秒早送り</string>
+    <string name="player_control_previous">前へ</string>
+    <string name="player_control_next">次へ</string>
+    <string name="player_control_play_pause">再生/一時停止</string>
+    <string name="player_control_play">再生</string>
+    <string name="player_control_pause">一時停止</string>
+    <string name="player_control_playback_speed">再生速度</string>
+    <string name="player_control_adjust_temporary">一時調整</string>
+    <string name="player_audio_delay">オーディオ遅延</string>
+    <string name="player_subtitle_delay">字幕遅延</string>
+    <string name="settings_player_playback_speed_summary">すべての動画のデフォルト再生速度を調整します</string>
+    <string name="player_control_screenshot">スクリーンショット</string>
+    <string name="player_control_frame_step_forward">次のコマ</string>
+    <string name="player_control_frame_step_backward">前のコマ</string>
+    <string name="player_control_lock">操作をロック</string>
+    <string name="player_control_unlock">ロック解除</string>
+    <string name="player_control_enter_pip">ピクチャーインピクチャー</string>
+    <string name="player_control_osd">ステータス表示</string>
+    <string name="player_osd_none">オフ</string>
+    <string name="player_osd_stats_header_title">情報</string>
+    <string name="player_osd_stats_general">一般統計 (P1)</string>
+    <string name="player_osd_stats_timings">フレームタイミング (P2)</string>
+    <string name="player_osd_stats_cache">入力/キャッシュ統計 (P3)</string>
+    <string name="player_osd_stats_key_bindings">ショートカットキー設定 (P4)</string>
+    <string name="player_osd_stats_tracks">選択中トラック情報 (P5)</string>
+    <string name="player_status_seek_forward">+%d秒</string>
+    <string name="player_status_seek_backward">-%d秒</string>
+    <string name="player_status_fast_forwarding">%1$.1f倍速 早送り中</string>
+    <string name="player_settings_player">プレーヤー設定</string>
+    <string name="player_settings_decoder">デコーダー設定</string>
+    <string name="player_settings_audio">オーディオ設定</string>
+    <string name="player_settings_subtitle">字幕設定</string>
+    <string name="player_settings_gestures">ジェスチャー設定</string>
+    <string name="player_settings_advanced">詳細設定</string>
+
+    <!-- Player Tracks Drawer -->
+    <string name="player_drawer_tracks_title">トラック</string>
+    <string name="player_drawer_playlist_title">プレイリスト</string>
+    <string name="player_drawer_audio_tracks">音声</string>
+    <string name="player_drawer_subtitle_tracks">字幕</string>
+    <string name="player_add_external_subtitle">外部字幕を追加</string>
+    <string name="player_error_unsupported_subtitle">未対応の字幕フォーマットです</string>
+    <string name="player_error_load_failed">メディアの読み込みに失敗しました。ネットワークとサーバーアドレスを確認してください</string>
+    <string name="player_drawer_video_tracks">映像</string>
+    <string name="player_drawer_tracks_button">トラック選択</string>
+    <string name="player_drawer_playlist_button">プレイリスト</string>
+
+    <!-- Player Settings -->
+    <string name="settings_search_empty">一致する設定が見つかりません</string>
+    <string name="settings_player_header_controls">コントロール</string>
+    <string name="settings_player_seek_duration">早送り/早戻し時間</string>
+    <string name="settings_player_seek_duration_summary">ボタンでのシーク移動時間: %d 秒</string>
+    <string name="settings_player_auto_hide_duration">コントロールバーの自動非表示時間</string>
+    <string name="settings_player_auto_hide_duration_summary">無操作状態が %1$d 秒続くとコントロールバーを非表示にします</string>
+    <string name="settings_player_enable_pip">ピクチャーインピクチャー (PiP)</string>
+    <string name="settings_player_enable_pip_summary">再生中にアプリを離れた際、自動的に PiP モードへ移行します</string>
+    <string name="settings_player_screenshot_format">スクリーンショットのフォーマット</string>
+    <string name="settings_player_screenshot_format_jpg">JPEG (.jpg)</string>
+    <string name="settings_player_screenshot_format_png">PNG (.png)</string>
+    <string name="settings_player_screenshot_format_webp">WebP (.webp)</string>
+
+    <string name="settings_player_header_ui">インターフェース</string>
+    <string name="settings_player_always_full_screen">全画面表示を維持</string>
+    <string name="settings_player_always_full_screen_summary">コントロール表示時もステータスバーやナビゲーションバーを非表示にします</string>
+
+    <string name="settings_player_layout">プレーヤーレイアウト</string>
+    <string name="settings_player_layout_summary">四隅の操作ボタンをカスタマイズ</string>
+    <string name="settings_player_layout_show_title_bar">タイトルバーを表示</string>
+    <string name="settings_player_layout_all_buttons">すべてのボタン</string>
+
+    <string name="settings_player_scale_mode">画面拡大モード</string>
+    <string name="settings_player_scale_mode_fit">画面に合わせる</string>
+    <string name="settings_player_scale_mode_fill">画面いっぱいに表示</string>
+    <string name="settings_player_scale_mode_original">オリジナルサイズ</string>
+
+    <string name="settings_player_button_effects">ボタンエフェクト</string>
+    <string name="settings_player_button_effects_summary">ボタンの外観およびアニメーションをカスタマイズ</string>
+    <string name="settings_player_button_effects_blur">ぼかし効果</string>
+    <string name="settings_player_button_effects_blur_summary">すりガラスのようなぼかし効果を有効化</string>
+    <string name="settings_player_button_effects_lens">レンズ効果</string>
+    <string name="settings_player_button_effects_lens_summary">端の歪みレンズエフェクトを有効化</string>
+    <string name="settings_player_button_effects_alpha">不透明度</string>
+    <string name="settings_player_button_effects_alpha_summary">ボタンの不透明度を調整</string>
+    <string name="settings_player_button_effects_show_border">枠線を表示</string>
+    <string name="settings_player_button_effects_show_border_summary">ボタンの周りにハイライト枠線を表示</string>
+    <string name="settings_player_button_effects_border_style">ハイライトスタイル</string>
+    <string name="settings_player_button_effects_border_style_directional">方向性ハイライト</string>
+    <string name="settings_player_button_effects_border_style_ambient">アンビエントライト</string>
+    <string name="settings_player_button_effects_border_style_plain">単色</string>
+    <string name="settings_player_button_effects_use_texture_view">TextureView コンテナを使用</string>
+    <string name="settings_player_button_effects_use_texture_view_summary">TextureView でレンダリングし、ぼかし・レンズ効果を遅延なしで実現します</string>
+    <string name="settings_player_button_effects_note" formatted="false">コンテナ構成と特徴\n• SurfaceView + PixelCopy (デフォルト)\nハードウェアコンポーザー (HWC) を使用し、非常に省電力でバッテリー負荷がありません。ただし背景のガラスぼかし生成に僅かな遅延が生じます。\n• TextureView\nリアルタイムのガラス屈折・ぼかしを遅延なしで極めて滑らかに表示しますが、再生中の GPU 負荷が増加します。\n• ExoPlayer エンジンの注意点\nExoPlayer エンジンの SurfaceView はレイアウト制約で拡大率を制御するため、TextureView を有効にしない限り PixelCopy によるぼかし効果は自動的に無効化されます。</string>
+    <string name="settings_player_seek_bar_style">シークバースタイル</string>
+    <string name="settings_player_seek_bar_style_wavy">ウェーブ</string>
+    <string name="settings_player_seek_bar_style_straight">ストレート</string>
+
+    <string name="settings_player_resume_playback">続きから再生</string>
+    <string name="settings_player_resume_playback_summary">前回の保存位置から自動的に再生を再開します</string>
+
+    <string name="settings_player_loop_mode">ループモード</string>
+    <string name="settings_player_loop_mode_none">なし</string>
+    <string name="settings_player_loop_mode_current">1曲リピート</string>
+    <string name="settings_player_loop_mode_sequential">順次再生</string>
+    <string name="settings_player_loop_mode_list">全曲リピート</string>
+    <string name="settings_player_loop_mode_shuffle">シャッフル</string>
+    <string name="settings_player_loop_mode_shuffle_repeat">シャッフルリピート</string>
+
+    <string name="settings_player_remember_brightness">明るさを記憶</string>
+    <string name="settings_player_remember_brightness_summary">前回再生時の明るさ設定を維持します</string>
+
+    <string name="settings_player_orientation">画面の向き</string>
+    <string name="settings_player_orientation_default">システムに従う</string>
+    <string name="settings_player_orientation_default_summary">システムの自動回転設定に従います</string>
+    <string name="settings_player_orientation_sensor">センサー自動</string>
+    <string name="settings_player_orientation_sensor_summary">常にデバイスのセンサーに基づいて回転します</string>
+    <string name="settings_player_orientation_landscape">横画面固定</string>
+    <string name="settings_player_orientation_landscape_summary">横画面に固定 (センサー切り替え対応)</string>
+    <string name="settings_player_orientation_portrait">縦画面固定</string>
+    <string name="settings_player_orientation_portrait_summary">縦画面に固定 (センサー切り替え対応)</string>
+    <string name="settings_player_orientation_video">動画アスペクト比に合わせる</string>
+    <string name="settings_player_orientation_video_summary">動画の縦横比に基づいて自動切替します</string>
+
+    <string name="settings_audio_header_playback">再生動作</string>
+    <string name="settings_audio_header_exoplayer">ExoPlayer オーディオ</string>
+    <string name="settings_audio_header_mpv">mpv オーディオ</string>
+    <string name="settings_audio_request_focus">オーディオフォーカスを要求</string>
+    <string name="settings_audio_request_focus_summary">他のアプリが音声を出力した際に再生を一時停止します</string>
+    <string name="settings_audio_enable_background_audio">バックグラウンド再生</string>
+    <string name="settings_audio_enable_background_audio_summary">アプリがバックグラウンドに移行しても音声を再生し続けます</string>
+    <string name="settings_audio_exo_volume">プレーヤー音量</string>
+    <string name="settings_audio_exo_volume_summary">ExoPlayer の音量を設定 (0–100%%)</string>
+    <string name="settings_audio_mpv_volume">プレーヤー音量</string>
+    <string name="settings_audio_mpv_volume_summary">mpv の音量を設定 (0–200%%)</string>
+    <string name="settings_audio_preferred_language">優先音声言語</string>
+    <string name="settings_audio_preferred_language_summary">デフォルトの音声言語を選択します</string>
+    <string name="settings_audio_delay">オーディオ遅延</string>
+    <string name="settings_audio_delay_summary">音声と映像の同期ズレを補正するためのデフォルト遅延を調整</string>
+    <string name="settings_audio_output_order">音声出力優先度</string>
+    <string name="settings_audio_output_order_summary">音声出力バックエンドの優先度を調整します</string>
+    <string name="settings_audio_dynamic_normalize">ダイナミックレンジ圧縮</string>
+    <string name="settings_audio_dynamic_normalize_summary">音量を正規化して会話を聞きやすくし、大音量を抑えます (ナイトモード)</string>
+    <string name="settings_audio_pitch_correction">ピッチ補正</string>
+    <string name="settings_audio_pitch_correction_summary">再生速度を変更した際も元の音高を維持します</string>
+
+    <string name="settings_subtitle_header_selection">字幕選択</string>
+    <string name="settings_subtitle_header_rendering">レンダリングと外観</string>
+    <string name="settings_subtitle_preferred_language">優先字幕言語</string>
+    <string name="settings_subtitle_preferred_language_summary">デフォルトの字幕言語を選択します</string>
+    <string name="settings_subtitle_fallback">自動字幕選択</string>
+    <string name="settings_subtitle_fallback_summary">優先言語が見つからない場合、最初に利用可能な字幕を自動選択します</string>
+
+    <string name="settings_subtitle_header_mpv">mpv 字幕</string>
+    <string name="settings_subtitle_mpv_style">字幕の外観設定</string>
+    <string name="settings_subtitle_mpv_style_summary">フォントサイズ、文字色、縁取り、余白をカスタマイズ</string>
+
+    <string name="settings_subtitle_header_exo">ExoPlayer 字幕</string>
+    <string name="settings_subtitle_exo_style">字幕の外観設定</string>
+    <string name="settings_subtitle_exo_style_summary">フォントサイズ、文字色、縁取り、背景、下部余白をカスタマイズ</string>
+    <string name="settings_subtitle_exo_preview_sample">これは ExoPlayer 字幕のサンプルです</string>
+
+    <string name="settings_subtitle_mpv_ass_override">ASS 字幕スタイルの上書き</string>
+    <string name="settings_subtitle_mpv_ass_override_summary">ユーザー定義スタイルで ASS 字幕の固有スタイルを上書きするか設定します</string>
+    <string name="settings_subtitle_mpv_ass_override_scale">スケーリングのみ (推奨)</string>
+    <string name="settings_subtitle_mpv_ass_override_scale_summary">字幕の元のレイアウトを保持しつつ、基本的な拡大縮小とスタイル上書きを適用します</string>
+    <string name="settings_subtitle_mpv_ass_override_yes">基本スタイルを上書き</string>
+    <string name="settings_subtitle_mpv_ass_override_yes_summary">元のデザインを可能な限り残しつつ、ユーザー定義の基本スタイルを適用します</string>
+    <string name="settings_subtitle_mpv_ass_override_no">上書きしない (ASS 原文そのまま)</string>
+    <string name="settings_subtitle_mpv_ass_override_no_summary">字幕ファイルで定義されたスタイル、位置、エフェクトをそのままレンダリングします</string>
+    <string name="settings_subtitle_mpv_ass_override_force">ユーザー定義を強制適用</string>
+    <string name="settings_subtitle_mpv_ass_override_force_summary">字幕独自のフォーマットを無視し、グローバル字幕スタイルを強制適用します</string>
+    <string name="settings_subtitle_mpv_ass_override_strip">ASS タグを消去 (テキストのみ)</string>
+    <string name="settings_subtitle_mpv_ass_override_strip_summary">ASS エフェクトタグやカスタムフォントをすべて除去し、プレーンテキストとして表示します</string>
+    <string name="settings_subtitle_mpv_preview_sample">これは mpv 字幕のサンプルです</string>
+
+    <string name="settings_subtitle_font_size">フォントサイズ</string>
+    <string name="settings_subtitle_font_size_summary">字幕の表示サイズを調整 (sp)</string>
+    <string name="settings_subtitle_text_color">文字色</string>
+    <string name="settings_subtitle_bg_color">背景色</string>
+    <string name="settings_subtitle_bg_opacity">背景の不透明度</string>
+    <string name="settings_subtitle_bg_opacity_summary">字幕背景ボックスの不透明度を調整します</string>
+    <string name="settings_subtitle_bottom_padding">字幕の下部余白</string>
+    <string name="settings_subtitle_bottom_padding_summary">画面下部からの距離を調整 (dp)</string>
+    <string name="settings_subtitle_font_weight">フォントの太さ</string>
+    <string name="settings_subtitle_outline_color">縁取りの色</string>
+    <string name="settings_subtitle_outline_width">縁取りの幅</string>
+    <string name="settings_subtitle_shadow_color">影の色</string>
+    <string name="settings_subtitle_shadow_offset">影のオフセット</string>
+    <string name="settings_subtitle_bottom_margin">字幕の下部余白</string>
+    <string name="settings_subtitle_bottom_margin_summary">画面下部からの垂直距離を調整します</string>
+    <string name="settings_subtitle_bold">太字</string>
+    <string name="settings_subtitle_bold_summary">字幕テキストを太字で表示します</string>
+    <string name="settings_subtitle_italic">斜体</string>
+    <string name="settings_subtitle_italic_summary">字幕テキストを斜体で表示します</string>
+    <string name="settings_subtitle_font">字幕フォント</string>
+    <string name="settings_subtitle_font_summary">mpv 字幕レンダリングに使用するフォントを選択</string>
+    <string name="settings_subtitle_font_default">システムデフォルト (sans-serif)</string>
+    <string name="settings_subtitle_font_permission_required">すべてのファイルへのアクセス権限が必要です</string>
+    <string name="settings_subtitle_font_permission_summary">/Fonts フォルダ内のカスタムフォントをスキャンするため権限を許可してください</string>
+    <string name="settings_subtitle_font_grant_permission">権限を許可</string>
+    <string name="settings_subtitle_font_no_fonts_found">カスタムフォントが見つかりません</string>
+    <string name="settings_subtitle_font_no_fonts_summary">%s フォルダに .ttf または .otf フォントファイルを配置してください</string>
+    <string name="settings_subtitle_font_directory_hint">ヒント: カスタムの .ttf や .otf フォントファイルを %s フォルダに配置すると、上のリストに自動表示されます。</string>
+
+    <string name="settings_decoder_header_engine">エンジン</string>
+    <string name="settings_decoder_player_engine_type">再生エンジン</string>
+    <string name="settings_decoder_player_engine_mpv">mpv エンジン</string>
+    <string name="settings_decoder_player_engine_mpv_summary">高機能・高性能。高度な ASS/SSA 特殊字幕、ソフト音声ゲイン、全フォーマットデコード、カスタム Shader フィルターに対応。</string>
+    <string name="settings_decoder_player_engine_exo">ExoPlayer (Media3) エンジン</string>
+    <string name="settings_decoder_player_engine_exo_summary">省電力なハードウェアデコード。Android システムの MediaCodec とキャッシュを活用し、軽量・安定した再生を実現。</string>
+
+    <string name="settings_decoder_header_rendering">コアエンジン</string>
+    <string name="settings_decoder_header_performance">ハードウェアとパフォーマンス</string>
+    <string name="settings_decoder_header_processing">映像処理</string>
+    <string name="settings_decoder_profile">mpv プリセット</string>
+    <string name="settings_decoder_profile_summary">mpv の標準構成プリセット</string>
+    <string name="settings_decoder_profile_fast">高速</string>
+    <string name="settings_decoder_profile_fast_summary">パフォーマンスと低消費電力を最優先。多くのモバイルデバイスに推奨。</string>
+    <string name="settings_decoder_profile_default">デフォルト</string>
+    <string name="settings_decoder_profile_default_summary">mpv のデフォルト設定。バランスの取れた標準構成。</string>
+    <string name="settings_decoder_profile_high_quality">高品質</string>
+    <string name="settings_decoder_profile_high_quality_summary">高品質なスケーリングとデバンドフィルターを有効化。発熱やバッテリー消費が増加する場合があります。</string>
+    <string name="settings_decoder_profile_gpu_hq">GPU 高品質</string>
+    <string name="settings_decoder_profile_gpu_hq_summary">現代の GPU 向けにチューニングされた高品質プリセット。</string>
+    <string name="settings_decoder_profile_low_latency">低遅延</string>
+    <string name="settings_decoder_profile_low_latency_summary">再生遅延を最小限に抑えます。ライブ配信やゲーム映像に最適。</string>
+    <string name="settings_decoder_profile_sw_fast">ソフトウェア高速</string>
+    <string name="settings_decoder_profile_sw_fast_summary">最も高速なソフトウェアデコード。ハードウェアデコードが利用できない場合に使用。</string>
+
+    <string name="settings_decoder_override_profile">プリセット設定を上書き</string>
+    <string name="settings_decoder_override_profile_summary">プリセット値の代わりに、スケーリングやデバンドを個別手動設定します</string>
+
+    <string name="settings_decoder_vo">映像出力 (VO)</string>
+    <string name="settings_decoder_vo_summary">映像レンダリングに使用する出力ドライバー</string>
+    <string name="settings_decoder_vo_gpu">GPU (従来)</string>
+    <string name="settings_decoder_vo_gpu_summary">標準の GPU レンダラー。非常に高い安定性と互換性を誇ります。</string>
+    <string name="settings_decoder_vo_gpu_next">GPU Next (新世代)</string>
+    <string name="settings_decoder_vo_gpu_next_summary">libplacebo ベースの最新実験的レンダラー。先進的な機能をサポート。</string>
+
+    <string name="settings_decoder_gpu_api">GPU API</string>
+    <string name="settings_decoder_gpu_api_summary">レンダラーが使用するグラフィックス API</string>
+    <string name="settings_decoder_gpu_api_opengl">OpenGL ES</string>
+    <string name="settings_decoder_gpu_api_opengl_summary">デフォルトのグラフィックス API。高速で広くサポートされています。</string>
+    <string name="settings_decoder_gpu_api_vulkan">Vulkan</string>
+    <string name="settings_decoder_gpu_api_vulkan_summary">低オーバーヘッドな最新グラフィックス API。対応端末でより高い性能を発揮します。</string>
+
+    <string name="settings_decoder_hwdec">ハードウェアデコード</string>
+    <string name="settings_decoder_hwdec_summary">ハードウェアアクセラレーションによるデコード方針</string>
+    <string name="settings_decoder_hwdec_mediacodec">MediaCodec (Surface)</string>
+    <string name="settings_decoder_hwdec_mediacodec_summary">Android Surface に直接描画。最高のパフォーマンスと省電力を実現。</string>
+    <string name="settings_decoder_hwdec_mediacodec_copy">MediaCodec Copy (RAM)</string>
+    <string name="settings_decoder_hwdec_mediacodec_copy_summary">デコードフレームをメモリにコピー。mpv での後処理が可能ですが速度は低下します。</string>
+    <string name="settings_decoder_hwdec_no">無効 (ソフトウェア処理)</string>
+    <string name="settings_decoder_hwdec_no_summary">CPU でデコードします。低速ですがハードウェアの不具合を回避できます。</string>
+
+    <string name="settings_decoder_video_sync">映像同期モード</string>
+    <string name="settings_decoder_video_sync_summary">音声と映像の同期方式</string>
+    <string name="settings_decoder_video_sync_audio">音声優先 (Audio)</string>
+    <string name="settings_decoder_video_sync_audio_summary">音声クロックに合わせて映像フレームを出力します。最も安定したモードです。</string>
+    <string name="settings_decoder_video_sync_display_resample">ディスプレイリサンプル (Display Resample)</string>
+    <string name="settings_decoder_video_sync_display_resample_summary">ディスプレイのリフレッシュレートに合わせて音声をリサンプルし、ズレを自動補正します。</string>
+    <string name="settings_decoder_video_sync_display_resample_vdrop">Display Resample V-Drop</string>
+    <string name="settings_decoder_video_sync_display_resample_vdrop_summary">音声をリサンプルしつつ、コマ落ち（フレームドロップ）を許可してズレを補正します。</string>
+    <string name="settings_decoder_video_sync_display_resample_desync">Display Resample Desync</string>
+    <string name="settings_decoder_video_sync_display_resample_desync_summary">音声をリサンプルしますが、AV同期補正は行いません。</string>
+    <string name="settings_decoder_video_sync_display_tempo">Display Tempo</string>
+    <string name="settings_decoder_video_sync_display_tempo_summary">Display Resample と同様ですが、音高（ピッチ）の変化を防ぎます。</string>
+    <string name="settings_decoder_video_sync_display_vdrop">Display V-Drop</string>
+    <string name="settings_decoder_video_sync_display_vdrop_summary">映像フレームのスキップまたは重複によってズレを補正します。</string>
+    <string name="settings_decoder_video_sync_display_adrop">Display A-Drop</string>
+    <string name="settings_decoder_video_sync_display_adrop_summary">音声データをスキップまたは重複させて映像に同期させます。</string>
+    <string name="settings_decoder_video_sync_display_desync">Display Desync</string>
+    <string name="settings_decoder_video_sync_display_desync_summary">映像を画面リフレッシュレートに同期させ、音声は独立して再生します。</string>
+
+    <string name="settings_decoder_scale">拡大アルゴリズム (scale)</string>
+    <string name="settings_decoder_scale_summary">映像解像度を拡大する際のリサンプリングアルゴリズム</string>
+    <string name="settings_decoder_dscale">縮小アルゴリズム (dscale)</string>
+    <string name="settings_decoder_dscale_summary">映像解像度を縮小する際のリサンプリングアルゴリズム</string>
+    <string name="settings_decoder_cscale">色差アルゴリズム (cscale)</string>
+    <string name="settings_decoder_cscale_summary">色差（クロマ）チャンネルの処理に使用するアルゴリズム</string>
+    <string name="settings_decoder_scale_antiring">アンチリンギング強度 (scale-antiring)</string>
+    <string name="settings_decoder_scale_antiring_summary">スケーリング時の輪郭の白いチラつき（リンギング）を抑えます</string>
+    <string name="settings_decoder_scale_bilinear">Bilinear</string>
+    <string name="settings_decoder_scale_bilinear_summary">バイリニア処理 (最高速・低画質)。高速プリセットのデフォルト。</string>
+    <string name="settings_decoder_scale_spline36">Spline36</string>
+    <string name="settings_decoder_scale_spline36_summary">Spline36 スケーリング。鮮明さと速度のバランスに優れた高品質アルゴリズム。</string>
+    <string name="settings_decoder_scale_ewa_lanczos">EWA Lanczos (Jinc)</string>
+    <string name="settings_decoder_scale_ewa_lanczos_summary">楕円加重平均 Lanczos。低速ですが極めて高品質。</string>
+    <string name="settings_decoder_scale_lanczos">Lanczos</string>
+    <string name="settings_decoder_scale_lanczos_summary">Lanczos スケーリング。画質とパフォーマンスのバランスが良い標準アルゴリズム。</string>
+    <string name="settings_decoder_scale_ewa_lanczos_sharp">EWA Lanczos Sharp</string>
+    <string name="settings_decoder_scale_ewa_lanczos_sharp_summary">EWA Lanczos をわずかにくっきりさせたバージョン。高品質プリセットのデフォルト。</string>
+    <string name="settings_decoder_scale_ewa_lanczos_4sharpest">EWA Lanczos 4Sharpest</string>
+    <string name="settings_decoder_scale_ewa_lanczos_4sharpest_summary">非常にくっきりしますがリンギングが発生しやすいスケーラー。</string>
+    <string name="settings_decoder_scale_mitchell">Mitchell-Netravali</string>
+    <string name="settings_decoder_scale_mitchell_summary">三次補間フィルター。各種ノイズの発生を抑えたバランス型。</string>
+    <string name="settings_decoder_scale_hermite">Hermite</string>
+    <string name="settings_decoder_scale_hermite_summary">エルミートスプライン。高速ですがブロックノイズが発生しやすくなります。</string>
+    <string name="settings_decoder_scale_catmull_rom">Catmull-Rom</string>
+    <string name="settings_decoder_scale_catmull_rom_summary">Mitchell よりくっきりしますが、リンギングが発生しやすくなります。</string>
+    <string name="settings_decoder_scale_oversample">Oversample</string>
+    <string name="settings_decoder_scale_oversample_summary">オーバーサンプル処理でジャダーノイズを抑制します（多少ぼやけが発生します）。</string>
+
+    <string name="settings_decoder_deband">バンディング低減 (Debanding)</string>
+    <string name="settings_decoder_deband_summary">映像のグラデーション段差（カラーバンディング）を軽減します</string>
+    <string name="settings_decoder_deband_iterations">反復回数 (Iterations)</string>
+    <string name="settings_decoder_deband_iterations_summary">サンプルごとに実行するデバンド処理の回数。高いほど効果的ですが負荷が増加します。(デフォルト: 1)</string>
+    <string name="settings_decoder_deband_threshold">しきい値 (Threshold)</string>
+    <string name="settings_decoder_deband_threshold_summary">フィルターのカットオフ閾値。高いほどバンディングを抑えますが細部が損なわれる場合があります。(デフォルト: 48)</string>
+    <string name="settings_decoder_deband_range">範囲 (Range)</string>
+    <string name="settings_decoder_deband_range_summary">フィルターの初期半径。広いほどグラデーションを検出しやすくなります。(デフォルト: 16)</string>
+    <string name="settings_decoder_deband_grain">ノイズ付加 (Grain)</string>
+    <string name="settings_decoder_deband_grain_summary">微細なノイズを付加して残ったバンディングを目立たなくします。(デフォルト: 32)</string>
+
+    <string name="settings_decoder_hdr_settings">HDR 設定</string>
+    <string name="settings_decoder_hdr_settings_summary">HDR 直通、トーンマッピング、輝度ブースト、色域マッピングの設定</string>
+    <string name="settings_decoder_hdr_passthrough">HDR ハードウェア直通 (Passthrough)</string>
+    <string name="settings_decoder_hdr_passthrough_summary">ディスプレイに直接 HDR 信号を送信してピーク輝度を引き出します。有効時、ソフトウェアトーンマッピングはバイパスされます。</string>
+    <string name="settings_decoder_tone_mapping">トーンマッピングアルゴリズム</string>
+    <string name="settings_decoder_tone_mapping_auto">自動</string>
+    <string name="settings_decoder_tone_mapping_auto_summary">コンテンツに合わせて最適なマッピングを自動選択します</string>
+    <string name="settings_decoder_tone_mapping_bt2446a">BT.2446a</string>
+    <string name="settings_decoder_tone_mapping_bt2446a_summary">HDR から SDR への変換における最新の参照標準規格</string>
+    <string name="settings_decoder_tone_mapping_spline">Spline</string>
+    <string name="settings_decoder_tone_mapping_spline_summary">滑らかな曲線マッピング。ハイライトの細部を多く保持します</string>
+    <string name="settings_decoder_tone_mapping_reinhard">Reinhard</string>
+    <string name="settings_decoder_tone_mapping_reinhard_summary">クラシックなトーンマッピング。白飛びの防止に優れています</string>
+    <string name="settings_decoder_tone_mapping_max_boost">輝度ブーストの上限</string>
+    <string name="settings_decoder_tone_mapping_max_boost_summary">ハイライト部分のトーンカーブ超過を許可し、コントラストを強調します。(デフォルト: 1.50)</string>
+    <string name="settings_decoder_gamut_mapping_mode">色域マッピングモード</string>
+    <string name="settings_decoder_gamut_mapping_mode_summary">広色域 HDR (BT.2020) を SDR ディスプレイにマッピングする方針</string>
+    <string name="settings_decoder_gamut_mapping_perceptual">知覚的 (Perceptual)</string>
+    <string name="settings_decoder_gamut_mapping_perceptual_summary">相対的な色彩関係を維持し、自然なグラデーションを保ちます</string>
+    <string name="settings_decoder_gamut_mapping_clip">クリップ (Clip)</string>
+    <string name="settings_decoder_gamut_mapping_clip_summary">色域外のカラーを直線的に切り捨てます</string>
+    <string name="settings_decoder_gamut_mapping_relative">相対的色域 (Relative)</string>
+    <string name="settings_decoder_gamut_mapping_relative_summary">ホワイトポイントに合わせて色域をスケーリングします</string>
+    <string name="settings_decoder_gamut_mapping_saturation">彩度優先 (Saturation)</string>
+    <string name="settings_decoder_gamut_mapping_saturation_summary">鮮やかな彩度の維持を最優先します</string>
+    <string name="settings_decoder_gamut_mapping_desaturate">減色 (Desaturate)</string>
+    <string name="settings_decoder_gamut_mapping_desaturate_summary">ハイライトの色を白に近づけて色域内に収めます</string>
+
+    <string name="settings_decoder_framedrop">コマ落ち（ドロップ）方針</string>
+    <string name="settings_decoder_framedrop_summary">処理負荷増大時の対応方針</string>
+    <string name="settings_decoder_framedrop_vo">VO (推奨)</string>
+    <string name="settings_decoder_framedrop_vo_summary">映像出力段階でコマ落ちさせます。性能と同期のバランスがベストです。</string>
+    <string name="settings_decoder_framedrop_decoder">デコーダー (積極的)</string>
+    <string name="settings_decoder_framedrop_decoder_summary">デコード段階でコマ落ちさせます。非常に強力ですが映像乱れが生じる場合があります。</string>
+    <string name="settings_decoder_framedrop_no">無効</string>
+    <string name="settings_decoder_framedrop_no_summary">コマ落ちを行いません。音ズレを防ぐためハイスペック端末のみ推奨。</string>
+
+    <string name="settings_decoder_header_info">情報</string>
+    <string name="settings_decoder_codec_info">デコーダー情報</string>
+    <string name="settings_decoder_codec_info_summary">端末が対応する音声/映像デコーダーおよびハードウェア処理の状況を確認できます</string>
+    <string name="settings_decoder_codec_group_all">すべて</string>
+    <string name="settings_decoder_codec_group_video">映像</string>
+    <string name="settings_decoder_codec_group_audio">音声</string>
+    <string name="settings_decoder_codec_group_hardware">ハードウェアデコード</string>
+    <string name="settings_decoder_hw_decoding">ハードウェアデコード</string>
+    <string name="settings_decoder_sw_decoding">ソフトウェアデコード</string>
+    <string name="settings_decoder_codec_count">%1$d 個のデコーダー</string>
+    <string name="settings_decoder_codec_empty">一致するデコーダーが見つかりません</string>
+
+    <string name="settings_subtitle_codepage">字幕の文字コード</string>
+    <string name="settings_subtitle_codepage_summary">外部字幕ファイルのエンコーディング設定</string>
+    <string name="settings_subtitle_codepage_auto">自動判定 (汎用)</string>
+    <string name="settings_subtitle_codepage_auto_summary">文字コードを自動判別します (UTF-8/汎用)。ほとんどのファイルに対応。</string>
+    <string name="settings_subtitle_codepage_utf8">UTF-8</string>
+    <string name="settings_subtitle_codepage_utf8_summary">標準的な近代エンコーディング。字幕が文字化けする場合にお試しください。</string>
+    <string name="settings_subtitle_codepage_gbk">GBK (簡体字中国語)</string>
+    <string name="settings_subtitle_codepage_gbk_summary">旧来の簡体字中国語字幕で広く使われているエンコーディング。</string>
+    <string name="settings_subtitle_codepage_big5">BIG5 (繁体字中国語)</string>
+    <string name="settings_subtitle_codepage_big5_summary">繁体字中国語 (台湾/香港) の標準的なエンコーディング。</string>
+
+    <string name="settings_audio_output_aaudio_summary">最新の Android 低遅延オーディオ API。</string>
+    <string name="settings_audio_output_audiotrack_summary">標準的な Android Java ベースの音声出力。安定性と互換性に優れています。</string>
+    <string name="settings_audio_output_opensles_summary">従来の低レイヤー C 言語 API。他の出力で問題が発生した場合に使用。</string>
+
+    <string name="settings_lang_preferred_language_none">デフォルト (なし)</string>
+    <string name="settings_lang_add_language">言語を追加</string>
+    <string name="settings_lang_select_language">言語を選択</string>
+    <string name="settings_lang_all_languages">すべての言語</string>
+
+    <string name="settings_about_version">バージョン</string>
+    <string name="settings_about_description">ローカルストレージと各種リモートネットワークの架け橋となる、強力でモダンな Android 向けメディアプレーヤー。</string>
+
+    <string name="settings_about_header_legal">法的情報</string>
+    <string name="settings_about_libraries">オープンソースライセンス</string>
+    <string name="settings_about_libraries_summary">使用されているライブラリのバージョンとライセンス情報</string>
+    <string name="settings_about_copyright">著作権表示</string>
+    <string name="settings_about_copyright_summary">アプリの著作権とライセンス利用規約を表示</string>
+
+    <string name="settings_about_header_links">リンク</string>
+    <string name="settings_about_developer">開発者</string>
+    <string name="settings_about_developer_summary">開発者の GitHub プロフィールを表示</string>
+    <string name="settings_about_github">GitHub リポジトリ</string>
+    <string name="settings_about_github_summary">ソースコードの閲覧、不具合の報告、プロジェクトへの貢献</string>
+    <string name="settings_about_telegram">Telegram チャンネル</string>
+    <string name="settings_about_telegram_summary">コミュニティに参加して最新情報やディスカッションをチェック</string>
+
+    <string name="settings_advanced_header_security">mpv セキュリティ</string>
+    <string name="settings_advanced_tls_verify">TLS 証明書検証</string>
+    <string name="settings_advanced_tls_verify_summary">HTTPS 接続の TLS/SSL 証明書を検証します。ローカル環境で自己署名証明書を使用する場合は無効化してください。</string>
+
+    <string name="settings_advanced_header_connection">ネットワーク接続</string>
+    <string name="settings_advanced_user_agent">User-Agent</string>
+    <string name="settings_advanced_user_agent_summary">HTTP リクエストに使用するカスタム User-Agent 文字列</string>
+    <string name="settings_advanced_user_agent_empty_error">User-Agent を空にすることはできません</string>
+    <string name="settings_advanced_timeout">接続タイムアウト</string>
+    <string name="settings_advanced_timeout_summary">ネットワークレスポンスを待機する最大時間 (秒)</string>
+
+    <string name="settings_advanced_header_cache">mpv バッファとキャッシュ</string>
+    <string name="settings_advanced_cache_secs">前方キャッシュ時間</string>
+    <string name="settings_advanced_cache_secs_summary">バッファに事前読み込みする未再生ビデオの時間 (秒)</string>
+    <string name="settings_advanced_cache_back_secs">後方キャッシュ時間</string>
+    <string name="settings_advanced_cache_back_secs_summary">バッファ内に保持する再生済みビデオの時間 (秒)</string>
+    <string name="settings_advanced_demuxer_max_bytes">前方バッファサイズ</string>
+    <string name="settings_advanced_demuxer_max_bytes_summary">未再生コンテンツのバッファに使用する最大メモリ容量</string>
+    <string name="settings_advanced_demuxer_max_back_bytes">後方バッファサイズ</string>
+    <string name="settings_advanced_demuxer_max_back_bytes_summary">再生済みコンテンツのバッファに使用する最大メモリ容量</string>
+
+    <!-- Storage and Cache -->
+    <string name="settings_advanced_header_storage_cache">ストレージとキャッシュ</string>
+    <string name="settings_advanced_clear_thumbnails">サムネイルキャッシュ</string>
+    <string name="settings_advanced_clear_thumbnails_summary">キャッシュされた動画プレビューフレームを消去</string>
+    <string name="settings_advanced_clear_video_cache">動画再生キャッシュ</string>
+    <string name="settings_advanced_clear_video_cache_summary">ExoPlayer によって生成された動画キャッシュファイルを消去</string>
+    <string name="settings_advanced_clear_history">再生履歴</string>
+    <string name="settings_advanced_clear_history_summary">保存されているすべての視聴進捗と再生履歴を削除</string>
+    <string name="settings_advanced_history_count_format">合計 %d 件</string>
+    <string name="settings_advanced_history_cleared">再生履歴を消去しました</string>
+    <string name="settings_cache_cleared">キャッシュを消去しました</string>
+
+    <!-- Notification -->
+    <string name="notification_playback_channel_name">再生コントロール</string>
+    <string name="notification_playback_channel_description">バックグラウンドメディア再生のコントロール通知</string>
+
+    <string name="notification_screenshot_channel_name">スクリーンショット</string>
+    <string name="notification_screenshot_channel_description">保存されたスクリーンショットの通知</string>
+    <string name="notification_screenshot_saved">スクリーンショットを保存しました</string>
+
+    <string name="error_permission_denied_storage">アクセスが拒否されました: 外部ストレージの権限が必要です</string>
+
+    <!-- File Management -->
+    <string name="file_action_copy">コピー</string>
+    <string name="file_action_move">移動</string>
+    <string name="file_action_rename">名前を変更</string>
+    <string name="file_action_delete">削除</string>
+    <string name="file_action_add_to_playlist">プレイリストに追加</string>
+    <string name="file_action_clear_selection">選択を解除</string>
+    <string name="file_action_create_folder">新しいフォルダ</string>
+
+    <string name="file_dialog_rename_title">名前を変更</string>
+    <string name="file_dialog_delete_title">選択した項目を削除しますか？</string>
+    <string name="file_dialog_delete_confirm">削除</string>
+    <string name="file_dialog_create_folder_title">新しいフォルダを作成</string>
+    <string name="file_dialog_create_folder_hint">フォルダ名</string>
+    <string name="file_dialog_select_target_directory">移動先フォルダを選択</string>
+    <string name="file_dialog_device_home_path">ストレージデバイス</string>
+    <string name="file_dialog_empty_folder">サブフォルダがありません</string>
+    <string name="file_dialog_copy_here">ここにコピー</string>
+    <string name="file_dialog_move_here">ここに移動</string>
+    <string name="file_dialog_conflict_title">ファイル名の競合</string>
+    <string name="file_dialog_conflict_message">移動先に同名のファイル「%1$s」が既に存在します。</string>
+    <string name="file_dialog_conflict_overwrite">上書き</string>
+    <string name="file_dialog_conflict_skip">スキップ</string>
+    <string name="file_dialog_conflict_apply_all">残りのすべての競合に適用</string>
+
+    <string name="file_operation_copying">ファイルをコピー中…</string>
+    <string name="file_operation_moving">ファイルを移動中…</string>
+    <string name="file_operation_deleting">ファイルを削除中…</string>
+    <string name="file_operation_cancel">キャンセル</string>
+    <string name="file_operation_completed">ファイル操作が完了しました</string>
+    <string name="file_operation_failed">ファイル操作に失敗しました: %1$s</string>
+    <string name="file_operation_notification_channel_name">ファイルバックグラウンド処理</string>
+    <string name="file_operation_notification_channel_desc">ファイルのコピー、移動、削除タスクの進行状況を表示します。</string>
+
+    <!-- File Task Queue -->
+    <string name="file_task_queue_title">ファイル操作キュー</string>
+    <string name="file_task_clear_completed">完了した記録を消去</string>
+    <string name="file_task_section_active">実行中のタスク</string>
+    <string name="file_task_section_pending">待機中のタスク (%d)</string>
+    <string name="file_task_section_completed">完了履歴 (%d)</string>
+    <string name="file_task_cancel">キャンセル</string>
+    <string name="file_task_empty">ファイル操作タスクはありません</string>
+    <string name="file_task_status_pending">待機中</string>
+    <string name="file_task_status_completed">完了</string>
+    <string name="file_task_status_failed">失敗</string>
+    <string name="file_task_status_cancelled">キャンセル済み</string>
+</resources>
