@@ -219,7 +219,7 @@
     <string name="playlist_create_title_blank">新規プレイリスト</string>
     <string name="playlist_create_title_m3u_link">URL から M3U をインポート</string>
     <string name="playlist_create_title_m3u_file">ファイルから M3U をインポート</string>
-    <string name="playlist_create_m3u_url_placeholder">リンク URL (http://, https://...)</string>
+    <string name="playlist_create_m3u_url_placeholder">リンク URL (http://, https://…)</string>
     <string name="playlist_create_m3u_file_select">M3U ファイルを選択</string>
     <string name="playlist_create_m3u_file_selected">選択されたファイル: %s</string>
     <string name="playlist_create_import_button">インポート</string>
