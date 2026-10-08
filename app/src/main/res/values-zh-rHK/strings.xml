@@ -1,0 +1,756 @@
+<!--
+  ~ IsekaiPlayer - Sovereign above myriad realms; shatter every mortal cipher.
+  ~ Copyright (C) 2026 onlymash
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="app_name">異界播放器</string>
+    <string name="app_slogan_short">凌駕於諸界架構之上，粉碎萬千編碼之重障。</string>
+
+    <string name="settings_category_appearance">外觀</string>
+    <string name="settings_category_appearance_summary">自定義主題、深色模式及高對比度設定</string>
+    <string name="settings_category_player">播放器</string>
+    <string name="settings_category_player_summary">配置播放行為、界面佈局及按鈕交互效果</string>
+    <string name="settings_category_gestures">手勢</string>
+    <string name="settings_category_gestures_summary">管理滑動和點擊手勢，用於進度、音量及亮度調節</string>
+    <string name="settings_category_decoder">解碼器</string>
+    <string name="settings_category_decoder_summary">調整硬件加速、影片輸出及縮放算法</string>
+    <string name="settings_category_audio">音訊</string>
+    <string name="settings_category_audio_summary">管理音軌、輸出優先級及動態範圍壓縮</string>
+    <string name="settings_category_subtitle">字幕</string>
+    <string name="settings_category_subtitle_summary">自定義字幕語言、外觀及編碼設定</string>
+    <string name="settings_category_advanced">高級選項</string>
+    <string name="settings_category_advanced_summary">配置緩衝區大小、向前與向後快取、網絡連接及安全設定</string>
+    <string name="settings_category_general">常規</string>
+    <string name="settings_category_general_summary">更改應用程式語言、觸感反饋及導航行為</string>
+    <string name="settings_category_about">關於</string>
+    <string name="settings_category_about_summary">查看應用程式版本、開源許可及社交媒體鏈接</string>
+
+    <string name="settings_appearance_header_theme">主題</string>
+
+    <string name="settings_appearance_theme_mode">主題模式</string>
+    <string name="settings_appearance_theme_mode_system">跟隨系統</string>
+    <string name="settings_appearance_theme_mode_light">淺色</string>
+    <string name="settings_appearance_theme_mode_dark">深色</string>
+    <string name="settings_appearance_theme_high_contrast">高對比度深色主題</string>
+    <string name="settings_appearance_theme_high_contrast_summary">加深深色主題背景以獲得更高對比度</string>
+
+    <string name="settings_general_header_general">常規</string>
+    <string name="settings_general_app_language">應用程式語言</string>
+    <string name="settings_general_app_language_summary">更改應用程式的語言</string>
+    <string name="settings_general_header_navigation">導航</string>
+
+    <string name="settings_general_haptics">觸感反饋</string>
+    <string name="settings_general_haptics_summary">開啓觸控操作與手勢反饋</string>
+    <string name="settings_general_intercept_back">返回鍵導航</string>
+    <string name="settings_general_intercept_back_summary">啓用後，按返回鍵或手勢滑動將先逐層返回上一級目錄，直到頂層才退出應用程式</string>
+
+    <!-- Backup & Restore -->
+    <string name="settings_general_header_backup">備份與還原</string>
+    <string name="settings_general_export_settings">匯出設定備份</string>
+    <string name="settings_general_export_settings_summary">將應用程式當前的全部設定匯出保存為 JSON 配置檔案</string>
+    <string name="settings_general_import_settings">匯入設定備份</string>
+    <string name="settings_general_import_settings_summary">從 JSON 備份檔案還原設定（將覆蓋當前配置）</string>
+    <string name="settings_backup_export_success">設定已被成功匯出</string>
+    <string name="settings_backup_export_failed">匯出設定失敗</string>
+    <string name="settings_backup_import_success">設定已還原，配置已更新</string>
+    <string name="settings_backup_import_failed">還原設定失敗，請檢查備份檔案格式</string>
+
+    <string name="settings_gestures_header_drag">滑動控制</string>
+    <string name="settings_gestures_header_tap">點擊控制</string>
+    <string name="settings_gestures_horizontal_drag">進度調節</string>
+    <string name="settings_gestures_horizontal_drag_summary">在螢幕水平滑動調節播放進度</string>
+    <string name="settings_gestures_vertical_drag_volume">音量調節</string>
+    <string name="settings_gestures_vertical_drag_volume_summary">在螢幕左側上下滑動調節音量</string>
+    <string name="settings_gestures_vertical_drag_brightness">亮度調節</string>
+    <string name="settings_gestures_vertical_drag_brightness_summary">在螢幕右側上下滑動調節亮度</string>
+    <string name="settings_gestures_swap_volume_brightness">交換音量和亮度區域</string>
+    <string name="settings_gestures_swap_volume_brightness_summary">調換左右兩側滑動調節音量和亮度的區域</string>
+    <string name="settings_gestures_double_tap_seek">雙擊快進/快退</string>
+    <string name="settings_gestures_double_tap_seek_summary">雙擊螢幕兩側快進或快退</string>
+    <string name="settings_gestures_double_tap_play_pause">雙擊播放/暫停</string>
+    <string name="settings_gestures_double_tap_play_pause_summary">雙擊螢幕中央播放或暫停</string>
+    <string name="settings_gestures_long_press">長按倍速</string>
+    <string name="settings_gestures_long_press_summary">長按螢幕觸發快進與倍速播放</string>
+    <string name="settings_gestures_long_press_speed">長按倍速</string>
+    <string name="settings_gestures_long_press_speed_summary">調整長按時的快進速度</string>
+    <string name="settings_gestures_double_tap_seek_duration">雙擊跳轉時間</string>
+    <string name="settings_gestures_double_tap_seek_duration_summary">調整兩側雙擊時的跳轉時間：%d 秒</string>
+
+    <string name="browser_view_options_title">視圖選項</string>
+    <string name="browser_view_options_sort_by">排序方式</string>
+    <string name="browser_view_options_sort_type_name">名稱</string>
+    <string name="browser_view_options_sort_type_date">日期</string>
+    <string name="browser_view_options_sort_type_size">大小</string>
+    <string name="browser_view_options_sort_type_duration">時長</string>
+    <string name="browser_view_options_order">排序方向</string>
+    <string name="browser_view_options_order_ascending">升序</string>
+    <string name="browser_view_options_order_descending">降序</string>
+    <string name="browser_view_options_folders_first">資料夾優先</string>
+    <string name="browser_view_options_show_hidden">顯示隱藏檔案</string>
+    <string name="browser_view_options_show_subtitles">顯示字幕檔案</string>
+    <string name="browser_view_options_filters">過濾</string>
+    <string name="browser_view_options_fields">顯示字段</string>
+    <string name="browser_view_options_field_thumbnail">縮略圖</string>
+    <string name="browser_view_options_field_item_count">項目數</string>
+    <string name="browser_view_options_field_size">大小</string>
+    <string name="browser_view_options_field_duration">時長</string>
+    <string name="browser_view_options_field_resolution">解像度</string>
+    <string name="browser_view_options_field_date">日期</string>
+    <string name="browser_view_options_field_extension">附檔名</string>
+
+    <string name="browser_view_options_order_name_asc">A-Z</string>
+    <string name="browser_view_options_order_name_desc">Z-A</string>
+    <string name="browser_view_options_order_date_asc">由舊到新</string>
+    <string name="browser_view_options_order_date_desc">由新到舊</string>
+    <string name="browser_view_options_order_size_asc">由小到大</string>
+    <string name="browser_view_options_order_size_desc">由大到小</string>
+    <string name="browser_view_options_order_duration_asc">由短到長</string>
+    <string name="browser_view_options_order_duration_desc">由長到短</string>
+    <string name="browser_view_options_done">完成</string>
+
+    <string name="source_editor_title_add">添加數據源</string>
+    <string name="source_editor_title_edit">編輯數據源</string>
+    <string name="source_editor_save">保存</string>
+    <string name="source_editor_label_name">顯示名稱</string>
+    <string name="source_editor_label_protocol">協議</string>
+    <string name="source_editor_label_host">主機 / IP</string>
+    <string name="source_editor_label_port">埠 (可選)</string>
+    <string name="source_editor_label_path_default">初始路徑</string>
+    <string name="source_editor_label_path_smb">共享名稱</string>
+    <string name="source_editor_label_https">使用 HTTPS</string>
+    <string name="source_editor_label_username">用户名 (可選)</string>
+    <string name="source_editor_label_password">密碼 (可選)</string>
+    <string name="source_editor_error_required">名稱和主機為必填項</string>
+    <string name="source_editor_error_smb_share_required">SMB 協議需要填寫共享名稱</string>
+
+    <!-- Common Strings -->
+    <string name="common_close">關閉</string>
+    <string name="common_more">更多</string>
+    <string name="common_expand">展開</string>
+    <string name="common_collapse">摺疊</string>
+    <string name="common_edit">編輯</string>
+    <string name="common_delete">刪除</string>
+    <string name="common_back">返回</string>
+    <string name="common_cancel">取消</string>
+    <string name="common_retry">重試</string>
+    <string name="common_refresh">重新整理</string>
+    <string name="common_settings">設定</string>
+    <string name="common_replay">重新播放</string>
+    <string name="common_move_up">上移</string>
+    <string name="common_move_down">下移</string>
+    <string name="common_none">無</string>
+    <string name="common_all">全部</string>
+    <string name="common_reset">重置</string>
+    <string name="common_on">開啓</string>
+    <string name="common_off">關閉</string>
+    <string name="common_preview">效果預覽</string>
+
+    <!-- Browser Screen -->
+    <string name="browser_menu_sources">數據源</string>
+    <string name="browser_menu_sort">排序</string>
+    <string name="browser_menu_search">搜索</string>
+    <string name="browser_permission_grant">授予所有檔案存取權限</string>
+    <string name="browser_permission_required">掃描本地影片及自動加載外掛字幕需要所有檔案存取權限</string>
+    <string name="browser_media_list_empty">未找到影片</string>
+    <string name="browser_search_placeholder_collapsed">搜索</string>
+    <string name="browser_search_placeholder_expanded">在當前資料夾中搜索</string>
+    <string name="browser_search_prompt">輸入關鍵詞以搜索</string>
+    <string name="browser_media_items_count">%1$d 個項目</string>
+    <string name="browser_subtitle_no_matching_video">未找到匹配的影片檔案</string>
+    <string name="browser_fab_menu_add_source">添加遠程源</string>
+    <string name="browser_fab_menu_play_network_stream">播放網絡鏈接</string>
+    <string name="browser_fab_toggle_menu_content_description">切換菜單</string>
+    <string name="browser_fab_toggle_menu_expanded_description">已展開</string>
+    <string name="browser_fab_toggle_menu_collapsed_description">已摺疊</string>
+    <string name="browser_fab_toggle_menu_close_action_label">關閉菜單</string>
+
+    <string name="network_stream_title">播放網絡鏈接</string>
+    <string name="network_stream_input_label">網絡鏈接</string>
+    <string name="network_stream_input_placeholder">輸入影片或直播流鏈接 (http://, https://&#8230;)</string>
+    <string name="network_stream_play_button">播放</string>
+    <string name="network_stream_history_title">播放記錄</string>
+    <string name="network_stream_history_empty">暫無網絡鏈接播放記錄</string>
+    <string name="network_stream_clear_history">清空記錄</string>
+    <string name="network_stream_invalid_url">請輸入有效的網絡鏈接</string>
+    <string name="network_stream_copy_link">複製鏈接</string>
+    <string name="network_stream_link_copied">鏈接已複製到剪貼板</string>
+    <string name="network_stream_delete_single_dialog_title">刪除記錄</string>
+    <string name="network_stream_delete_single_dialog_message">確定要刪除該條播放記錄嗎？</string>
+    <string name="network_stream_clear_all_dialog_title">清空全部記錄</string>
+    <string name="network_stream_clear_all_dialog_message">確定要清空所有網絡鏈接播放記錄嗎？此操作不可撤銷。</string>
+
+    <!-- Source -->
+    <string name="source_selection_devices_list_title">儲存裝置</string>
+    <string name="source_selection_manage">管理數據源</string>
+    <string name="source_storage_usage">%1$s 可用，共 %2$s</string>
+    <string name="source_local_internal_desc">本地設備檔案</string>
+    <string name="source_local_external_desc">外部儲存空間</string>
+    <string name="source_remote_header">遠程源</string>
+    <string name="source_internal_storage_name">內部儲存空間</string>
+    <string name="source_manager_title">管理數據源</string>
+    <string name="source_manager_empty">尚未添加遠程源</string>
+    <string name="source_manager_add">添加遠程源</string>
+    <string name="source_manager_delete_title">刪除數據源</string>
+    <string name="source_manager_delete_message">確定要刪除“%1$s”嗎？此操作無法撤銷。</string>
+
+    <!-- Drawer Categories & History & Playlist -->
+    <string name="drawer_library_section_title">媒體庫</string>
+    <string name="playlist_title">播放清單</string>
+    <string name="playlist_subtitle">自定義媒體集合</string>
+    <string name="playlist_create_dialog_title">新建播放清單</string>
+    <string name="playlist_create_dialog_placeholder">播放清單名稱</string>
+    <string name="playlist_create_option_blank">直接創建空白播放清單</string>
+    <string name="playlist_create_option_m3u_link">通過鏈接添加 M3U 播放清單</string>
+    <string name="playlist_create_option_m3u_file">通過 M3U 檔案添加播放清單</string>
+    <string name="playlist_create_title_blank">新建播放清單</string>
+    <string name="playlist_create_title_m3u_link">通過鏈接匯入 M3U 播放清單</string>
+    <string name="playlist_create_title_m3u_file">通過檔案匯入 M3U 播放清單</string>
+    <string name="playlist_create_m3u_url_placeholder">鏈接地址 (http://, https://&#8230;)</string>
+    <string name="playlist_create_m3u_file_select">選擇 M3U 檔案</string>
+    <string name="playlist_create_m3u_file_selected">已選擇檔案：%s</string>
+    <string name="playlist_create_import_button">匯入</string>
+    <string name="playlist_create_next_button">下一步</string>
+    <string name="playlist_create_previous_button">上一步</string>
+    <string name="playlist_import_error_invalid_url">請輸入有效的 HTTP 或 HTTPS 鏈接</string>
+    <string name="playlist_import_error_network">獲取播放清單失敗，請檢查網絡或鏈接是否正確</string>
+    <string name="playlist_import_error_parse">解析 M3U 內容失敗，請確認檔案格式</string>
+    <string name="playlist_import_error_title_empty">播放清單名稱不能為空</string>
+    <string name="playlist_type_m3u_link">M3U 鏈接</string>
+    <string name="playlist_type_m3u_file">M3U 檔案</string>
+    <string name="playlist_move_up">上移</string>
+    <string name="playlist_move_down">下移</string>
+    <string name="playlist_rename_dialog_title">重命名播放清單</string>
+    <string name="playlist_empty">暫無播放清單</string>
+    <string name="playlist_items_empty">此播放清單暫無影片</string>
+    <string name="playlist_play_all">播放全部</string>
+    <string name="playlist_item_count">%d 項</string>
+    <string name="playlist_delete_dialog_title">刪除播放清單</string>
+    <string name="playlist_delete_dialog_message">確定要刪除播放清單“%s”嗎？</string>
+    <string name="playback_history_title">播放記錄</string>
+    <string name="playback_history_subtitle">觀看進度與記錄</string>
+    <string name="playback_history_search_placeholder_expanded">搜索播放記錄</string>
+    <string name="playlist_search_placeholder_expanded">搜索播放清單內影片</string>
+    <string name="playback_history_empty">暫無播放記錄</string>
+    <string name="playback_history_clear_all">清空播放記錄</string>
+    <string name="playback_history_clear_dialog_title">清空播放記錄</string>
+    <string name="playback_history_clear_dialog_message">確定要清空所有的影片播放記錄嗎？此操作無法撤銷。</string>
+    <string name="playback_history_delete_dialog_title">刪除播放記錄</string>
+    <string name="playback_history_delete_dialog_message">確定要刪除該條播放記錄嗎？</string>
+
+    <!-- Multi-Selection & Action Toolbar -->
+    <string name="browser_selection_count">已選擇 %d 項</string>
+    <string name="browser_selection_select_all">全選</string>
+    <string name="browser_selection_deselect_all">反選</string>
+    <string name="browser_selection_exit">退出選擇模式</string>
+    <string name="playlist_add_to">添加到播放清單</string>
+    <string name="playlist_select_target_title">添加到播放清單</string>
+    <string name="playlist_added_toast">已將 %1$d 項添加到“%2$s”</string>
+    <string name="playlist_readonly">只讀</string>
+
+    <!-- Player Quick Controls -->
+    <string name="player_control_brightness">亮度</string>
+    <string name="player_control_system_volume">系統音量</string>
+    <string name="player_control_player_volume">播放器音量</string>
+    <string name="player_control_rewind">後退 %d 秒</string>
+    <string name="player_control_forward">前進 %d 秒</string>
+    <string name="player_control_previous">上一個</string>
+    <string name="player_control_next">下一個</string>
+    <string name="player_control_play_pause">播放/暫停</string>
+    <string name="player_control_play">播放</string>
+    <string name="player_control_pause">暫停</string>
+    <string name="player_control_playback_speed">播放倍速</string>
+    <string name="player_control_adjust_temporary">臨時調節</string>
+    <string name="player_audio_delay">音訊延遲</string>
+    <string name="player_subtitle_delay">字幕延遲</string>
+    <string name="settings_player_playback_speed_summary">調整所有影片的預設播放倍速</string>
+    <string name="player_control_screenshot">截圖</string>
+    <string name="player_control_frame_step_forward">後一幀</string>
+    <string name="player_control_frame_step_backward">前一幀</string>
+    <string name="player_control_lock">鎖定控制</string>
+    <string name="player_control_unlock">解鎖控制</string>
+    <string name="player_control_enter_pip">進入子母畫面</string>
+    <string name="player_control_osd">狀態顯示</string>
+    <string name="player_osd_none">關閉</string>
+    <string name="player_osd_stats_header_title">信息</string>
+    <string name="player_osd_stats_general">常規統計 (P1)</string>
+    <string name="player_osd_stats_timings">幀時間統計 (P2)</string>
+    <string name="player_osd_stats_cache">輸入/快取統計 (P3)</string>
+    <string name="player_osd_stats_key_bindings">快捷鍵綁定 (P4)</string>
+    <string name="player_osd_stats_tracks">軌道詳細信息 (P5)</string>
+    <string name="player_status_seek_forward">+%d秒</string>
+    <string name="player_status_seek_backward">-%d秒</string>
+    <string name="player_status_fast_forwarding">%1$.1fX 快進中</string>
+    <string name="player_settings_player">播放器設定</string>
+    <string name="player_settings_decoder">解碼設定</string>
+    <string name="player_settings_audio">音訊設定</string>
+    <string name="player_settings_subtitle">字幕設定</string>
+    <string name="player_settings_gestures">手勢設定</string>
+    <string name="player_settings_advanced">高級設定</string>
+
+    <!-- Player Tracks Drawer -->
+    <string name="player_drawer_tracks_title">軌道</string>
+    <string name="player_drawer_playlist_title">播放清單</string>
+    <string name="player_drawer_audio_tracks">音訊</string>
+    <string name="player_drawer_subtitle_tracks">字幕</string>
+    <string name="player_add_external_subtitle">添加外掛字幕</string>
+    <string name="player_error_unsupported_subtitle">不支持的字幕格式</string>
+    <string name="player_error_load_failed">加載媒體失敗，請檢查網絡或服務器地址</string>
+    <string name="player_drawer_video_tracks">影片</string>
+    <string name="player_drawer_tracks_button">軌道選擇</string>
+    <string name="player_drawer_playlist_button">播放清單</string>
+
+    <!-- Player Settings -->
+    <string name="settings_search_empty">未找到匹配的設定項</string>
+    <string name="settings_player_header_controls">控制</string>
+    <string name="settings_player_seek_duration">快進/快退時間</string>
+    <string name="settings_player_seek_duration_summary">調整點擊快進/快退按鈕時的跳轉時間：%d 秒</string>
+    <string name="settings_player_auto_hide_duration">控制欄自動隱藏超時</string>
+    <string name="settings_player_auto_hide_duration_summary">無操作 %1$d 秒後隱藏控制欄</string>
+    <string name="settings_player_enable_pip">子母畫面 (PiP)</string>
+    <string name="settings_player_enable_pip_summary">播放時離開播放器自動開啓子母畫面</string>
+    <string name="settings_player_screenshot_format">截圖格式</string>
+    <string name="settings_player_screenshot_format_jpg">JPEG (.jpg)</string>
+    <string name="settings_player_screenshot_format_png">PNG (.png)</string>
+    <string name="settings_player_screenshot_format_webp">WebP (.webp)</string>
+
+    <string name="settings_player_header_ui">界面</string>
+    <string name="settings_player_always_full_screen">始終全屏</string>
+    <string name="settings_player_always_full_screen_summary">即使顯示播放控制欄，也隱藏系統狀態欄和導航欄</string>
+
+    <string name="settings_player_layout">播放器佈局</string>
+    <string name="settings_player_layout_summary">自定義四個角落的操作按鈕</string>
+    <string name="settings_player_layout_show_title_bar">顯示標題欄</string>
+    <string name="settings_player_layout_all_buttons">全部按鈕</string>
+
+    <string name="settings_player_scale_mode">縮放模式</string>
+    <string name="settings_player_scale_mode_fit">自適應</string>
+    <string name="settings_player_scale_mode_fill">鋪滿</string>
+    <string name="settings_player_scale_mode_original">原尺寸</string>
+    <string name="settings_player_button_effects">按鈕效果</string>
+    <string name="settings_player_button_effects_summary">自定義播放器按鈕的外觀及交互動畫</string>
+    <string name="settings_player_button_effects_blur">模糊效果</string>
+    <string name="settings_player_button_effects_blur_summary">開啓磨砂玻璃模糊效果</string>
+    <string name="settings_player_button_effects_lens">鏡頭效應</string>
+    <string name="settings_player_button_effects_lens_summary">開啓邊緣畸變鏡頭效果</string>
+    <string name="settings_player_button_effects_alpha">不透明度</string>
+    <string name="settings_player_button_effects_alpha_summary">調整按鈕的透明度</string>
+    <string name="settings_player_button_effects_show_border">顯示描邊</string>
+    <string name="settings_player_button_effects_show_border_summary">在按鈕四周顯示高亮描邊</string>
+    <string name="settings_player_button_effects_border_style">高亮樣式</string>
+    <string name="settings_player_button_effects_border_style_directional">定向高光</string>
+    <string name="settings_player_button_effects_border_style_ambient">環境柔光</string>
+    <string name="settings_player_button_effects_border_style_plain">平鋪純色</string>
+    <string name="settings_player_button_effects_use_texture_view">使用 TextureView 容器</string>
+    <string name="settings_player_button_effects_use_texture_view_summary">使用 TextureView 渲染影片，使模糊與鏡頭效果無延遲</string>
+    <string name="settings_player_button_effects_note" formatted="false">容器方案與優缺點\n• SurfaceView + PixelCopy（預設）\n影片渲染採用硬件直推（HWC），極其省電且續航拉滿，但控制欄的液態玻璃背景抓取存在輕微延遲。\n• TextureView\n液態玻璃折射與模糊無延遲、極其絲滑，但影片播放時 GPU 負載更高。\n• ExoPlayer 引擎説明\nExoPlayer 引擎的 SurfaceView 依靠佈局約束實現縮放和比例控制，所以按鈕無法通過 PixelCopy 獲得正確位置的像素內容用於生成實時模糊和鏡頭畸變效果，因此在 ExoPlayer 引擎下如果不開啓 TextureView 將自動禁用模糊和鏡頭畸變效果。</string>
+    <string name="settings_player_seek_bar_style">進度條樣式</string>
+    <string name="settings_player_seek_bar_style_wavy">波浪線</string>
+    <string name="settings_player_seek_bar_style_straight">直線</string>
+
+    <string name="settings_player_resume_playback">續播</string>
+    <string name="settings_player_resume_playback_summary">自動從上次保存的位置還原播放</string>
+
+    <string name="settings_player_loop_mode">循環模式</string>
+    <string name="settings_player_loop_mode_none">無</string>
+    <string name="settings_player_loop_mode_current">單曲循環</string>
+    <string name="settings_player_loop_mode_sequential">順序播放</string>
+    <string name="settings_player_loop_mode_list">列表循環</string>
+    <string name="settings_player_loop_mode_shuffle">亂序播放</string>
+    <string name="settings_player_loop_mode_shuffle_repeat">亂序循環</string>
+
+    <string name="settings_player_remember_brightness">記住亮度</string>
+    <string name="settings_player_remember_brightness_summary">使用上次播放時的亮度設定</string>
+
+    <string name="settings_player_orientation">螢幕方向</string>
+    <string name="settings_player_orientation_default">系統預設</string>
+    <string name="settings_player_orientation_default_summary">遵循系統螢幕旋轉設定</string>
+    <string name="settings_player_orientation_sensor">傳感器</string>
+    <string name="settings_player_orientation_sensor_summary">始終基於設備傳感器旋轉</string>
+    <string name="settings_player_orientation_landscape">橫屏</string>
+    <string name="settings_player_orientation_landscape_summary">鎖定為橫屏模式 (支持傳感器切換)</string>
+    <string name="settings_player_orientation_portrait">豎屏</string>
+    <string name="settings_player_orientation_portrait_summary">鎖定為豎屏模式 (支持傳感器切換)</string>
+    <string name="settings_player_orientation_video">自動匹配影片</string>
+    <string name="settings_player_orientation_video_summary">基於影片寬高比自動切換</string>
+
+    <string name="settings_audio_header_playback">播放行為</string>
+    <string name="settings_audio_header_exoplayer">ExoPlayer 音訊</string>
+    <string name="settings_audio_header_mpv">mpv 音訊</string>
+    <string name="settings_audio_request_focus">請求音訊焦點</string>
+    <string name="settings_audio_request_focus_summary">當其他應用程式播放音訊時暫停播放</string>
+    <string name="settings_audio_enable_background_audio">後台播放</string>
+    <string name="settings_audio_enable_background_audio_summary">應用程式切至後台時繼續播放</string>
+    <string name="settings_audio_exo_volume">播放器音量</string>
+    <string name="settings_audio_exo_volume_summary">設定 ExoPlayer 播放器音量 (0–100%%)</string>
+    <string name="settings_audio_mpv_volume">播放器音量</string>
+    <string name="settings_audio_mpv_volume_summary">設定 mpv 播放器音量 (0–200%%)</string>
+    <string name="settings_audio_preferred_language">首選音軌語言</string>
+    <string name="settings_audio_preferred_language_summary">選擇預設音軌語言</string>
+    <string name="settings_audio_delay">音訊延遲</string>
+    <string name="settings_audio_delay_summary">調整預設音訊延遲以彌補音畫不同步問題</string>
+    <string name="settings_audio_output_order">音訊輸出優先級</string>
+    <string name="settings_audio_output_order_summary">調整音訊輸出後端的優先級</string>
+    <string name="settings_audio_dynamic_normalize">動態範圍壓縮</string>
+    <string name="settings_audio_dynamic_normalize_summary">標準化音量以增強對話並抑制過大響聲 (夜間模式)</string>
+    <string name="settings_audio_pitch_correction">音調修正</string>
+    <string name="settings_audio_pitch_correction_summary">在改變播放倍速時保持原有音調</string>
+
+    <string name="settings_subtitle_header_selection">字幕選擇</string>
+    <string name="settings_subtitle_header_rendering">渲染與外觀</string>
+    <string name="settings_subtitle_preferred_language">首選字幕語言</string>
+    <string name="settings_subtitle_preferred_language_summary">選擇預設字幕語言</string>
+    <string name="settings_subtitle_fallback">自動字幕選擇</string>
+    <string name="settings_subtitle_fallback_summary">如果未找到首選語言字幕，則自動選擇第一個可用字幕</string>
+
+    <string name="settings_subtitle_header_mpv">mpv 字幕</string>
+    <string name="settings_subtitle_mpv_style">字幕外觀設定</string>
+    <string name="settings_subtitle_mpv_style_summary">自定義字號大小、文字顏色、描邊及底部邊距</string>
+
+    <string name="settings_subtitle_header_exo">ExoPlayer 字幕</string>
+    <string name="settings_subtitle_exo_style">字幕外觀設定</string>
+    <string name="settings_subtitle_exo_style_summary">自定義字號大小、文字顏色、描邊、背景及底部邊距</string>
+    <string name="settings_subtitle_exo_preview_sample">這是一條 ExoPlayer 字幕預覽</string>
+
+    <string name="settings_subtitle_mpv_ass_override">ASS 特效字幕覆蓋</string>
+    <string name="settings_subtitle_mpv_ass_override_summary">控制自定義字體樣式是否覆蓋 ASS 字幕檔案中自帶的樣式</string>
+    <string name="settings_subtitle_mpv_ass_override_scale">僅按比例縮放 (推薦)</string>
+    <string name="settings_subtitle_mpv_ass_override_scale_summary">應用程式基礎的用户自定義樣式及縮放，同時保留字幕檔案大部分原始排版與設計</string>
+    <string name="settings_subtitle_mpv_ass_override_yes">基礎覆蓋</string>
+    <string name="settings_subtitle_mpv_ass_override_yes_summary">應用程式基礎的用户自定義樣式設定，同時保留字幕腳本的大部分原始設計</string>
+    <string name="settings_subtitle_mpv_ass_override_no">不覆蓋 (保留 ASS 原樣式)</string>
+    <string name="settings_subtitle_mpv_ass_override_no_summary">完全使用字幕檔案中定義的原始樣式、位置和特效進行渲染，不做任何修改</string>
+    <string name="settings_subtitle_mpv_ass_override_force">強制覆蓋為用户樣式</string>
+    <string name="settings_subtitle_mpv_ass_override_force_summary">完全忽略字幕腳本的格式與字體，強行應用程式全局自定義字幕樣式</string>
+    <string name="settings_subtitle_mpv_ass_override_strip">剝離 ASS 特效 (作為純文本)</string>
+    <string name="settings_subtitle_mpv_ass_override_strip_summary">徹底清除所有 ASS 特效標籤與自定義字體，將字幕轉換為普通純文本渲染</string>
+    <string name="settings_subtitle_mpv_preview_sample">這是一條 mpv 字幕預覽</string>
+
+    <string name="settings_subtitle_font_size">字體大小</string>
+    <string name="settings_subtitle_font_size_summary">調整字幕顯示大小 (sp)</string>
+    <string name="settings_subtitle_text_color">文字顏色</string>
+    <string name="settings_subtitle_bg_color">背景框顏色</string>
+    <string name="settings_subtitle_bg_opacity">背景框不透明度</string>
+    <string name="settings_subtitle_bg_opacity_summary">調整字幕背景框的不透明度</string>
+    <string name="settings_subtitle_bottom_padding">字幕底部邊距</string>
+    <string name="settings_subtitle_bottom_padding_summary">調整字幕距離畫面底部的邊距 (dp)</string>
+    <string name="settings_subtitle_font_weight">字體字重</string>
+    <string name="settings_subtitle_outline_color">描邊顏色</string>
+    <string name="settings_subtitle_outline_width">描邊寬度</string>
+    <string name="settings_subtitle_shadow_color">陰影顏色</string>
+    <string name="settings_subtitle_shadow_offset">陰影偏移量</string>
+    <string name="settings_subtitle_bottom_margin">字幕底部邊距</string>
+    <string name="settings_subtitle_bottom_margin_summary">調整字幕距離畫面底部的邊距</string>
+    <string name="settings_subtitle_bold">加粗文字</string>
+    <string name="settings_subtitle_bold_summary">為字幕啓用粗體渲染</string>
+    <string name="settings_subtitle_italic">斜體文字</string>
+    <string name="settings_subtitle_italic_summary">為字幕啓用斜體渲染</string>
+    <string name="settings_subtitle_font">字幕字體</string>
+    <string name="settings_subtitle_font_summary">選擇 mpv 字幕渲染使用的字體</string>
+    <string name="settings_subtitle_font_default">系統預設 (sans-serif)</string>
+    <string name="settings_subtitle_font_permission_required">需要所有檔案存取權限</string>
+    <string name="settings_subtitle_font_permission_summary">請授予權限以掃描外部儲存空間 /Fonts 目錄下的字體檔案</string>
+    <string name="settings_subtitle_font_grant_permission">授予權限</string>
+    <string name="settings_subtitle_font_no_fonts_found">未找到自定義字體</string>
+    <string name="settings_subtitle_font_no_fonts_summary">請在 %s 目錄中放入 .ttf 或 .otf 字體檔案</string>
+    <string name="settings_subtitle_font_directory_hint">提示：請將自定義的 .ttf 或 .otf 字體檔案放入 %s 目錄中，掃描後即可在上方列表中選擇。</string>
+
+    <string name="settings_decoder_header_engine">引擎</string>
+    <string name="settings_decoder_player_engine_type">播放器引擎</string>
+    <string name="settings_decoder_player_engine_mpv">mpv 引擎</string>
+    <string name="settings_decoder_player_engine_mpv_summary">功能全能強勁。支持高級 ASS/SSA 特效字幕、音軌軟增益、全格式解碼及 Shader 着色器濾鏡。</string>
+    <string name="settings_decoder_player_engine_exo">ExoPlayer (Media3) 引擎</string>
+    <string name="settings_decoder_player_engine_exo_summary">原生硬解省電。基於 Android 系統 MediaCodec 與磁盤快取，流暢穩定且省電，適合基礎影片播放。</string>
+
+    <string name="settings_decoder_header_rendering">核心引擎</string>
+    <string name="settings_decoder_header_performance">硬件與性能</string>
+    <string name="settings_decoder_header_processing">畫面處理</string>
+    <string name="settings_decoder_profile">mpv 預設配置</string>
+    <string name="settings_decoder_profile_summary">mpv 的預設通用配置</string>
+    <string name="settings_decoder_profile_fast">極速</string>
+    <string name="settings_decoder_profile_fast_summary">優先保證性能和低功耗。推薦大多數移動設備使用。</string>
+    <string name="settings_decoder_profile_default">預設</string>
+    <string name="settings_decoder_profile_default_summary">mpv 預設配置。適用於大多數內容，設定均衡。</string>
+    <string name="settings_decoder_profile_high_quality">高質量</string>
+    <string name="settings_decoder_profile_high_quality_summary">開啓高質量縮放和去色帶濾鏡。可能會增加功耗和發熱。</string>
+    <string name="settings_decoder_profile_gpu_hq">GPU 高質量</string>
+    <string name="settings_decoder_profile_gpu_hq_summary">高質量預設的別名，針對現代 GPU 進行了專門調優。</string>
+    <string name="settings_decoder_profile_low_latency">低延遲</string>
+    <string name="settings_decoder_profile_low_latency_summary">針對最小播放延遲進行優化。適合直播流或遊戲內容。</string>
+    <string name="settings_decoder_profile_sw_fast">軟件解碼極速</string>
+    <string name="settings_decoder_profile_sw_fast_summary">最快的軟解配置。在硬解不可用時使用。</string>
+
+    <string name="settings_decoder_override_profile">覆蓋預設配置</string>
+    <string name="settings_decoder_override_profile_summary">手動配置縮放算法和去色帶，而不是使用預設值</string>
+
+    <string name="settings_decoder_vo">影片輸出 (VO)</string>
+    <string name="settings_decoder_vo_summary">用於影片渲染的輸出驅動</string>
+    <string name="settings_decoder_vo_gpu">GPU (傳統)</string>
+    <string name="settings_decoder_vo_gpu_summary">標準 GPU 渲染器。具有極高的穩定性和兼容性。</string>
+    <string name="settings_decoder_vo_gpu_next">GPU Next (現代)</string>
+    <string name="settings_decoder_vo_gpu_next_summary">基於 libplacebo 的新型實驗性渲染器。支持更多高級特性。</string>
+
+    <string name="settings_decoder_gpu_api">GPU API</string>
+    <string name="settings_decoder_gpu_api_summary">渲染器使用的圖形介面</string>
+    <string name="settings_decoder_gpu_api_opengl">OpenGL ES</string>
+    <string name="settings_decoder_gpu_api_opengl_summary">預設圖形介面。速度快且支持廣泛。</string>
+    <string name="settings_decoder_gpu_api_vulkan">Vulkan</string>
+    <string name="settings_decoder_gpu_api_vulkan_summary">現代、低開銷圖形介面。在支持的硬件上可能性能更佳。</string>
+
+    <string name="settings_decoder_hwdec">硬件解碼</string>
+    <string name="settings_decoder_hwdec_summary">硬件加速影片解碼策略</string>
+    <string name="settings_decoder_hwdec_mediacodec">MediaCodec (Surface)</string>
+    <string name="settings_decoder_hwdec_mediacodec_summary">直接渲染幀到 Android Surface。性能和效率最佳。</string>
+    <string name="settings_decoder_hwdec_mediacodec_copy">MediaCodec Copy (RAM)</string>
+    <string name="settings_decoder_hwdec_mediacodec_copy_summary">將解碼幀複製回系統記憶體。允許 mpv 進行後期處理，但速度較慢。</string>
+    <string name="settings_decoder_hwdec_no">已禁用 (軟解)</string>
+    <string name="settings_decoder_hwdec_no_summary">使用 CPU 解碼。速度最慢，但能規避硬件錯誤。</string>
+
+    <string name="settings_decoder_video_sync">影片同步模式</string>
+    <string name="settings_decoder_video_sync_summary">音影片播放同步策略</string>
+    <string name="settings_decoder_video_sync_audio">音訊 (Audio)</string>
+    <string name="settings_decoder_video_sync_audio_summary">按音訊時鐘定時匹配影片幀。最穩健的模式，無音訊假設，可能偶發丟幀或重複幀。</string>
+    <string name="settings_decoder_video_sync_display_resample">顯示重採樣 (Display Resample)</string>
+    <string name="settings_decoder_video_sync_display_resample_summary">重採樣音訊以精確匹配顯示器重新整理率，自動消除音影片漂移。</string>
+    <string name="settings_decoder_video_sync_display_resample_vdrop">Display Resample V-Drop</string>
+    <string name="settings_decoder_video_sync_display_resample_vdrop_summary">重採樣音訊，並允許通過丟棄影片幀來補償漂移。</string>
+    <string name="settings_decoder_video_sync_display_resample_desync">Display Resample Desync</string>
+    <string name="settings_decoder_video_sync_display_resample_desync_summary">重採樣音訊但不進行 A/V 補償。</string>
+    <string name="settings_decoder_video_sync_display_tempo">Display Tempo</string>
+    <string name="settings_decoder_video_sync_display_tempo_summary">同 Display Resample，但通過音訊濾鏡調整速度以避免變調。</string>
+    <string name="settings_decoder_video_sync_display_vdrop">Display V-Drop</string>
+    <string name="settings_decoder_video_sync_display_vdrop_summary">通過丟棄或重複影片幀來補償音影片不同步。</string>
+    <string name="settings_decoder_video_sync_display_adrop">Display A-Drop</string>
+    <string name="settings_decoder_video_sync_display_adrop_summary">通過丟棄或重複音訊數據來補償影片同步。</string>
+    <string name="settings_decoder_video_sync_display_desync">Display Desync</string>
+    <string name="settings_decoder_video_sync_display_desync_summary">完全按顯示器重新整理率同步影片，音訊自行播放。</string>
+
+    <string name="settings_decoder_scale">放大算法 (scale)</string>
+    <string name="settings_decoder_scale_summary">用於提升影片解像度的重採樣算法</string>
+    <string name="settings_decoder_dscale">縮小算法 (dscale)</string>
+    <string name="settings_decoder_dscale_summary">用於降低影片解像度時的重採樣算法</string>
+    <string name="settings_decoder_cscale">色度算法 (cscale)</string>
+    <string name="settings_decoder_cscale_summary">用於處理影片色彩與色度通道的算法</string>
+    <string name="settings_decoder_scale_antiring">抗環狀偽影強度 (scale-antiring)</string>
+    <string name="settings_decoder_scale_antiring_summary">抑制拉伸或縮放時產生的白邊與光暈虛影</string>
+    <string name="settings_decoder_scale_bilinear">Bilinear</string>
+    <string name="settings_decoder_scale_bilinear_summary">雙線性硬件紋理過濾（最快，質量極低）。極速配置預設的預設值。</string>
+    <string name="settings_decoder_scale_spline36">Spline36</string>
+    <string name="settings_decoder_scale_spline36_summary">Spline36 縮放。高質量中檔算法，畫面鋭利且速度適中。</string>
+    <string name="settings_decoder_scale_ewa_lanczos">EWA Lanczos (Jinc)</string>
+    <string name="settings_decoder_scale_ewa_lanczos_summary">橢圓加權平均 Lanczos 縮放。速度較慢，但質量非常高。</string>
+    <string name="settings_decoder_scale_lanczos">Lanczos</string>
+    <string name="settings_decoder_scale_lanczos_summary">Lanczos 縮放。在質量和性能之間提供良好的平衡。</string>
+    <string name="settings_decoder_scale_ewa_lanczos_sharp">EWA Lanczos Sharp</string>
+    <string name="settings_decoder_scale_ewa_lanczos_sharp_summary">EWA Lanczos 的輕微鋭化版本。高質量配置預設的預設值。</string>
+    <string name="settings_decoder_scale_ewa_lanczos_4sharpest">EWA Lanczos 4Sharpest</string>
+    <string name="settings_decoder_scale_ewa_lanczos_4sharpest_summary">非常鋭利的縮放器，容易產生振鈴效應。在 gpu-next 上會自動開啓內置抗振鈴。</string>
+    <string name="settings_decoder_scale_mitchell">Mitchell-Netravali</string>
+    <string name="settings_decoder_scale_mitchell_summary">分段三次過濾器。在所有縮放偽影之間提供平衡的折衷。</string>
+    <string name="settings_decoder_scale_hermite">Hermite</string>
+    <string name="settings_decoder_scale_hermite_summary">Hermite 樣條。非常快，但容易產生塊狀感。</string>
+    <string name="settings_decoder_scale_catmull_rom">Catmull-Rom</string>
+    <string name="settings_decoder_scale_catmull_rom_summary">比 Mitchell 更鋭利，但容易產生振鈴效應。</string>
+    <string name="settings_decoder_scale_oversample">Oversample</string>
+    <string name="settings_decoder_scale_oversample_summary">像素超採樣以消除抖動偽影，但會增加一些模糊。</string>
+
+    <string name="settings_decoder_deband">去色帶 (Debanding)</string>
+    <string name="settings_decoder_deband_summary">減少影片中的色彩斷層（色帶）現象</string>
+    <string name="settings_decoder_deband_iterations">迭代次數 (Iterations)</string>
+    <string name="settings_decoder_deband_iterations_summary">每個樣本執行的去色帶步數。值越高效果越好，但更耗性能。(預設: 1)</string>
+    <string name="settings_decoder_deband_threshold">閾值 (Threshold)</string>
+    <string name="settings_decoder_deband_threshold_summary">濾鏡的截止閾值。較高的數值會顯著增強去色帶強度，但會逐漸減少圖像細節。(預設: 48)</string>
+    <string name="settings_decoder_deband_range">範圍 (Range)</string>
+    <string name="settings_decoder_deband_range_summary">濾鏡的初始半徑。半徑越高能找到更多漸變，半徑越低平滑效果越激進。(預設: 16)</string>
+    <string name="settings_decoder_deband_grain">噪點 (Grain)</string>
+    <string name="settings_decoder_deband_grain_summary">添加額外的噪點以掩蓋殘留的量化偽影。(預設: 32)</string>
+
+    <string name="settings_decoder_hdr_settings">HDR 設定</string>
+    <string name="settings_decoder_hdr_settings_summary">配置 HDR 硬件直通、色調映射算法、亮度增強上限及色域模式</string>
+    <string name="settings_decoder_hdr_passthrough">HDR 硬件直通 (Passthrough)</string>
+    <string name="settings_decoder_hdr_passthrough_summary">向螢幕發送原生 HDR 信號以觸發硬件背光最大亮度。開啓後，下方的軟件色調映射參數將被自動繞過。</string>
+    <string name="settings_decoder_tone_mapping">色調映射算法</string>
+    <string name="settings_decoder_tone_mapping_auto">自動</string>
+    <string name="settings_decoder_tone_mapping_auto_summary">自動根據內容選擇最佳映射方式</string>
+    <string name="settings_decoder_tone_mapping_bt2446a">BT.2446a</string>
+    <string name="settings_decoder_tone_mapping_bt2446a_summary">HDR 到 SDR 轉換的現代參考標準</string>
+    <string name="settings_decoder_tone_mapping_spline">Spline</string>
+    <string name="settings_decoder_tone_mapping_spline_summary">平滑曲線映射。保留更多高光細節</string>
+    <string name="settings_decoder_tone_mapping_reinhard">Reinhard</string>
+    <string name="settings_decoder_tone_mapping_reinhard_summary">經典色調映射算法。擅長防止高光溢出</string>
+    <string name="settings_decoder_tone_mapping_max_boost">亮度增強上限</string>
+    <string name="settings_decoder_tone_mapping_max_boost_summary">允許高光區域過沖色調曲線，增強亮度和對比度衝擊感。(預設: 1.50)</string>
+    <string name="settings_decoder_gamut_mapping_mode">色域映射模式</string>
+    <string name="settings_decoder_gamut_mapping_mode_summary">將 HDR 廣色域 (BT.2020) 映射至 SDR 螢幕的策略</string>
+    <string name="settings_decoder_gamut_mapping_perceptual">感知 (Perceptual)</string>
+    <string name="settings_decoder_gamut_mapping_perceptual_summary">保持相對色彩層次關係，過渡自然飽滿</string>
+    <string name="settings_decoder_gamut_mapping_clip">硬裁剪 (Clip)</string>
+    <string name="settings_decoder_gamut_mapping_clip_summary">直接截斷超色域部分，易出現死色或色彩斷層</string>
+    <string name="settings_decoder_gamut_mapping_relative">相對色度 (Relative)</string>
+    <string name="settings_decoder_gamut_mapping_relative_summary">基於白點對齊縮放色域</string>
+    <string name="settings_decoder_gamut_mapping_saturation">飽和度優先 (Saturation)</string>
+    <string name="settings_decoder_gamut_mapping_saturation_summary">優先維持極強色彩飽和度</string>
+    <string name="settings_decoder_gamut_mapping_desaturate">去飽和度 (Desaturate)</string>
+    <string name="settings_decoder_gamut_mapping_desaturate_summary">高光去飽和化向白色過渡以適應色域</string>
+
+    <string name="settings_decoder_framedrop">丟幀策略</string>
+    <string name="settings_decoder_framedrop_summary">應對性能瓶頸的處理方案</string>
+    <string name="settings_decoder_framedrop_vo">VO (推薦)</string>
+    <string name="settings_decoder_framedrop_vo_summary">在影片輸出階段丟幀。性能與同步的最佳平衡。</string>
+    <string name="settings_decoder_framedrop_decoder">解碼器 (激進)</string>
+    <string name="settings_decoder_framedrop_decoder_summary">在解碼階段丟幀。最有效但可能導致畫面異常。</string>
+    <string name="settings_decoder_framedrop_no">已禁用</string>
+    <string name="settings_decoder_framedrop_no_summary">永不丟幀。僅建議高端設備使用，以避免音訊不同步。</string>
+
+    <string name="settings_decoder_header_info">信息</string>
+    <string name="settings_decoder_codec_info">解碼器信息</string>
+    <string name="settings_decoder_codec_info_summary">查看設備支持的音影片解碼器及硬解情況</string>
+    <string name="settings_decoder_codec_group_all">全部</string>
+    <string name="settings_decoder_codec_group_video">影片</string>
+    <string name="settings_decoder_codec_group_audio">音訊</string>
+    <string name="settings_decoder_codec_group_hardware">硬件解碼</string>
+    <string name="settings_decoder_hw_decoding">硬件解碼</string>
+    <string name="settings_decoder_sw_decoding">軟件解碼</string>
+    <string name="settings_decoder_codec_count">%1$d 個解碼器</string>
+    <string name="settings_decoder_codec_empty">未找到匹配的解碼器</string>
+
+    <string name="settings_subtitle_codepage">字幕編碼</string>
+    <string name="settings_subtitle_codepage_summary">外部字幕檔案的字符編碼</string>
+    <string name="settings_subtitle_codepage_auto">自動 (通用)</string>
+    <string name="settings_subtitle_codepage_auto_summary">自動檢測編碼 (UTF-8/通用)。適用於大多數檔案。</string>
+    <string name="settings_subtitle_codepage_utf8">UTF-8</string>
+    <string name="settings_subtitle_codepage_utf8_summary">現代標準編碼。如果 SubRip 檔案加載異常，請嘗試此項。</string>
+    <string name="settings_subtitle_codepage_gbk">GBK (簡體中文)</string>
+    <string name="settings_subtitle_codepage_gbk_summary">較舊的簡體中文字幕常見編碼。</string>
+    <string name="settings_subtitle_codepage_big5">BIG5 (繁體中文)</string>
+    <string name="settings_subtitle_codepage_big5_summary">繁體中文 (港台地區) 字幕標準編碼。</string>
+
+    <string name="settings_audio_output_aaudio_summary">現代 Android 低延遲音訊介面。</string>
+    <string name="settings_audio_output_audiotrack_summary">標準 Android Java 音訊輸出。可靠且兼容性好。</string>
+    <string name="settings_audio_output_opensles_summary">傳統低級 C 介面。若其他後端出現問題時使用。</string>
+
+    <string name="settings_lang_preferred_language_none">預設 (無)</string>
+    <string name="settings_lang_add_language">添加語言</string>
+    <string name="settings_lang_select_language">選擇語言</string>
+    <string name="settings_lang_all_languages">所有語言</string>
+
+    <string name="settings_about_version">版本</string>
+    <string name="settings_about_description">一款專為 Android 打造的功能強大且現代的媒體播放器。它完美融合了本地儲存空間與多種遠程網絡協議。</string>
+
+    <string name="settings_about_header_legal">法律信息</string>
+    <string name="settings_about_copyright">版權聲明</string>
+    <string name="settings_about_copyright_summary">查看應用程式版權與許可條款</string>
+    <string name="settings_about_libraries">開源庫與許可</string>
+    <string name="settings_about_libraries_summary">查看所有核心引擎庫的版本與開源許可信息</string>
+
+    <string name="settings_about_header_links">鏈接</string>
+    <string name="settings_about_developer">開發者</string>
+    <string name="settings_about_developer_summary">訪問開發者的 GitHub 個人主頁</string>
+    <string name="settings_about_github">GitHub 倉庫</string>
+    <string name="settings_about_github_summary">查看源碼、反饋問題並貢獻項目</string>
+    <string name="settings_about_telegram">Telegram 頻道</string>
+    <string name="settings_about_telegram_summary">加入我們的社區以獲取更新並進行討論</string>
+
+    <string name="settings_advanced_header_security">mpv 安全</string>
+    <string name="settings_advanced_tls_verify">TLS 驗證</string>
+    <string name="settings_advanced_tls_verify_summary">驗證 HTTPS 連接的 TLS/SSL 證書。如果在內網環境使用自簽名證書，請禁用此項。</string>
+
+    <string name="settings_advanced_header_connection">網絡連接</string>
+    <string name="settings_advanced_user_agent">User-Agent</string>
+    <string name="settings_advanced_user_agent_summary">自定義 HTTP 請求的 User-Agent 字符串</string>
+    <string name="settings_advanced_user_agent_empty_error">User-Agent 不能為空</string>
+    <string name="settings_advanced_timeout">連接超時</string>
+    <string name="settings_advanced_timeout_summary">等待網絡響應的最大秒數</string>
+
+    <string name="settings_advanced_header_cache">mpv 緩衝與快取</string>
+    <string name="settings_advanced_cache_secs">向前快取時長</string>
+    <string name="settings_advanced_cache_secs_summary">預讀未播放影片的時長（秒）</string>
+    <string name="settings_advanced_cache_back_secs">向後快取時長</string>
+    <string name="settings_advanced_cache_back_secs_summary">已播放影片在緩衝區中保留的時長（秒）</string>
+    <string name="settings_advanced_demuxer_max_bytes">向前緩衝區大小</string>
+    <string name="settings_advanced_demuxer_max_bytes_summary">未播放內容緩衝區的最大記憶體佔用</string>
+    <string name="settings_advanced_demuxer_max_back_bytes">向後緩衝區大小</string>
+    <string name="settings_advanced_demuxer_max_back_bytes_summary">已播放內容緩衝區的最大記憶體保留</string>
+
+    <!-- Storage and Cache -->
+    <string name="settings_advanced_header_storage_cache">儲存空間與快取</string>
+    <string name="settings_advanced_clear_thumbnails">縮略圖快取</string>
+    <string name="settings_advanced_clear_thumbnails_summary">清理本地快取的影片預覽海報幀</string>
+    <string name="settings_advanced_clear_video_cache">影片播放快取</string>
+    <string name="settings_advanced_clear_video_cache_summary">清理 ExoPlayer 產生的網絡影片播放快取檔案</string>
+    <string name="settings_advanced_clear_history">播放記錄</string>
+    <string name="settings_advanced_clear_history_summary">刪除所有保存的影片觀看進度與記錄</string>
+    <string name="settings_advanced_history_count_format">共 %d 條</string>
+    <string name="settings_advanced_history_cleared">播放記錄已成功清理</string>
+    <string name="settings_cache_cleared">快取已成功清理</string>
+
+    <!-- Notification -->
+    <string name="notification_playback_channel_name">播放控制</string>
+    <string name="notification_playback_channel_description">後台媒體播放控制欄</string>
+
+    <string name="notification_screenshot_channel_name">截圖</string>
+    <string name="notification_screenshot_channel_description">截圖保存後的通知</string>
+    <string name="notification_screenshot_saved">截圖已保存</string>
+
+    <string name="error_permission_denied_storage">權限被拒絕：需要外部儲存空間存取權限</string>
+
+    <!-- File Management -->
+    <string name="file_action_copy">複製</string>
+    <string name="file_action_move">移動</string>
+    <string name="file_action_rename">重命名</string>
+    <string name="file_action_delete">刪除</string>
+    <string name="file_action_add_to_playlist">添加到播放清單</string>
+    <string name="file_action_clear_selection">清除選擇</string>
+    <string name="file_action_create_folder">新建資料夾</string>
+
+    <string name="file_dialog_rename_title">重命名</string>
+    <string name="file_dialog_delete_title">刪除選中的項目？</string>
+    <string name="file_dialog_delete_confirm">刪除</string>
+    <string name="file_dialog_create_folder_title">新建資料夾</string>
+    <string name="file_dialog_create_folder_hint">資料夾名稱</string>
+    <string name="file_dialog_select_target_directory">選擇目標資料夾</string>
+    <string name="file_dialog_device_home_path">儲存裝置</string>
+    <string name="file_dialog_empty_folder">沒有子資料夾</string>
+    <string name="file_dialog_copy_here">複製到此處</string>
+    <string name="file_dialog_move_here">移動到此處</string>
+    <string name="file_dialog_conflict_title">檔案同名衝突</string>
+    <string name="file_dialog_conflict_message">目標位置已存在同名檔案 \"%1$s\"。</string>
+    <string name="file_dialog_conflict_overwrite">覆蓋</string>
+    <string name="file_dialog_conflict_skip">跳過</string>
+    <string name="file_dialog_conflict_apply_all">應用程式於所有剩餘衝突</string>
+
+    <string name="file_operation_copying">正在複製檔案…</string>
+    <string name="file_operation_moving">正在移動檔案…</string>
+    <string name="file_operation_deleting">正在刪除檔案…</string>
+    <string name="file_operation_cancel">取消</string>
+    <string name="file_operation_completed">檔案操作已完成</string>
+    <string name="file_operation_failed">檔案操作失敗: %1$s</string>
+    <string name="file_operation_notification_channel_name">檔案後台任務</string>
+    <string name="file_operation_notification_channel_desc">展示當前檔案複製、移動和刪除任務的實時進度。</string>
+
+    <!-- File Task Queue -->
+    <string name="file_task_queue_title">檔案操作隊列</string>
+    <string name="file_task_clear_completed">清理已完成記錄</string>
+    <string name="file_task_section_active">正在執行的任務</string>
+    <string name="file_task_section_pending">等待中的任務 (%d)</string>
+    <string name="file_task_section_completed">歷史記錄 (%d)</string>
+    <string name="file_task_cancel">取消</string>
+    <string name="file_task_empty">暫無檔案操作任務</string>
+    <string name="file_task_status_pending">等待中</string>
+    <string name="file_task_status_completed">已完成</string>
+    <string name="file_task_status_failed">操作失敗</string>
+    <string name="file_task_status_cancelled">已取消</string>
+</resources>
