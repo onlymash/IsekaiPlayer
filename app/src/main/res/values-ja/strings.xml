@@ -396,9 +396,9 @@
     <string name="settings_audio_enable_background_audio">バックグラウンド再生</string>
     <string name="settings_audio_enable_background_audio_summary">アプリがバックグラウンドに移行しても音声を再生し続けます</string>
     <string name="settings_audio_exo_volume">プレーヤー音量</string>
-    <string name="settings_audio_exo_volume_summary">ExoPlayer の音量を設定 (0–100%%)</string>
+    <string name="settings_audio_exo_volume_summary">ExoPlayer の音量を設定 (0–100%)</string>
     <string name="settings_audio_mpv_volume">プレーヤー音量</string>
-    <string name="settings_audio_mpv_volume_summary">mpv の音量を設定 (0–200%%)</string>
+    <string name="settings_audio_mpv_volume_summary">mpv の音量を設定 (0–200%)</string>
     <string name="settings_audio_preferred_language">優先音声言語</string>
     <string name="settings_audio_preferred_language_summary">デフォルトの音声言語を選択します</string>
     <string name="settings_audio_delay">オーディオ遅延</string>

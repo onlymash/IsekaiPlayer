@@ -395,9 +395,9 @@
     <string name="settings_audio_enable_background_audio">後台播放</string>
     <string name="settings_audio_enable_background_audio_summary">應用程式切至後台時繼續播放</string>
     <string name="settings_audio_exo_volume">播放器音量</string>
-    <string name="settings_audio_exo_volume_summary">設定 ExoPlayer 播放器音量 (0–100%%)</string>
+    <string name="settings_audio_exo_volume_summary">設定 ExoPlayer 播放器音量 (0–100%)</string>
     <string name="settings_audio_mpv_volume">播放器音量</string>
-    <string name="settings_audio_mpv_volume_summary">設定 mpv 播放器音量 (0–200%%)</string>
+    <string name="settings_audio_mpv_volume_summary">設定 mpv 播放器音量 (0–200%)</string>
     <string name="settings_audio_preferred_language">首選音軌語言</string>
     <string name="settings_audio_preferred_language_summary">選擇預設音軌語言</string>
     <string name="settings_audio_delay">音訊延遲</string>

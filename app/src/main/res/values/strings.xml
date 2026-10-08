@@ -396,9 +396,9 @@
     <string name="settings_audio_enable_background_audio">Background audio</string>
     <string name="settings_audio_enable_background_audio_summary">Continue playing audio when the app is in the background</string>
     <string name="settings_audio_exo_volume">Player volume</string>
-    <string name="settings_audio_exo_volume_summary">Set ExoPlayer volume (0–100%%)</string>
+    <string name="settings_audio_exo_volume_summary">Set ExoPlayer volume (0–100%)</string>
     <string name="settings_audio_mpv_volume">Player volume</string>
-    <string name="settings_audio_mpv_volume_summary">Set mpv volume (0–200%%)</string>
+    <string name="settings_audio_mpv_volume_summary">Set mpv volume (0–200%)</string>
     <string name="settings_audio_preferred_language">Preferred audio language</string>
     <string name="settings_audio_preferred_language_summary">Select the default audio track language</string>
     <string name="settings_audio_delay">Audio delay</string>
