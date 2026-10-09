@@ -56,7 +56,7 @@
     <string name="settings_general_haptics">Тактильный отклик</string>
     <string name="settings_general_haptics_summary">Включить вибрацию при нажатиях</string>
     <string name="settings_general_intercept_back">Навигация кнопкой «Назад»</string>
-    <string name="settings_general_intercept_back_summary">Если включено, жест «Назад» поднимается вверх по структуре папок перед выходом</string>
+    <string name="settings_general_intercept_back_summary">Если включено, жест «Назад» переходит на уровень вверх по папкам перед выходом</string>
 
     <!-- Backup & Restore -->
     <string name="settings_general_header_backup">Резервное копирование и восстановление</string>
@@ -219,7 +219,7 @@
     <string name="playlist_create_title_blank">Новый плейлист</string>
     <string name="playlist_create_title_m3u_link">Импорт M3U по ссылке</string>
     <string name="playlist_create_title_m3u_file">Импорт M3U из файла</string>
-    <string name="playlist_create_m3u_url_placeholder">Ссылка URL (http://, https://…)</string>
+    <string name="playlist_create_m3u_url_placeholder">URL-ссылка (http://, https://&#8230;)</string>
     <string name="playlist_create_m3u_file_select">Выбрать файл M3U</string>
     <string name="playlist_create_m3u_file_selected">Выбранный файл: %s</string>
     <string name="playlist_create_import_button">Импортировать</string>
@@ -367,7 +367,7 @@
 
     <string name="settings_player_loop_mode">Режим повтора</string>
     <string name="settings_player_loop_mode_none">Выключен</string>
-    <string name="settings_player_loop_mode_current">Повтор одного видео</string>
+    <string name="settings_player_loop_mode_current">Повтор текущего</string>
     <string name="settings_player_loop_mode_sequential">Последовательно</string>
     <string name="settings_player_loop_mode_list">Повтор всего списка</string>
     <string name="settings_player_loop_mode_shuffle">Случайно</string>
@@ -377,7 +377,7 @@
     <string name="settings_player_remember_brightness_summary">Сохранять уровень яркости из предыдущего сеанса</string>
 
     <string name="settings_player_orientation">Ориентация экрана</string>
-    <string name="settings_player_orientation_default">По умолчанию в системе</string>
+    <string name="settings_player_orientation_default">Как в системе</string>
     <string name="settings_player_orientation_default_summary">Следовать системным настройкам автоповорота</string>
     <string name="settings_player_orientation_sensor">По датчику</string>
     <string name="settings_player_orientation_sensor_summary">Всегда вращать в зависимости от положения устройства</string>

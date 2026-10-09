@@ -56,7 +56,7 @@
     <string name="settings_general_haptics">햅틱 피드백</string>
     <string name="settings_general_haptics_summary">터치 시 진동 피드백을 활성화합니다</string>
     <string name="settings_general_intercept_back">뒤로 가기 버튼 탐색</string>
-    <string name="settings_general_intercept_back_summary">활성화 시 뒤로 가기 제스처 사용 시 앱을 종료하기 전에 상위 디렉터리로 이동합니다</string>
+    <string name="settings_general_intercept_back_summary">활성화하면 뒤로 가기 제스처를 사용할 때 앱을 종료하기 전에 상위 디렉터리로 이동합니다</string>
 
     <!-- Backup & Restore -->
     <string name="settings_general_header_backup">백업 및 복원</string>
@@ -367,7 +367,7 @@
 
     <string name="settings_player_loop_mode">반복 모드</string>
     <string name="settings_player_loop_mode_none">반복 안 함</string>
-    <string name="settings_player_loop_mode_current">한 곡/동영상 반복</string>
+    <string name="settings_player_loop_mode_current">현재 항목 반복</string>
     <string name="settings_player_loop_mode_sequential">순차 재생</string>
     <string name="settings_player_loop_mode_list">전체 반복</string>
     <string name="settings_player_loop_mode_shuffle">셔플</string>

@@ -219,7 +219,7 @@
     <string name="playlist_create_title_blank">Nova lista de reprodução</string>
     <string name="playlist_create_title_m3u_link">Importar lista M3U via link</string>
     <string name="playlist_create_title_m3u_file">Importar lista M3U via arquivo</string>
-    <string name="playlist_create_m3u_url_placeholder">URL do link (http://, https://…)</string>
+    <string name="playlist_create_m3u_url_placeholder">URL do link (http://, https://&#8230;)</string>
     <string name="playlist_create_m3u_file_select">Selecionar arquivo M3U</string>
     <string name="playlist_create_m3u_file_selected">Arquivo selecionado: %s</string>
     <string name="playlist_create_import_button">Importar</string>
@@ -381,10 +381,10 @@
     <string name="settings_player_orientation_default_summary">Segue a configuração de rotação automática do sistema</string>
     <string name="settings_player_orientation_sensor">Automática por sensor</string>
     <string name="settings_player_orientation_sensor_summary">Gira sempre com base nos sensores do dispositivo</string>
-    <string name="settings_player_orientation_landscape">Horizontal</string>
-    <string name="settings_player_orientation_landscape_summary">Fixar no modo horizontal (sensível ao sensor)</string>
-    <string name="settings_player_orientation_portrait">Vertical</string>
-    <string name="settings_player_orientation_portrait_summary">Fixar no modo vertical (sensível ao sensor)</string>
+    <string name="settings_player_orientation_landscape">Paisagem</string>
+    <string name="settings_player_orientation_landscape_summary">Fixar no modo paisagem (sensível ao sensor)</string>
+    <string name="settings_player_orientation_portrait">Retrato</string>
+    <string name="settings_player_orientation_portrait_summary">Fixar no modo retrato (sensível ao sensor)</string>
     <string name="settings_player_orientation_video">Ajustar ao vídeo</string>
     <string name="settings_player_orientation_video_summary">Alterna automaticamente com base na proporção do vídeo</string>
 
@@ -714,7 +714,7 @@
     <string name="file_action_rename">Renomear</string>
     <string name="file_action_delete">Excluir</string>
     <string name="file_action_add_to_playlist">Adicionar à lista</string>
-    <string name="file_action_clear_selection">Desmarcar</string>
+    <string name="file_action_clear_selection">Limpar seleção</string>
     <string name="file_action_create_folder">Nova pasta</string>
 
     <string name="file_dialog_rename_title">Renomear</string>
