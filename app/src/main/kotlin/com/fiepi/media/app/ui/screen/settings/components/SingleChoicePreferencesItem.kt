@@ -70,11 +70,12 @@ fun <T> SingleChoicePreferencesItem(
                         label = {
                             Text(
                                 text = optionToText(option),
-                                style = MaterialTheme.typography.bodyMedium,
+                                style = MaterialTheme.typography.labelMedium,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
-                        }
+                        },
+                        icon = { }
                     )
                 }
             }
