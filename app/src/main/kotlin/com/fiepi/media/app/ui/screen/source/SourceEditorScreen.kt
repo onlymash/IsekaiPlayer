@@ -18,6 +18,11 @@
 
 package com.fiepi.media.app.ui.screen.source
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -69,16 +74,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import com.fiepi.media.app.R
 import com.fiepi.media.app.ui.components.BackIconButtonBox
 import com.fiepi.media.app.ui.screen.source.viewmodel.SourceEditorIntent
 import com.fiepi.media.app.ui.screen.source.viewmodel.SourceEditorState
 import com.fiepi.media.app.ui.screen.source.viewmodel.SourceEditorViewModel
+import com.fiepi.media.app.ui.theme.AppTheme
 import com.fiepi.media.app.ui.utils.displayName
 import com.fiepi.media.domain.model.source.SourceType
 import org.koin.compose.viewmodel.koinViewModel
@@ -133,6 +141,38 @@ private fun SourceEditorContent(
             .collect { onIntent(SourceEditorIntent.UpdatePassword(it)) }
     }
 
+    val context = LocalContext.current
+    val localNetworkPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            onIntent(SourceEditorIntent.Save)
+        }
+    }
+
+    val onSaveClick = {
+        val host = state.host.trim()
+        val isTargetSdk37OrHigher = context.applicationInfo.targetSdkVersion >= 37
+        val needsLocalNetworkPermission = Build.VERSION.SDK_INT >= 37 &&
+                isTargetSdk37OrHigher &&
+                isLocalNetworkHost(host)
+
+        if (needsLocalNetworkPermission) {
+            val hasPermission = ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_LOCAL_NETWORK
+            ) == PackageManager.PERMISSION_GRANTED
+
+            if (!hasPermission) {
+                localNetworkPermissionLauncher.launch(Manifest.permission.ACCESS_LOCAL_NETWORK)
+            } else {
+                onIntent(SourceEditorIntent.Save)
+            }
+        } else {
+            onIntent(SourceEditorIntent.Save)
+        }
+    }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -174,7 +214,7 @@ private fun SourceEditorContent(
                         .padding(horizontal = 16.dp, vertical = 12.dp)
                 ) {
                     Button(
-                        onClick = { onIntent(SourceEditorIntent.Save) },
+                        onClick = onSaveClick,
                         modifier = Modifier.fillMaxWidth(),
                         enabled = !state.isSaving
                     ) {
@@ -352,10 +392,33 @@ private fun SourceEditorContent(
     }
 }
 
+private fun isLocalNetworkHost(host: String): Boolean {
+    if (host.isBlank()) return false
+    val h = host.lowercase()
+    if (h == "localhost" || h.endsWith(".local") || h.endsWith(".lan") || h.endsWith(".home") || !h.contains(
+            "."
+        )
+    ) {
+        return true
+    }
+    val parts = h.split(".")
+    if (parts.size == 4 && parts.all { it.toIntOrNull() != null }) {
+        val p0 = parts[0].toIntOrNull() ?: return false
+        val p1 = parts[1].toIntOrNull() ?: return false
+        if (p0 == 10) return true
+        if (p0 == 172 && p1 in 16..31) return true
+        if (p0 == 192 && p1 == 168) return true
+        if (p0 == 169 && p1 == 254) return true
+        if (p0 == 100 && p1 in 64..127) return true
+        if (p0 == 127) return true
+    }
+    return false
+}
+
 @Preview(showBackground = true)
 @Composable
 fun SourceEditorContentPreview() {
-    MaterialTheme {
+    AppTheme {
         SourceEditorContent(
             state = SourceEditorState(name = "My Server", host = "192.168.1.1"),
             onIntent = {},
@@ -367,7 +430,7 @@ fun SourceEditorContentPreview() {
 @Preview(showBackground = true, device = Devices.TABLET)
 @Composable
 fun SourceEditorContentTabletPreview() {
-    MaterialTheme {
+    AppTheme {
         SourceEditorContent(
             state = SourceEditorState(name = "My Server", host = "192.168.1.1"),
             onIntent = {},
