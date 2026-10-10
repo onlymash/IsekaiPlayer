@@ -36,10 +36,10 @@ To function properly as a full-featured media player, the App requests certain s
 
 | Permission | Purpose & Usage | Requirement |
 | :--- | :--- | :--- |
-| **Storage / Media Access**<br>(`MANAGE_EXTERNAL_STORAGE`, `READ_MEDIA_VIDEO`, `READ_MEDIA_AUDIO`) | Allows the App to scan, discover, and play video, audio, and subtitle files stored on your device. | Required for local file playback |
-| **Network Access**<br>(`INTERNET`, `ACCESS_NETWORK_STATE`) | Allows the App to stream user-requested media from local network shares (SMB, FTP, WebDAV) or user-provided network URLs. | Required for network streaming features |
+| **Storage & File Management**<br>(`MANAGE_EXTERNAL_STORAGE`) | Allows the App to perform media scanning, discovery, and file management operations for videos, audio, and subtitles stored on your device. | Required for local file playback and file management |
+| **Network Access**<br>(`INTERNET`, `ACCESS_NETWORK_STATE`, `ACCESS_LOCAL_NETWORK`) | Allows the App to stream user-requested media from local network shares (SMB, FTP, WebDAV) or user-provided network URLs. `ACCESS_LOCAL_NETWORK` is required on Android 17+ to access local network devices. | Required for network streaming features |
 | **Notifications**<br>(`POST_NOTIFICATIONS`) | Displays playback controls (play/pause, skip, progress bar) in the Android system notification shade. | Optional (Can be disabled in system settings) |
-| **Foreground Service**<br>(`FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_MEDIA_PLAYBACK`) | Enables continuous, uninterrupted media playback when the App is running in the background or when the screen is turned off. | Required for background playback |
+| **Foreground Service**<br>(`FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_MEDIA_PLAYBACK`, `FOREGROUND_SERVICE_DATA_SYNC`) | Enables continuous, uninterrupted media playback in the background (`FOREGROUND_SERVICE_MEDIA_PLAYBACK`) and background file operations (`FOREGROUND_SERVICE_DATA_SYNC`). | Required for background playback and file operations |
 
 *We do not use any permissions for tracking, profiling, or background data gathering.*
 
