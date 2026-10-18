@@ -37,12 +37,14 @@ import androidx.core.view.WindowCompat
 import com.fiepi.media.app.activity.delegate.PlayerBackgroundPlaybackDelegate
 import com.fiepi.media.app.activity.delegate.PlayerMediaSessionDelegate
 import com.fiepi.media.app.activity.delegate.PlayerPipDelegate
+import com.fiepi.media.app.service.NotificationController
 import com.fiepi.media.app.ui.app.Player
 import com.fiepi.media.app.ui.screen.player.viewmodel.PlayerIntent
 import com.fiepi.media.app.ui.screen.player.viewmodel.PlayerViewModel
 import com.fiepi.media.domain.utils.FileUtils
 import com.fiepi.media.player.input.PlayerKeyHandler
 import kotlinx.coroutines.flow.map
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayerActivity : ComponentActivity() {
@@ -92,12 +94,15 @@ class PlayerActivity : ComponentActivity() {
     }
 
     private val viewModel: PlayerViewModel by viewModel()
+    private val notificationController: NotificationController by inject()
 
     // Lifecycle-aware MediaSession delegate for handling bluetooth headset media controls in foreground
     private val mediaSessionDelegate by lazy {
         PlayerMediaSessionDelegate(
             activity = this,
+            notificationController = notificationController,
             playbackState = viewModel.state.map { it.playback },
+            isBackgroundAudioEnabled = { viewModel.playerUiOptions.enableBackgroundAudio },
             onIntent = viewModel::sendIntent
         )
     }
@@ -115,6 +120,7 @@ class PlayerActivity : ComponentActivity() {
     private val backgroundPlaybackDelegate by lazy {
         PlayerBackgroundPlaybackDelegate(
             activity = this,
+            notificationController = notificationController,
             isPlaying = { viewModel.state.value.playback.isPlaying },
             isBackgroundAudioEnabled = { viewModel.playerUiOptions.enableBackgroundAudio },
             isEnteringBackgroundAudioManually = { viewModel.uiState.isEnteringBackgroundAudioManually },

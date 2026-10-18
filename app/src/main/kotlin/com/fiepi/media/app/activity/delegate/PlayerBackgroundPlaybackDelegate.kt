@@ -22,6 +22,7 @@ import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
+import com.fiepi.media.app.service.NotificationController
 import com.fiepi.media.app.service.PlaybackService
 import com.fiepi.media.app.ui.screen.player.viewmodel.PlayerIntent
 
@@ -31,6 +32,7 @@ import com.fiepi.media.app.ui.screen.player.viewmodel.PlayerIntent
  */
 class PlayerBackgroundPlaybackDelegate(
     private val activity: ComponentActivity,
+    private val notificationController: NotificationController,
     private val isPlaying: () -> Boolean,
     private val isBackgroundAudioEnabled: () -> Boolean,
     private val isEnteringBackgroundAudioManually: () -> Boolean,
@@ -72,12 +74,16 @@ class PlayerBackgroundPlaybackDelegate(
             // User explicitly closed page (e.g. back button); stop service and release resources completely
             if (!bgEnabled) {
                 activity.stopService(Intent(activity, PlaybackService::class.java))
+                notificationController.cancelNotification(NotificationController.NOTIFICATION_ID_PLAYBACK)
             }
         } else {
             // Switching to background or locking screen (onStop indicates screen no longer visible)
             // If background playback conditions are met and currently playing, start service to maintain foreground playback state
             if ((bgEnabled || manualBg) && playing) {
                 activity.startService(Intent(activity, PlaybackService::class.java))
+            } else {
+                activity.stopService(Intent(activity, PlaybackService::class.java))
+                notificationController.cancelNotification(NotificationController.NOTIFICATION_ID_PLAYBACK)
             }
             onIntent(PlayerIntent.EnterBackground)
         }

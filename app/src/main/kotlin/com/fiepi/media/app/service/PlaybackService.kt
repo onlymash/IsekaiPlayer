@@ -118,6 +118,9 @@ class PlaybackService : Service() {
                 // Maintain foreground state and notification only after video is loaded
                 if (!state.isLoaded) {
                     stopForeground(STOP_FOREGROUND_REMOVE)
+                    notificationController.cancelNotification(NotificationController.NOTIFICATION_ID_PLAYBACK)
+                    mediaSession?.isActive = false
+                    stopSelf()
                     return@collectLatest
                 }
 
@@ -261,6 +264,8 @@ class PlaybackService : Service() {
             ACTION_PREVIOUS -> mediaPlayer.playPrevious()
             ACTION_NEXT -> mediaPlayer.playNext()
             ACTION_STOP -> {
+                stopForeground(STOP_FOREGROUND_REMOVE)
+                notificationController.cancelNotification(NotificationController.NOTIFICATION_ID_PLAYBACK)
                 mediaPlayer.release()
                 stopSelf()
             }
@@ -271,6 +276,7 @@ class PlaybackService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onDestroy() {
+        stopForeground(STOP_FOREGROUND_REMOVE)
         mediaPlayer.decrementClientCount(PlayerClientType.BACKGROUND)
         mediaSession?.isActive = false
         mediaSession?.release()
