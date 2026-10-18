@@ -38,6 +38,7 @@ import com.fiepi.media.app.activity.delegate.PlayerBackgroundPlaybackDelegate
 import com.fiepi.media.app.activity.delegate.PlayerMediaSessionDelegate
 import com.fiepi.media.app.activity.delegate.PlayerPipDelegate
 import com.fiepi.media.app.service.NotificationController
+import com.fiepi.media.app.service.PlayerMediaSessionManager
 import com.fiepi.media.app.ui.app.Player
 import com.fiepi.media.app.ui.screen.player.viewmodel.PlayerIntent
 import com.fiepi.media.app.ui.screen.player.viewmodel.PlayerViewModel
@@ -95,15 +96,16 @@ class PlayerActivity : ComponentActivity() {
 
     private val viewModel: PlayerViewModel by viewModel()
     private val notificationController: NotificationController by inject()
+    private val mediaSessionManager: PlayerMediaSessionManager by inject()
 
     // Lifecycle-aware MediaSession delegate for handling bluetooth headset media controls in foreground
     private val mediaSessionDelegate by lazy {
         PlayerMediaSessionDelegate(
             activity = this,
             notificationController = notificationController,
+            mediaSessionManager = mediaSessionManager,
             playbackState = viewModel.state.map { it.playback },
-            isBackgroundAudioEnabled = { viewModel.playerUiOptions.enableBackgroundAudio },
-            onIntent = viewModel::sendIntent
+            isBackgroundAudioEnabled = { viewModel.playerUiOptions.enableBackgroundAudio }
         )
     }
 

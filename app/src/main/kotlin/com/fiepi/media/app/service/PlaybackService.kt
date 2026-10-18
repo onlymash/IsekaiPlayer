@@ -115,8 +115,8 @@ class PlaybackService : Service() {
     private fun observePlayerState() {
         serviceScope.launch {
             mediaPlayer.state.collectLatest { state ->
-                // Maintain foreground state and notification only after video is loaded
-                if (!state.isLoaded) {
+                // Maintain foreground state and notification as long as a media item is active or loading
+                if (!state.isLoaded && state.mediaTitle.isNullOrEmpty()) {
                     stopForeground(STOP_FOREGROUND_REMOVE)
                     notificationController.cancelNotification(NotificationController.NOTIFICATION_ID_PLAYBACK)
                     mediaSession?.isActive = false
