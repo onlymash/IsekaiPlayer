@@ -88,30 +88,30 @@ class PlaybackService : Service() {
             sessionToken = mediaSessionManager.sessionToken,
             artworkBitmap = mediaSessionManager.currentArtwork,
             artworkUri = mediaSessionManager.currentArtworkContentUri,
-            playPendingIntent = getPendingIntent(ACTION_PLAY),
-            pausePendingIntent = getPendingIntent(ACTION_PAUSE),
-            prevPendingIntent = getPendingIntent(ACTION_PREVIOUS),
-            nextPendingIntent = getPendingIntent(ACTION_NEXT)
+            playPendingIntent = getPendingIntent(PlaybackNotificationReceiver.ACTION_PLAY),
+            pausePendingIntent = getPendingIntent(PlaybackNotificationReceiver.ACTION_PAUSE),
+            prevPendingIntent = getPendingIntent(PlaybackNotificationReceiver.ACTION_PREVIOUS),
+            nextPendingIntent = getPendingIntent(PlaybackNotificationReceiver.ACTION_NEXT)
         )
     }
 
     private fun getPendingIntent(action: String): PendingIntent {
-        val intent = Intent(this, PlaybackService::class.java).apply { this.action = action }
-        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val intent =
+            Intent(this, PlaybackNotificationReceiver::class.java).apply { this.action = action }
+        return PendingIntent.getBroadcast(
+            this,
+            action.hashCode(),
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        when (intent?.action) {
-            ACTION_PLAY -> mediaPlayer.play()
-            ACTION_PAUSE -> mediaPlayer.pause()
-            ACTION_PREVIOUS -> mediaPlayer.playPrevious()
-            ACTION_NEXT -> mediaPlayer.playNext()
-            ACTION_STOP -> {
-                stopForeground(STOP_FOREGROUND_REMOVE)
-                notificationController.cancelNotification(NotificationController.NOTIFICATION_ID_PLAYBACK)
-                mediaPlayer.release()
-                stopSelf()
-            }
+        if (intent?.action == ACTION_STOP) {
+            stopForeground(STOP_FOREGROUND_REMOVE)
+            notificationController.cancelNotification(NotificationController.NOTIFICATION_ID_PLAYBACK)
+            mediaPlayer.release()
+            stopSelf()
         }
         return START_STICKY
     }
@@ -125,10 +125,6 @@ class PlaybackService : Service() {
     }
 
     companion object {
-        const val ACTION_PLAY = "com.fiepi.media.app.ACTION_PLAY"
-        const val ACTION_PAUSE = "com.fiepi.media.app.ACTION_PAUSE"
-        const val ACTION_PREVIOUS = "com.fiepi.media.app.ACTION_PREVIOUS"
-        const val ACTION_NEXT = "com.fiepi.media.app.ACTION_NEXT"
         const val ACTION_STOP = "com.fiepi.media.app.ACTION_STOP"
     }
 }

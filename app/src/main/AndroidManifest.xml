@@ -86,6 +86,17 @@
             </intent-filter>
         </service>
 
+        <receiver
+            android:name=".service.PlaybackNotificationReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.fiepi.media.app.notification.ACTION_PLAY" />
+                <action android:name="com.fiepi.media.app.notification.ACTION_PAUSE" />
+                <action android:name="com.fiepi.media.app.notification.ACTION_PREVIOUS" />
+                <action android:name="com.fiepi.media.app.notification.ACTION_NEXT" />
+            </intent-filter>
+        </receiver>
+
         <service
             android:name=".service.FileOperationService"
             android:exported="false"

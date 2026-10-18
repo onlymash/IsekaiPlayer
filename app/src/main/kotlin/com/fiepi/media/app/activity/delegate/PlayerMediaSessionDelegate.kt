@@ -26,7 +26,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.fiepi.media.app.service.MediaSessionManager
 import com.fiepi.media.app.service.NotificationController
-import com.fiepi.media.app.service.PlaybackService
+import com.fiepi.media.app.service.PlaybackNotificationReceiver
 import com.fiepi.media.domain.player.model.MediaPlaybackState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -86,10 +86,10 @@ class PlayerMediaSessionDelegate(
             sessionToken = mediaSessionManager.sessionToken,
             artworkBitmap = mediaSessionManager.currentArtwork,
             artworkUri = mediaSessionManager.currentArtworkContentUri,
-            playPendingIntent = getPendingIntent(PlaybackService.ACTION_PLAY),
-            pausePendingIntent = getPendingIntent(PlaybackService.ACTION_PAUSE),
-            prevPendingIntent = getPendingIntent(PlaybackService.ACTION_PREVIOUS),
-            nextPendingIntent = getPendingIntent(PlaybackService.ACTION_NEXT)
+            playPendingIntent = getPendingIntent(PlaybackNotificationReceiver.ACTION_PLAY),
+            pausePendingIntent = getPendingIntent(PlaybackNotificationReceiver.ACTION_PAUSE),
+            prevPendingIntent = getPendingIntent(PlaybackNotificationReceiver.ACTION_PREVIOUS),
+            nextPendingIntent = getPendingIntent(PlaybackNotificationReceiver.ACTION_NEXT)
         )
         notificationController.showNotification(
             NotificationController.NOTIFICATION_ID_PLAYBACK,
@@ -98,8 +98,16 @@ class PlayerMediaSessionDelegate(
     }
 
     private fun getPendingIntent(action: String): PendingIntent {
-        val intent = Intent(activity, PlaybackService::class.java).apply { this.action = action }
-        return PendingIntent.getService(activity, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val intent =
+            Intent(activity, PlaybackNotificationReceiver::class.java).apply {
+                this.action = action
+            }
+        return PendingIntent.getBroadcast(
+            activity,
+            action.hashCode(),
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
     }
 
     private fun stopObserving() {
