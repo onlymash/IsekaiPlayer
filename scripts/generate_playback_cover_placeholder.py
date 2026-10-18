@@ -9,7 +9,9 @@ import os
 import sys
 
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-OUTPUT_SVG = os.path.join(PROJECT_ROOT, "app", "src", "main", "playback-cover-placeholder.svg")
+ARTWORK_DIR = os.path.join(PROJECT_ROOT, "artwork")
+os.makedirs(ARTWORK_DIR, exist_ok=True)
+OUTPUT_SVG = os.path.join(ARTWORK_DIR, "playback-cover-placeholder.svg")
 OUTPUT_XML = os.path.join(PROJECT_ROOT, "app", "src", "main", "res", "drawable", "ic_playback_cover_placeholder.xml")
 
 

@@ -378,10 +378,11 @@ def export_to_png(svg_path: str, png_path: str) -> None:
 def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
-    app_main_dir = os.path.join(project_root, 'app', 'src', 'main')
+    artwork_dir = os.path.join(project_root, 'artwork')
+    os.makedirs(artwork_dir, exist_ok=True)
 
-    svg_path = os.path.join(app_main_dir, 'github-social-preview.svg')
-    png_path = os.path.join(app_main_dir, 'github-social-preview.png')
+    svg_path = os.path.join(artwork_dir, 'github-social-preview.svg')
+    png_path = os.path.join(artwork_dir, 'github-social-preview.png')
 
     svg_content = generate_svg()
     with open(svg_path, 'w', encoding='utf-8') as f:

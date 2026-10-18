@@ -17,6 +17,9 @@
 | `update-cacert.sh` | 自动下载、校验 SHA256 并更新 `player/src/main/assets/cacert.pem` 的 Mozilla CA 根证书包工具 |
 | `release.sh` | 版本发布工具脚本，自动检查 Git Tag 及已编译 Release APK，支持指定类型（`prerelease` 或 `release`）并通过 `gh` CLI 创建发布与上传 APK |
 | `utils.sh` | 通用工具函数（Meson Cross File 生成器、`vulkan.pc` 生成器以及 `libraries.json` 生成器） |
+| `generate_feature_graphic.py` | Google Play 商店 Feature Graphic 图像生成工具（输出至 `artwork/playstore-feature-graphic.*`） |
+| `generate_github_social_preview.py` | GitHub Social Preview 社交预览横幅生成工具（输出至 `artwork/github-social-preview.*`） |
+| `generate_playback_cover_placeholder.py` | 播放通知占位封面生成工具（输出至 `artwork/playback-cover-placeholder.svg` 与 `ic_playback_cover_placeholder.xml`） |
 | `components/` | 各 C/C++ 依赖库的单独编译脚本（`mbedtls.sh`, `lua.sh`, `ffmpeg.sh`, `mpv.sh` 等 16 个组件） |
 
 ---

@@ -1,6 +1,6 @@
 **English** | [简体中文](README_zh.md) | [繁體中文 (香港)](README_zh_HK.md) | [繁體中文 (台灣)](README_zh_TW.md) | [日本語](README_ja.md) | [Русский](README_ru.md)
 
-![IsekaiPlayer](app/src/main/github-social-preview.png)
+![IsekaiPlayer](artwork/github-social-preview.png)
 
 # IsekaiPlayer
 

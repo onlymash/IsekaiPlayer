@@ -17,6 +17,9 @@ This directory contains scripts responsible for managing, configuring, updating,
 | `update-cacert.sh` | Utility script to download and update the Mozilla CA certificate bundle at `player/src/main/assets/cacert.pem` with SHA256 verification |
 | `release.sh` | Release publisher script that verifies git tag and compiled release APK before publishing a GitHub release (`prerelease` or `release`) via `gh` CLI |
 | `utils.sh` | Helper functions (Meson cross-file generator, `vulkan.pc` generator, and `libraries.json` generator) |
+| `generate_feature_graphic.py` | Google Play Store Feature Graphic SVG/PNG generator (`artwork/playstore-feature-graphic.*`) |
+| `generate_github_social_preview.py` | GitHub Social Preview Banner SVG/PNG generator (`artwork/github-social-preview.*`) |
+| `generate_playback_cover_placeholder.py` | Notification Playback Cover Placeholder SVG/XML generator (`artwork/playback-cover-placeholder.svg` & `ic_playback_cover_placeholder.xml`) |
 | `components/` | Individual build recipes for C/C++ dependencies (`mbedtls.sh`, `lua.sh`, `ffmpeg.sh`, `mpv.sh`, etc., 16 components in total) |
 
 ---
