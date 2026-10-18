@@ -36,59 +36,52 @@
             android:strokeWidth="14"
             android:strokeColor="@color/ic_launcher_outer_ring" />
 
-        <!-- 内层魔法阵八向符文刻度环 (8段弧长完全相等，每段严格跨越25度，四向八位绝对正心对称) -->
-        <!-- 上方两侧弧 (70°~95° & 85°~110°) -->
+        <!-- 内层魔法阵八向符文刻度环 (8段弧长完全相等，每段跨越25度，间隔20度，100%绝对等距与左右对称) -->
         <path
             android:fillColor="@android:color/transparent"
-            android:pathData="M 608,249 A 280,280 0 0,1 710,314"
+            android:pathData="M 787.75,560.62 A 280,280 0 0,1 741.36,672.60"
             android:strokeWidth="8"
             android:strokeColor="@color/ic_launcher_rune"
             android:strokeLineCap="round" />
         <path
             android:fillColor="@android:color/transparent"
-            android:pathData="M 314,314 A 280,280 0 0,1 416,249"
-            android:strokeWidth="8"
-            android:strokeColor="@color/ic_launcher_rune"
-            android:strokeLineCap="round" />
-
-        <!-- 右侧两侧弧 (25°~50° & 310°~335°) -->
-        <path
-            android:fillColor="@android:color/transparent"
-            android:pathData="M 766,416 A 280,280 0 0,1 784,512"
+            android:pathData="M 672.60,741.36 A 280,280 0 0,1 560.62,787.75"
             android:strokeWidth="8"
             android:strokeColor="@color/ic_launcher_rune"
             android:strokeLineCap="round" />
         <path
             android:fillColor="@android:color/transparent"
-            android:pathData="M 784,512 A 280,280 0 0,1 766,608"
-            android:strokeWidth="8"
-            android:strokeColor="@color/ic_launcher_rune"
-            android:strokeLineCap="round" />
-
-        <!-- 下方两侧弧 (200°~225° & 245°~270°) -->
-        <path
-            android:fillColor="@android:color/transparent"
-            android:pathData="M 710,710 A 280,280 0 0,1 608,775"
+            android:pathData="M 463.38,787.75 A 280,280 0 0,1 351.40,741.36"
             android:strokeWidth="8"
             android:strokeColor="@color/ic_launcher_rune"
             android:strokeLineCap="round" />
         <path
             android:fillColor="@android:color/transparent"
-            android:pathData="M 416,775 A 280,280 0 0,1 314,710"
-            android:strokeWidth="8"
-            android:strokeColor="@color/ic_launcher_rune"
-            android:strokeLineCap="round" />
-
-        <!-- 左侧两侧弧 (130°~155° & 175°~200°) -->
-        <path
-            android:fillColor="@android:color/transparent"
-            android:pathData="M 258,608 A 280,280 0 0,1 240,512"
+            android:pathData="M 282.64,672.60 A 280,280 0 0,1 236.25,560.62"
             android:strokeWidth="8"
             android:strokeColor="@color/ic_launcher_rune"
             android:strokeLineCap="round" />
         <path
             android:fillColor="@android:color/transparent"
-            android:pathData="M 240,512 A 280,280 0 0,1 258,416"
+            android:pathData="M 236.25,463.38 A 280,280 0 0,1 282.64,351.40"
+            android:strokeWidth="8"
+            android:strokeColor="@color/ic_launcher_rune"
+            android:strokeLineCap="round" />
+        <path
+            android:fillColor="@android:color/transparent"
+            android:pathData="M 351.40,282.64 A 280,280 0 0,1 463.38,236.25"
+            android:strokeWidth="8"
+            android:strokeColor="@color/ic_launcher_rune"
+            android:strokeLineCap="round" />
+        <path
+            android:fillColor="@android:color/transparent"
+            android:pathData="M 560.62,236.25 A 280,280 0 0,1 672.60,282.64"
+            android:strokeWidth="8"
+            android:strokeColor="@color/ic_launcher_rune"
+            android:strokeLineCap="round" />
+        <path
+            android:fillColor="@android:color/transparent"
+            android:pathData="M 741.36,351.40 A 280,280 0 0,1 787.75,463.38"
             android:strokeWidth="8"
             android:strokeColor="@color/ic_launcher_rune"
             android:strokeLineCap="round" />

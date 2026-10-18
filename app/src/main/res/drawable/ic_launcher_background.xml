@@ -16,13 +16,103 @@
   ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   -->
 
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <gradient
-        android:centerX="50%"
-        android:centerY="50%"
-        android:endColor="@color/ic_launcher_background_end"
-        android:gradientRadius="70%p"
-        android:startColor="@color/ic_launcher_background_start"
-        android:type="radial" />
-</shape>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="1024"
+    android:viewportHeight="1024">
+
+    <!-- 1. 异世界深空渐变背景基底 (1024x1024 自适应图标全区) -->
+    <path android:pathData="M 0,0 L 1024,0 L 1024,1024 L 0,1024 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:endX="1024"
+                android:endY="1024"
+                android:startX="0"
+                android:startY="0"
+                android:type="linear">
+                <item
+                    android:color="@color/ic_launcher_background_start"
+                    android:offset="0.0" />
+                <item
+                    android:color="@color/ic_launcher_background_middle"
+                    android:offset="0.5" />
+                <item
+                    android:color="@color/ic_launcher_background_end"
+                    android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- 2. 核心魔力气场 (正心 512, 512, R = 360) -->
+    <path android:pathData="M 512,152 A 360,360 0 1,1 511.9,152 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:centerX="512"
+                android:centerY="512"
+                android:gradientRadius="360"
+                android:type="radial">
+                <item
+                    android:color="@color/ic_launcher_aura_center"
+                    android:offset="0.0" />
+                <item
+                    android:color="@color/ic_launcher_aura_outer"
+                    android:offset="0.55" />
+                <item
+                    android:color="@color/ic_launcher_background_end"
+                    android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- 3. 左上副魔导轨迹圆环 -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M 295,203 A 92,92 0 1,1 294.9,203 Z"
+        android:strokeWidth="2.0"
+        android:strokeColor="@color/ic_launcher_outer_ring_translucent" />
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M 295,233 A 62,62 0 1,1 294.9,233 Z"
+        android:strokeWidth="1.5"
+        android:strokeColor="@color/ic_launcher_rune_translucent" />
+
+    <!-- 4. 右下辅助魔导轨圆环 -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M 725,645 A 80,80 0 1,1 724.9,645 Z"
+        android:strokeWidth="1.8"
+        android:strokeColor="@color/ic_launcher_outer_ring_translucent" />
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M 725,667 A 58,58 0 1,1 724.9,667 Z"
+        android:strokeWidth="1.2"
+        android:strokeColor="@color/ic_launcher_rune_translucent" />
+
+    <!-- 5. 魔力星尘微粒 (8 颗星粒) -->
+    <path
+        android:fillColor="@color/ic_launcher_star_primary"
+        android:pathData="M 203,668 A 5,5 0 1,1 202.9,668 Z" />
+    <path
+        android:fillColor="@color/ic_launcher_star_secondary"
+        android:pathData="M 338,233 A 6,6 0 1,1 337.9,233 Z" />
+    <path
+        android:fillColor="@color/ic_launcher_core_highlight"
+        android:pathData="M 428,788 A 4,4 0 1,1 427.9,788 Z" />
+    <path
+        android:fillColor="@color/ic_launcher_star_primary"
+        android:pathData="M 578,221 A 7,7 0 1,1 577.9,221 Z" />
+    <path
+        android:fillColor="@color/ic_launcher_star_secondary"
+        android:pathData="M 788,233 A 4,4 0 1,1 787.9,233 Z" />
+    <path
+        android:fillColor="@color/ic_launcher_star_primary"
+        android:pathData="M 818,758 A 6,6 0 1,1 817.9,758 Z" />
+    <path
+        android:fillColor="@color/ic_launcher_core_highlight"
+        android:pathData="M 668,803 A 5,5 0 1,1 667.9,803 Z" />
+    <path
+        android:fillColor="@color/ic_launcher_star_accent"
+        android:pathData="M 181,428 A 4,4 0 1,1 180.9,428 Z" />
+</vector>

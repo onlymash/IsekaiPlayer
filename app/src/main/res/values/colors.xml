@@ -20,12 +20,20 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- App Launcher Icon Colors (Release) -->
-    <color name="ic_launcher_background_start">#261447</color>
-    <color name="ic_launcher_background_end">#0B0614</color>
+    <!-- App Launcher Icon Colors (Release: Deep Violet / Cyan Mana Theme) -->
+    <color name="ic_launcher_background_start">#080512</color>
+    <color name="ic_launcher_background_middle">#140B2D</color>
+    <color name="ic_launcher_background_end">#090E20</color>
+    <color name="ic_launcher_aura_center">#597C4DFF</color>
+    <color name="ic_launcher_aura_outer">#2600E5FF</color>
     <color name="ic_launcher_outer_ring">#7C4DFF</color>
+    <color name="ic_launcher_outer_ring_translucent">#337C4DFF</color>
     <color name="ic_launcher_rune">#00E5FF</color>
+    <color name="ic_launcher_rune_translucent">#2600E5FF</color>
     <color name="ic_launcher_auxiliary_line">#50B388FF</color>
     <color name="ic_launcher_play_triangle">#B388FF</color>
     <color name="ic_launcher_core_highlight">#FFFFFF</color>
+    <color name="ic_launcher_star_primary">#9900E5FF</color>
+    <color name="ic_launcher_star_secondary">#80B388FF</color>
+    <color name="ic_launcher_star_accent">#667C4DFF</color>
 </resources>
