@@ -256,6 +256,7 @@ class NotificationController(
                 when {
                     artworkUri != null -> setLargeIcon(Icon.createWithContentUri(artworkUri))
                     artworkBitmap != null -> setLargeIcon(Icon.createWithBitmap(artworkBitmap))
+                    else -> setLargeIcon(Icon.createWithResource(context, R.drawable.ic_playback_cover_placeholder))
                 }
             }
             .setContentIntent(contentIntent)
