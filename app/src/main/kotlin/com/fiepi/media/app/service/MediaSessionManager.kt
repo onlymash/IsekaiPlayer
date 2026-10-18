@@ -21,16 +21,21 @@ package com.fiepi.media.app.service
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.media.MediaMetadata
 import android.media.session.MediaSession
 import android.media.session.PlaybackState
 import android.os.SystemClock
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.net.toUri
 import coil3.SingletonImageLoader
 import coil3.asDrawable
 import coil3.request.ImageRequest
 import coil3.request.SuccessResult
+import com.fiepi.media.app.R
 import com.fiepi.media.app.activity.PlayerActivity
 import com.fiepi.media.domain.player.MediaPlayer
 import com.fiepi.media.domain.player.model.MediaPlaybackState
@@ -53,6 +58,18 @@ class MediaSessionManager(
     private val mediaPlayer: MediaPlayer
 ) {
     private val managerScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+
+    private val placeholderArtwork: Bitmap by lazy {
+        val width = 256
+        val height = 256
+        val bitmap = createBitmap(width, height)
+        val drawable = ContextCompat.getDrawable(context, R.drawable.ic_playback_cover_placeholder)
+            ?: return@lazy bitmap
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, width, height)
+        drawable.draw(canvas)
+        bitmap
+    }
 
     val mediaSession: MediaSession = MediaSession(context, "IsekaiPlayerMediaSession").apply {
         setCallback(object : MediaSession.Callback() {
@@ -93,7 +110,7 @@ class MediaSessionManager(
 
     val sessionToken: MediaSession.Token get() = mediaSession.sessionToken
 
-    var currentArtwork: android.graphics.Bitmap? = null
+    var currentArtwork: Bitmap? = null
         private set
     var currentArtworkContentUri: android.net.Uri? = null
         private set
@@ -157,16 +174,14 @@ class MediaSessionManager(
             return
         }
 
+        val artworkToUse = currentArtwork ?: placeholderArtwork
+
         val metadata = MediaMetadata.Builder()
             .putString(MediaMetadata.METADATA_KEY_TITLE, state.mediaTitle)
             .putString(MediaMetadata.METADATA_KEY_ARTIST, state.mediaSubtitle)
             .putLong(MediaMetadata.METADATA_KEY_DURATION, state.duration)
-            .apply {
-                currentArtwork?.let {
-                    putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, it)
-                    putBitmap(MediaMetadata.METADATA_KEY_ART, it)
-                }
-            }
+            .putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, artworkToUse)
+            .putBitmap(MediaMetadata.METADATA_KEY_ART, artworkToUse)
             .build()
         mediaSession.setMetadata(metadata)
 
