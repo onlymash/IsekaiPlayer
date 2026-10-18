@@ -24,9 +24,9 @@ import android.content.Intent
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import com.fiepi.media.app.service.MediaSessionManager
 import com.fiepi.media.app.service.NotificationController
 import com.fiepi.media.app.service.PlaybackService
-import com.fiepi.media.app.service.PlayerMediaSessionManager
 import com.fiepi.media.domain.player.model.MediaPlaybackState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -40,7 +40,7 @@ import kotlinx.coroutines.launch
 class PlayerMediaSessionDelegate(
     private val activity: Activity,
     private val notificationController: NotificationController,
-    private val mediaSessionManager: PlayerMediaSessionManager,
+    private val mediaSessionManager: MediaSessionManager,
     private val playbackState: Flow<MediaPlaybackState>,
     private val isBackgroundAudioEnabled: () -> Boolean
 ) : DefaultLifecycleObserver {

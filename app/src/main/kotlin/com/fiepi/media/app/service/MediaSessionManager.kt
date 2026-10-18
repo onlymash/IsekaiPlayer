@@ -48,7 +48,7 @@ import kotlinx.coroutines.launch
  * Ensures a single stable MediaSession token is shared across foreground Activity and background Service,
  * preventing system UI media controls, ColorOS Fluid Cloud, and Bluetooth headsets from losing connection during track switches.
  */
-class PlayerMediaSessionManager(
+class MediaSessionManager(
     private val context: Context,
     private val mediaPlayer: MediaPlayer
 ) {

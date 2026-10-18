@@ -23,34 +23,21 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import android.content.pm.ServiceInfo
-import android.media.MediaMetadata
-import android.media.session.MediaSession
-import android.media.session.PlaybackState
 import android.os.Build
 import android.os.IBinder
-import android.os.SystemClock
-import androidx.core.graphics.drawable.toBitmap
-import androidx.core.net.toUri
-import coil3.SingletonImageLoader
-import coil3.asDrawable
-import coil3.request.ImageRequest
-import coil3.request.SuccessResult
-import com.fiepi.media.app.activity.PlayerActivity
 import com.fiepi.media.domain.player.MediaPlayer
 import com.fiepi.media.domain.player.model.MediaPlaybackState
 import com.fiepi.media.domain.player.model.PlayerClientType
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 /**
  * Background playback service implemented purely on system native APIs (android.media.*).
+ * Delegates MediaSession lifecycle and metadata updates to PlayerMediaSessionManager.
  * Optimized for API 33+, featuring an extremely streamlined architecture.
  */
 @Suppress("SameParameterValue")
@@ -58,58 +45,13 @@ class PlaybackService : Service() {
 
     private val mediaPlayer: MediaPlayer by inject()
     private val notificationController: NotificationController by inject()
+    private val mediaSessionManager: MediaSessionManager by inject()
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
-
-    private var mediaSession: MediaSession? = null
-    private var currentArtwork: android.graphics.Bitmap? = null
-    private var currentArtworkContentUri: android.net.Uri? = null
-    private var currentArtworkUri: String? = null
 
     override fun onCreate() {
         super.onCreate()
         mediaPlayer.incrementClientCount(PlayerClientType.BACKGROUND)
-        setupMediaSession()
         observePlayerState()
-        observeArtworkChanges()
-    }
-
-    private fun setupMediaSession() {
-        mediaSession = MediaSession(this, "MediaServicePlaybackSession").apply {
-            setCallback(object : MediaSession.Callback() {
-                override fun onPlay() {
-                    mediaPlayer.play()
-                }
-
-                override fun onPause() {
-                    mediaPlayer.pause()
-                }
-
-                override fun onSkipToNext() {
-                    mediaPlayer.playNext()
-                }
-
-                override fun onSkipToPrevious() {
-                    mediaPlayer.playPrevious()
-                }
-
-                override fun onStop() {
-                    mediaPlayer.release()
-                    stopSelf()
-                }
-
-                override fun onSeekTo(pos: Long) {
-                    mediaPlayer.seekTo(pos)
-                }
-            })
-
-            val intent = Intent(this@PlaybackService, PlayerActivity::class.java)
-            val pendingIntent = PendingIntent.getActivity(
-                this@PlaybackService, 0, intent,
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            )
-            setSessionActivity(pendingIntent)
-            isActive = true
-        }
     }
 
     private fun observePlayerState() {
@@ -119,12 +61,9 @@ class PlaybackService : Service() {
                 if (!state.isLoaded && state.mediaTitle.isNullOrEmpty()) {
                     stopForeground(STOP_FOREGROUND_REMOVE)
                     notificationController.cancelNotification(NotificationController.NOTIFICATION_ID_PLAYBACK)
-                    mediaSession?.isActive = false
                     stopSelf()
                     return@collectLatest
                 }
-
-                updateMediaSession(state)
 
                 val notification = createNotification(state)
 
@@ -142,109 +81,13 @@ class PlaybackService : Service() {
         }
     }
 
-    private fun observeArtworkChanges() {
-        serviceScope.launch {
-            mediaPlayer.state
-                .map { it.mediaArtworkUri }
-                .distinctUntilChanged()
-                .collectLatest { uriString ->
-                    // Whenever URI changes, clear old artwork cache immediately to prevent flashing previous track cover when switching tracks
-                    currentArtwork = null
-                    currentArtworkContentUri = null
-                    currentArtworkUri = uriString
-
-                    if (uriString != null) {
-                        val uri = uriString.toUri()
-                        currentArtworkContentUri = if (uri.scheme == "content") {
-                            uri
-                        } else {
-                            null
-                        }
-                        // Asynchronously load artwork via Coil
-                        loadArtworkViaCoil(uriString)
-                    } else {
-                        // If explicitly no artwork, trigger a refresh to update notification bar
-                        refreshMetadataAndNotification()
-                    }
-                }
-        }
-    }
-
-    private suspend fun loadArtworkViaCoil(uri: String) {
-        try {
-            val request = ImageRequest.Builder(this)
-                .data(uri)
-                .size(320)
-                .build()
-            val result = SingletonImageLoader.get(this).execute(request)
-            currentArtwork = if (result is SuccessResult) {
-                result.image.asDrawable(resources).toBitmap()
-            } else {
-                null
-            }
-            // Manually trigger a state refresh to update notification bar and MediaSession regardless of load success
-            refreshMetadataAndNotification()
-        } catch (e: Exception) {
-            if (e is CancellationException) throw e
-            currentArtwork = null
-            refreshMetadataAndNotification()
-        }
-    }
-
-    private fun refreshMetadataAndNotification() {
-        val state = mediaPlayer.state.value
-        updateMediaSession(state)
-        val notification = createNotification(state)
-        notificationController.showNotification(
-            NotificationController.NOTIFICATION_ID_PLAYBACK,
-            notification
-        )
-    }
-
-    private fun updateMediaSession(state: MediaPlaybackState) {
-        val metadata = MediaMetadata.Builder()
-            .putString(MediaMetadata.METADATA_KEY_TITLE, state.mediaTitle)
-            .putString(MediaMetadata.METADATA_KEY_ARTIST, state.mediaSubtitle)
-            .putLong(MediaMetadata.METADATA_KEY_DURATION, state.duration)
-            .apply {
-                currentArtwork?.let {
-                    putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, it)
-                    putBitmap(
-                        MediaMetadata.METADATA_KEY_ART,
-                        it
-                    ) // Lock screen artwork compatibility for more devices
-                }
-            }
-            .build()
-        mediaSession?.setMetadata(metadata)
-
-        val pbState =
-            if (state.isPlaying) PlaybackState.STATE_PLAYING else PlaybackState.STATE_PAUSED
-
-        // Native PlaybackState requires 4 arguments; 4th is state update timestamp
-        val playbackState = PlaybackState.Builder()
-            .setState(
-                pbState,
-                state.currentPosition,
-                state.playbackSpeed,
-                SystemClock.elapsedRealtime()
-            )
-            .setActions(
-                PlaybackState.ACTION_PLAY or PlaybackState.ACTION_PAUSE or
-                        PlaybackState.ACTION_SKIP_TO_NEXT or PlaybackState.ACTION_SKIP_TO_PREVIOUS or
-                        PlaybackState.ACTION_SEEK_TO or PlaybackState.ACTION_STOP
-            )
-            .build()
-        mediaSession?.setPlaybackState(playbackState)
-    }
-
     private fun createNotification(state: MediaPlaybackState): Notification {
         return notificationController.buildPlaybackNotification(
             context = this,
             state = state,
-            sessionToken = mediaSession?.sessionToken,
-            artworkBitmap = currentArtwork,
-            artworkUri = currentArtworkContentUri,
+            sessionToken = mediaSessionManager.sessionToken,
+            artworkBitmap = mediaSessionManager.currentArtwork,
+            artworkUri = mediaSessionManager.currentArtworkContentUri,
             playPendingIntent = getPendingIntent(ACTION_PLAY),
             pausePendingIntent = getPendingIntent(ACTION_PAUSE),
             prevPendingIntent = getPendingIntent(ACTION_PREVIOUS),
@@ -278,9 +121,6 @@ class PlaybackService : Service() {
     override fun onDestroy() {
         stopForeground(STOP_FOREGROUND_REMOVE)
         mediaPlayer.decrementClientCount(PlayerClientType.BACKGROUND)
-        mediaSession?.isActive = false
-        mediaSession?.release()
-        mediaSession = null
         super.onDestroy()
     }
 

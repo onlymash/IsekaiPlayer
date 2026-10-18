@@ -19,8 +19,8 @@
 package com.fiepi.media.app.di
 
 import com.fiepi.media.app.service.FileOperationManager
+import com.fiepi.media.app.service.MediaSessionManager
 import com.fiepi.media.app.service.NotificationController
-import com.fiepi.media.app.service.PlayerMediaSessionManager
 import com.fiepi.media.app.ui.screen.browser.viewmodel.BrowserViewModel
 import com.fiepi.media.app.ui.screen.player.viewmodel.PlayerViewModel
 import com.fiepi.media.app.ui.screen.settings.model.SettingsSearchViewModel
@@ -51,7 +51,7 @@ import org.koin.dsl.module
 private val appModule = module {
     singleOf(::NotificationController)
     singleOf(::FileOperationManager)
-    singleOf(::PlayerMediaSessionManager)
+    singleOf(::MediaSessionManager)
 
     viewModelOf(::AppearancePrefsViewModel)
     viewModel { AboutViewModel(androidContext(), get()) }
