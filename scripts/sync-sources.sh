@@ -122,16 +122,29 @@ process_repo() {
     local current_ref
     current_ref=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null || echo "detached")
 
-    if [ "$target_ref" == "master" ] || [ "$target_ref" == "main" ]; then
-        echo "    Target is $target_ref. Performing pull..."
-        git checkout "$target_ref" 2>/dev/null || git checkout -b "$target_ref" "origin/$target_ref"
-        git pull origin "$target_ref"
-    elif [ "$current_ref" != "$target_ref" ]; then
-        echo "    Switching ref: $current_ref -> $target_ref"
-        git fetch origin "$target_ref" --depth 1
+    # 判断 target_ref 是否为远程分支 (包含 refs/heads/$target_ref)
+    local is_branch=0
+    if git ls-remote --heads origin "$target_ref" 2>/dev/null | grep -q .; then
+        is_branch=1
+    fi
+
+    if [ "$is_branch" -eq 1 ]; then
+        echo "    Target $target_ref is a branch. Fetching and pulling latest commits..."
+        git fetch origin "$target_ref" --depth 1 > /dev/null
         git checkout "$target_ref" 2>/dev/null || git checkout -B "$target_ref" FETCH_HEAD
+        git reset --hard FETCH_HEAD > /dev/null
+        local latest_commit
+        latest_commit=$(git rev-parse --short HEAD)
+        echo "    Updated $dir branch $target_ref to latest commit ($latest_commit)."
     else
-        echo "    Already at $target_ref. No ref change needed."
+        if [ "$current_ref" == "$target_ref" ]; then
+            echo "    Target $target_ref is a tag/commit. Already at $target_ref (immutable, skipped)."
+        else
+            echo "    Target $target_ref is a tag/commit. Switching ref: $current_ref -> $target_ref..."
+            git fetch origin "$target_ref" --depth 1 > /dev/null
+            git checkout -q "$target_ref" 2>/dev/null || git checkout -q FETCH_HEAD
+            echo "    Switched to $target_ref."
+        fi
     fi
 
     # 处理子模块
