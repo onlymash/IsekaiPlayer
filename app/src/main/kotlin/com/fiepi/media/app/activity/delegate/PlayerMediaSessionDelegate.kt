@@ -53,14 +53,14 @@ class PlayerMediaSessionDelegate(
 
     override fun onStop(owner: LifecycleOwner) {
         stopObserving()
-        if (!isBackgroundAudioEnabled() || activity.isFinishing) {
+        if (activity.isFinishing && !isBackgroundAudioEnabled()) {
             notificationController.cancelNotification(NotificationController.NOTIFICATION_ID_PLAYBACK)
         }
     }
 
     override fun onDestroy(owner: LifecycleOwner) {
         stopObserving()
-        if (!isBackgroundAudioEnabled() || activity.isFinishing) {
+        if (activity.isFinishing && !isBackgroundAudioEnabled()) {
             notificationController.cancelNotification(NotificationController.NOTIFICATION_ID_PLAYBACK)
         }
     }
