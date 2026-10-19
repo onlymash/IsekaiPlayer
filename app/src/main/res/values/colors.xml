@@ -36,4 +36,30 @@
     <color name="ic_launcher_star_primary">#9900E5FF</color>
     <color name="ic_launcher_star_secondary">#80B388FF</color>
     <color name="ic_launcher_star_accent">#667C4DFF</color>
+
+    <!-- Playback Cover Placeholder Colors (Release: Deep Violet / Cyan Mana Theme) -->
+    <color name="ic_playback_cover_background_start">#080512</color>
+    <color name="ic_playback_cover_background_middle">#140B2D</color>
+    <color name="ic_playback_cover_background_end">#090E20</color>
+    <color name="ic_playback_cover_aura_center">#597C4DFF</color>
+    <color name="ic_playback_cover_aura_outer">#2600E5FF</color>
+    <color name="ic_playback_cover_aura_fade">#00080512</color>
+    <color name="ic_playback_cover_ring_primary">#CC7C4DFF</color>
+    <color name="ic_playback_cover_ring_secondary">#997C4DFF</color>
+    <color name="ic_playback_cover_ring_subtle">#337C4DFF</color>
+    <color name="ic_playback_cover_star_ring">#667C4DFF</color>
+    <color name="ic_playback_cover_rune_bright">#E600E5FF</color>
+    <color name="ic_playback_cover_rune_arc">#D900E5FF</color>
+    <color name="ic_playback_cover_rune_star_bright">#CC00E5FF</color>
+    <color name="ic_playback_cover_rune_star">#9900E5FF</color>
+    <color name="ic_playback_cover_rune_medium">#8000E5FF</color>
+    <color name="ic_playback_cover_rune_subtle">#6600E5FF</color>
+    <color name="ic_playback_cover_rune_faint">#2600E5FF</color>
+    <color name="ic_playback_cover_aux_accent">#CCB388FF</color>
+    <color name="ic_playback_cover_aux_star">#80B388FF</color>
+    <color name="ic_playback_cover_aux_line">#6650B388</color>
+    <color name="ic_playback_cover_play_triangle_fill">#33B388FF</color>
+    <color name="ic_playback_cover_core_highlight">#E6FFFFFF</color>
+    <color name="ic_playback_cover_star_white_bright">#B2FFFFFF</color>
+    <color name="ic_playback_cover_star_white_medium">#80FFFFFF</color>
 </resources>

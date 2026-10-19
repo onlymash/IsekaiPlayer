@@ -33,4 +33,30 @@
     <color name="ic_launcher_star_primary">#99FFD600</color>
     <color name="ic_launcher_star_secondary">#80FFB74D</color>
     <color name="ic_launcher_star_accent">#66FF6D00</color>
+
+    <!-- Playback Cover Placeholder Colors (Debug: Fiery Amber / Golden Flame Theme) -->
+    <color name="ic_playback_cover_background_start">#120803</color>
+    <color name="ic_playback_cover_background_middle">#2D140B</color>
+    <color name="ic_playback_cover_background_end">#200E09</color>
+    <color name="ic_playback_cover_aura_center">#59FF6D00</color>
+    <color name="ic_playback_cover_aura_outer">#26FFD600</color>
+    <color name="ic_playback_cover_aura_fade">#00120803</color>
+    <color name="ic_playback_cover_ring_primary">#CCFF6D00</color>
+    <color name="ic_playback_cover_ring_secondary">#99FF6D00</color>
+    <color name="ic_playback_cover_ring_subtle">#33FF6D00</color>
+    <color name="ic_playback_cover_star_ring">#66FF6D00</color>
+    <color name="ic_playback_cover_rune_bright">#E6FFD600</color>
+    <color name="ic_playback_cover_rune_arc">#D9FFD600</color>
+    <color name="ic_playback_cover_rune_star_bright">#CCFFD600</color>
+    <color name="ic_playback_cover_rune_star">#99FFD600</color>
+    <color name="ic_playback_cover_rune_medium">#80FFD600</color>
+    <color name="ic_playback_cover_rune_subtle">#66FFD600</color>
+    <color name="ic_playback_cover_rune_faint">#26FFD600</color>
+    <color name="ic_playback_cover_aux_accent">#CCFFB74D</color>
+    <color name="ic_playback_cover_aux_star">#80FFB74D</color>
+    <color name="ic_playback_cover_aux_line">#66FFB74D</color>
+    <color name="ic_playback_cover_play_triangle_fill">#33FFB74D</color>
+    <color name="ic_playback_cover_core_highlight">#E6FFFFFF</color>
+    <color name="ic_playback_cover_star_white_bright">#B2FFFFFF</color>
+    <color name="ic_playback_cover_star_white_medium">#80FFFFFF</color>
 </resources>
