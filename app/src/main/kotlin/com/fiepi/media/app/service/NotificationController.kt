@@ -248,9 +248,15 @@ class NotificationController(
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
+        val title = if (!state.mediaTitle.isNullOrBlank()) {
+            state.mediaTitle
+        } else {
+            context.getString(R.string.app_name)
+        }
+
         return Notification.Builder(context, CHANNEL_ID_PLAYBACK)
             .setSmallIcon(R.drawable.ic_notification_playback)
-            .setContentTitle(state.mediaTitle)
+            .setContentTitle(title)
             .setContentText(state.mediaSubtitle)
             .apply {
                 when {

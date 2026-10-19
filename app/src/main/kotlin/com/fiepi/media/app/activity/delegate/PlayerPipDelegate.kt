@@ -29,6 +29,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.fiepi.media.app.activity.PlayerActivity
+import com.fiepi.media.app.service.PlaybackService
 import com.fiepi.media.app.ui.screen.player.viewmodel.PlayerIntent
 
 /**
@@ -70,11 +71,13 @@ class PlayerPipDelegate(
 
     /**
      * Handles Picture-in-Picture mode change events.
-     * Prevents audio leakage when PiP is closed explicitly by user ("X" button).
+     * Prevents audio leakage when PiP is closed explicitly by user ("X" button) with background audio disabled.
+     * Stopping PlaybackService automatically destroys the service and clears the notification.
      */
     fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
         if (!isInPictureInPictureMode && !isBackgroundAudioEnabled() && activity.lifecycle.currentState < Lifecycle.State.STARTED) {
             onIntent(PlayerIntent.SetPlay(false))
+            PlaybackService.stop(activity)
         }
         onIntent(PlayerIntent.SetPiPMode(isInPictureInPictureMode))
     }

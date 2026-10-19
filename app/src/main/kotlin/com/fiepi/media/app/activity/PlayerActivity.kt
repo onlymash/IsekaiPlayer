@@ -35,17 +35,13 @@ import androidx.activity.compose.setContent
 import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import com.fiepi.media.app.activity.delegate.PlayerBackgroundPlaybackDelegate
-import com.fiepi.media.app.activity.delegate.PlayerMediaSessionDelegate
 import com.fiepi.media.app.activity.delegate.PlayerPipDelegate
-import com.fiepi.media.app.service.MediaSessionManager
-import com.fiepi.media.app.service.NotificationController
+import com.fiepi.media.app.service.PlaybackService
 import com.fiepi.media.app.ui.app.Player
 import com.fiepi.media.app.ui.screen.player.viewmodel.PlayerIntent
 import com.fiepi.media.app.ui.screen.player.viewmodel.PlayerViewModel
 import com.fiepi.media.domain.utils.FileUtils
 import com.fiepi.media.player.input.PlayerKeyHandler
-import kotlinx.coroutines.flow.map
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayerActivity : ComponentActivity() {
@@ -95,19 +91,6 @@ class PlayerActivity : ComponentActivity() {
     }
 
     private val viewModel: PlayerViewModel by viewModel()
-    private val notificationController: NotificationController by inject()
-    private val mediaSessionManager: MediaSessionManager by inject()
-
-    // Lifecycle-aware MediaSession delegate for handling bluetooth headset media controls in foreground
-    private val mediaSessionDelegate by lazy {
-        PlayerMediaSessionDelegate(
-            activity = this,
-            notificationController = notificationController,
-            mediaSessionManager = mediaSessionManager,
-            playbackState = viewModel.state.map { it.playback },
-            isBackgroundAudioEnabled = { viewModel.playerUiOptions.enableBackgroundAudio }
-        )
-    }
 
     // Lifecycle-aware PiP delegate for handling Picture-in-Picture controls and state sync
     private val pipDelegate by lazy {
@@ -122,7 +105,6 @@ class PlayerActivity : ComponentActivity() {
     private val backgroundPlaybackDelegate by lazy {
         PlayerBackgroundPlaybackDelegate(
             activity = this,
-            notificationController = notificationController,
             isPlaying = { viewModel.state.value.playback.isPlaying },
             isBackgroundAudioEnabled = { viewModel.playerUiOptions.enableBackgroundAudio },
             isEnteringBackgroundAudioManually = { viewModel.uiState.isEnteringBackgroundAudioManually },
@@ -138,7 +120,6 @@ class PlayerActivity : ComponentActivity() {
         volumeControlStream = AudioManager.STREAM_MUSIC
 
         // Register lifecycle observers
-        lifecycle.addObserver(mediaSessionDelegate)
         lifecycle.addObserver(pipDelegate)
         lifecycle.addObserver(backgroundPlaybackDelegate)
 
@@ -170,6 +151,16 @@ class PlayerActivity : ComponentActivity() {
         handleIntent(intent)
     }
 
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        if (viewModel.playerUiOptions.enablePiP && viewModel.state.value.playback.isPlaying && !isInPictureInPictureMode) {
+            try {
+                pipDelegate.enterPiP()
+            } catch (_: Exception) {
+            }
+        }
+    }
+
     /**
      * Core Intent handler. Responsible for dispatching media loading requests.
      */
@@ -192,11 +183,13 @@ class PlayerActivity : ComponentActivity() {
             val title = FileUtils.extractNameWithoutExtension(rawTitle)
 
             viewModel.sendIntent(PlayerIntent.LoadVideo(data, title))
+            PlaybackService.start(this)
         } else if (intent.hasExtra(EXTRA_PLAYLIST_ID)) {
             val playlistId = intent.getStringExtra(EXTRA_PLAYLIST_ID) ?: ""
             val initialMediaId = intent.getStringExtra(EXTRA_INITIAL_MEDIA_ID)
             if (playlistId.isNotBlank()) {
                 viewModel.sendIntent(PlayerIntent.LoadPlaylist(playlistId, initialMediaId))
+                PlaybackService.start(this)
             }
         } else if (intent.hasExtra(EXTRA_SOURCE_ID) && intent.hasExtra(EXTRA_VIDEO_PATH)) {
             // Trigger loading only when Intent explicitly contains source info.
@@ -204,6 +197,7 @@ class PlayerActivity : ComponentActivity() {
             val path = intent.getStringExtra(EXTRA_VIDEO_PATH) ?: ""
             if (sid.isNotBlank() && path.isNotBlank()) {
                 viewModel.sendIntent(PlayerIntent.LoadMedia(sid, path))
+                PlaybackService.start(this)
             }
         }
     }

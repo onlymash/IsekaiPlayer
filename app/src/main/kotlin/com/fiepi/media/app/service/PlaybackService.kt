@@ -21,6 +21,7 @@ package com.fiepi.media.app.service
 import android.app.Notification
 import android.app.PendingIntent
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.Build
@@ -36,9 +37,9 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 /**
- * Background playback service implemented purely on system native APIs (android.media.*).
- * Delegates MediaSession lifecycle and metadata updates to PlayerMediaSessionManager.
- * Optimized for API 33+, featuring an extremely streamlined architecture.
+ * Unified foreground playback service managing notification, foreground service status, and media session integration.
+ * Acts as the single source of truth for media playback notifications and background service lifecycle.
+ * Optimized for API 33+, featuring a streamlined architecture without foreground/background handoff churn.
  */
 @Suppress("SameParameterValue")
 class PlaybackService : Service() {
@@ -66,18 +67,20 @@ class PlaybackService : Service() {
                 }
 
                 val notification = createNotification(state)
-
-                // For Android 14+ (API 34), must explicitly specify FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
-                if (Build.VERSION.SDK_INT >= 34) {
-                    startForeground(
-                        NotificationController.NOTIFICATION_ID_PLAYBACK,
-                        notification,
-                        ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
-                    )
-                } else {
-                    startForeground(NotificationController.NOTIFICATION_ID_PLAYBACK, notification)
-                }
+                startForegroundServiceInternal(notification)
             }
+        }
+    }
+
+    private fun startForegroundServiceInternal(notification: Notification) {
+        if (Build.VERSION.SDK_INT >= 34) {
+            startForeground(
+                NotificationController.NOTIFICATION_ID_PLAYBACK,
+                notification,
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
+            )
+        } else {
+            startForeground(NotificationController.NOTIFICATION_ID_PLAYBACK, notification)
         }
     }
 
@@ -112,7 +115,13 @@ class PlaybackService : Service() {
             notificationController.cancelNotification(NotificationController.NOTIFICATION_ID_PLAYBACK)
             mediaPlayer.release()
             stopSelf()
+            return START_NOT_STICKY
         }
+
+        // Must call startForeground immediately in onStartCommand to fulfill Android's FGS requirement
+        val notification = createNotification(mediaPlayer.state.value)
+        startForegroundServiceInternal(notification)
+
         return START_STICKY
     }
 
@@ -120,11 +129,21 @@ class PlaybackService : Service() {
 
     override fun onDestroy() {
         stopForeground(STOP_FOREGROUND_REMOVE)
+        notificationController.cancelNotification(NotificationController.NOTIFICATION_ID_PLAYBACK)
         mediaPlayer.decrementClientCount(PlayerClientType.BACKGROUND)
         super.onDestroy()
     }
 
     companion object {
         const val ACTION_STOP = "com.fiepi.media.app.ACTION_STOP"
+
+        fun start(context: Context) {
+            val intent = Intent(context, PlaybackService::class.java)
+            context.startForegroundService(intent)
+        }
+
+        fun stop(context: Context) {
+            context.stopService(Intent(context, PlaybackService::class.java))
+        }
     }
 }

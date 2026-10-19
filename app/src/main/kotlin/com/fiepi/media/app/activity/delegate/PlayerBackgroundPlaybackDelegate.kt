@@ -18,21 +18,18 @@
 
 package com.fiepi.media.app.activity.delegate
 
-import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.fiepi.media.app.service.NotificationController
 import com.fiepi.media.app.service.PlaybackService
 import com.fiepi.media.app.ui.screen.player.viewmodel.PlayerIntent
 
 /**
- * Lifecycle-aware delegate responsible for coordinating playback service transitions
- * between foreground Activity playback and background audio playback.
+ * Lifecycle-aware delegate responsible for coordinating playback service lifecycle and background audio policies.
+ * Ensures PlaybackService remains continuously running for seamless foreground and background audio playback.
  */
 class PlayerBackgroundPlaybackDelegate(
     private val activity: ComponentActivity,
-    private val notificationController: NotificationController,
     private val isPlaying: () -> Boolean,
     private val isBackgroundAudioEnabled: () -> Boolean,
     private val isEnteringBackgroundAudioManually: () -> Boolean,
@@ -49,8 +46,10 @@ class PlayerBackgroundPlaybackDelegate(
     }
 
     override fun onStart(owner: LifecycleOwner) {
-        // Stop background service when returning to foreground; Activity UI takes over playback control
-        activity.stopService(Intent(activity, PlaybackService::class.java))
+        // Ensure PlaybackService is active whenever playback is started
+        if (isPlaying()) {
+            PlaybackService.start(activity)
+        }
     }
 
     override fun onPause(owner: LifecycleOwner) {
@@ -66,24 +65,18 @@ class PlayerBackgroundPlaybackDelegate(
     }
 
     override fun onStop(owner: LifecycleOwner) {
-        val playing = isPlaying()
         val bgEnabled = isBackgroundAudioEnabled()
         val manualBg = isEnteringBackgroundAudioManually()
 
         if (activity.isFinishing) {
-            // User explicitly closed page (e.g. back button); stop service and release resources completely
-            if (!bgEnabled) {
-                activity.stopService(Intent(activity, PlaybackService::class.java))
-                notificationController.cancelNotification(NotificationController.NOTIFICATION_ID_PLAYBACK)
-            }
+            // User explicitly closed page (e.g. back button); stop playback and service
+            onIntent(PlayerIntent.SetPlay(false))
+            PlaybackService.stop(activity)
         } else {
-            // Switching to background or locking screen (onStop indicates screen no longer visible)
-            // If background playback conditions are met and currently playing, start service to maintain foreground playback state
-            if ((bgEnabled || manualBg) && playing) {
-                activity.startService(Intent(activity, PlaybackService::class.java))
-            } else {
-                activity.stopService(Intent(activity, PlaybackService::class.java))
-                notificationController.cancelNotification(NotificationController.NOTIFICATION_ID_PLAYBACK)
+            // Switching to background or locking screen
+            if (!activity.isInPictureInPictureMode && !bgEnabled && !manualBg) {
+                onIntent(PlayerIntent.SetPlay(false))
+                PlaybackService.stop(activity)
             }
             onIntent(PlayerIntent.EnterBackground)
         }
