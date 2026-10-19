@@ -60,11 +60,12 @@ class MediaSessionManager(
     private val managerScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     private val placeholderArtwork: Bitmap by lazy {
-        val width = 256
-        val height = 256
+        val width = 320
+        val height = 320
         val bitmap = createBitmap(width, height)
-        val drawable = ContextCompat.getDrawable(context, R.drawable.ic_playback_cover_placeholder)
-            ?: return@lazy bitmap
+        val drawable =
+            ContextCompat.getDrawable(context, R.drawable.ic_playback_cover_placeholder_compact)
+                ?: return@lazy bitmap
         val canvas = Canvas(bitmap)
         drawable.setBounds(0, 0, width, height)
         drawable.draw(canvas)
