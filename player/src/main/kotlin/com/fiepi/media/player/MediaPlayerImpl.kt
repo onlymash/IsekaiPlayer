@@ -29,8 +29,8 @@ import com.fiepi.media.domain.player.MediaStreamServer
 import com.fiepi.media.domain.player.PlayerEngine
 import com.fiepi.media.domain.player.model.EngineEvent
 import com.fiepi.media.domain.player.model.ExternalSubtitle
-import com.fiepi.media.domain.player.model.MediaPlaybackState
 import com.fiepi.media.domain.player.model.MediaMetadata
+import com.fiepi.media.domain.player.model.MediaPlaybackState
 import com.fiepi.media.domain.player.model.PlayerClientType
 import com.fiepi.media.domain.player.model.PlayerEngineType
 import com.fiepi.media.domain.player.model.TrackType
@@ -383,7 +383,8 @@ class MediaPlayerImpl(
                 engineManager.setSpeed(_state.value.playbackSpeed.toDouble())
 
                 // [DELAYED EXTERNAL SUBTITLE LOADING]
-                val video = currentPlayingVideo ?: _state.value.playlist.getOrNull(_state.value.currentIndex)
+                val video = currentPlayingVideo
+                    ?: _state.value.playlist.getOrNull(_state.value.currentIndex)
                 val source = currentSource
 
                 trackManager.loadExternalSubtitlesForVideo(
@@ -420,7 +421,8 @@ class MediaPlayerImpl(
                 if (event.tracks.isNotEmpty() || !_state.value.isLoaded) {
                     _state.update { it.copy(videoTracks = event.tracks) }
                     trackManager.onVideoTracksChanged(event.tracks)
-                    val selectedVideo = event.tracks.firstOrNull { it.isSelected } ?: event.tracks.firstOrNull()
+                    val selectedVideo =
+                        event.tracks.firstOrNull { it.isSelected } ?: event.tracks.firstOrNull()
                     if (selectedVideo != null) {
                         surfaceManager.applySurfaceFrameRate(selectedVideo.fps)
                     }
@@ -439,7 +441,8 @@ class MediaPlayerImpl(
             }
 
             EngineEvent.EngineRestarted -> {
-                val video = currentPlayingVideo ?: _state.value.playlist.getOrNull(_state.value.currentIndex)
+                val video = currentPlayingVideo
+                    ?: _state.value.playlist.getOrNull(_state.value.currentIndex)
                 if (video != null) {
                     // If currently playing, automatically resume after engine restart
                     _state.update {
@@ -526,7 +529,8 @@ class MediaPlayerImpl(
             if (totalCount == 0) return@launch
 
             val targetIndex = if (!initialMediaId.isNullOrBlank()) {
-                val foundIndex = useCases.playlist.getPlaylistItemIndexByMediaId(playlistId, initialMediaId)
+                val foundIndex =
+                    useCases.playlist.getPlaylistItemIndexByMediaId(playlistId, initialMediaId)
                 foundIndex ?: initialIndex
             } else {
                 initialIndex
@@ -644,8 +648,14 @@ class MediaPlayerImpl(
             }
 
             // Update UI state with basic info of new video
-            _state.update {
-                it.copy(
+            _state.update { currentState ->
+                val totalCount =
+                    if (currentState.playlistId != null) currentState.totalPlaylistItems else currentState.playlist.size
+                val positionSubtitle = if (totalCount > 1) {
+                    "${index + 1} / $totalCount"
+                } else null
+
+                currentState.copy(
                     currentIndex = index,
                     sourceId = effectiveSourceId,
                     isLoaded = false,
@@ -660,7 +670,7 @@ class MediaPlayerImpl(
                     mediaMetadata = MediaMetadata(
                         mediaId = video.id,
                         title = video.name,
-                        subtitle = video.name, // Temporary subtitle, can be passed by business layer later
+                        subtitle = positionSubtitle,
                         artworkUri = video.thumbnailUrl
                     ),
                     duration = duration,
