@@ -87,7 +87,7 @@ data class PlayerOptions(
     @SerialName("seek_duration_seconds")
     val seekDurationSeconds: Int = 10,
     @SerialName("seek_bar_style")
-    val seekBarStyle: SeekBarStyle = SeekBarStyle.Wavy,
+    val seekBarStyle: SeekBarStyle = SeekBarStyle.Straight,
     @SerialName("resume_playback")
     val resumePlayback: Boolean = true,
     @SerialName("loop_mode")
