@@ -18,17 +18,25 @@
 
 package com.fiepi.media.app.activity.delegate
 
+import android.app.PictureInPictureParams
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import androidx.activity.ComponentActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
+import com.fiepi.media.app.activity.PlayerActivity
 import com.fiepi.media.app.service.PlaybackService
 import com.fiepi.media.app.ui.screen.player.viewmodel.PlayerIntent
 
 /**
- * Lifecycle-aware delegate responsible for coordinating playback service lifecycle and background audio policies.
- * Ensures PlaybackService remains continuously running for seamless foreground and background audio playback.
+ * Unified lifecycle observer managing Picture-in-Picture (PiP) controls, background playback policies,
+ * and service lifecycle coordination for PlayerActivity.
  */
-class PlayerBackgroundPlaybackDelegate(
+class PlayerLifecycleDelegate(
     private val activity: ComponentActivity,
     private val isPlaying: () -> Boolean,
     private val isBackgroundAudioEnabled: () -> Boolean,
@@ -38,11 +46,34 @@ class PlayerBackgroundPlaybackDelegate(
 
     private var isEntering = false
 
+    private val pipReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent == null || intent.action != PlayerActivity.ACTION_PIP_CONTROL) return
+
+            val controlType = intent.getIntExtra(PlayerActivity.EXTRA_CONTROL_TYPE, 0)
+
+            when (controlType) {
+                PlayerActivity.CONTROL_TYPE_PREV -> onIntent(PlayerIntent.PlayPrevious)
+                PlayerActivity.CONTROL_TYPE_PLAY_PAUSE -> onIntent(PlayerIntent.TogglePlay)
+                PlayerActivity.CONTROL_TYPE_NEXT -> onIntent(PlayerIntent.PlayNext)
+            }
+        }
+    }
+
     /**
      * Marks activity as being re-entered via new intent to prevent false pause in onPause.
      */
     fun markEntering() {
         isEntering = true
+    }
+
+    override fun onCreate(owner: LifecycleOwner) {
+        ContextCompat.registerReceiver(
+            activity,
+            pipReceiver,
+            IntentFilter(PlayerActivity.ACTION_PIP_CONTROL),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
     }
 
     override fun onStart(owner: LifecycleOwner) {
@@ -80,5 +111,28 @@ class PlayerBackgroundPlaybackDelegate(
             }
             onIntent(PlayerIntent.EnterBackground)
         }
+    }
+
+    override fun onDestroy(owner: LifecycleOwner) {
+        activity.unregisterReceiver(pipReceiver)
+    }
+
+    /**
+     * Handles Picture-in-Picture mode change events.
+     * Prevents audio leakage when PiP is closed explicitly by user ("X" button) with background audio disabled.
+     */
+    fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean) {
+        if (!isInPictureInPictureMode && !isBackgroundAudioEnabled() && activity.lifecycle.currentState < Lifecycle.State.STARTED) {
+            onIntent(PlayerIntent.SetPlay(false))
+            PlaybackService.stop(activity)
+        }
+        onIntent(PlayerIntent.SetPiPMode(isInPictureInPictureMode))
+    }
+
+    /**
+     * Enters Picture-in-Picture mode.
+     */
+    fun enterPiP() {
+        activity.enterPictureInPictureMode(PictureInPictureParams.Builder().build())
     }
 }

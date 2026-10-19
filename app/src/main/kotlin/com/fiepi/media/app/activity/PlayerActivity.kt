@@ -34,8 +34,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
-import com.fiepi.media.app.activity.delegate.PlayerBackgroundPlaybackDelegate
-import com.fiepi.media.app.activity.delegate.PlayerPipDelegate
+import com.fiepi.media.app.activity.delegate.PlayerLifecycleDelegate
 import com.fiepi.media.app.service.PlaybackService
 import com.fiepi.media.app.ui.app.Player
 import com.fiepi.media.app.ui.screen.player.viewmodel.PlayerIntent
@@ -92,18 +91,9 @@ class PlayerActivity : ComponentActivity() {
 
     private val viewModel: PlayerViewModel by viewModel()
 
-    // Lifecycle-aware PiP delegate for handling Picture-in-Picture controls and state sync
-    private val pipDelegate by lazy {
-        PlayerPipDelegate(
-            activity = this,
-            onIntent = viewModel::sendIntent,
-            isBackgroundAudioEnabled = { viewModel.playerUiOptions.enableBackgroundAudio }
-        )
-    }
-
-    // Lifecycle-aware background playback delegate for coordinating foreground and background service transitions
-    private val backgroundPlaybackDelegate by lazy {
-        PlayerBackgroundPlaybackDelegate(
+    // Unified lifecycle delegate for handling Picture-in-Picture controls, background playback, and service lifecycle
+    private val lifecycleDelegate by lazy {
+        PlayerLifecycleDelegate(
             activity = this,
             isPlaying = { viewModel.state.value.playback.isPlaying },
             isBackgroundAudioEnabled = { viewModel.playerUiOptions.enableBackgroundAudio },
@@ -119,9 +109,8 @@ class PlayerActivity : ComponentActivity() {
         // Ensure volume buttons directly adjust media stream volume
         volumeControlStream = AudioManager.STREAM_MUSIC
 
-        // Register lifecycle observers
-        lifecycle.addObserver(pipDelegate)
-        lifecycle.addObserver(backgroundPlaybackDelegate)
+        // Register lifecycle observer
+        lifecycle.addObserver(lifecycleDelegate)
 
         // Request notification permission for showing media controls
         if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
@@ -138,7 +127,7 @@ class PlayerActivity : ComponentActivity() {
                 viewModel = viewModel,
                 onBack = { finish() },
                 onEnterPiP = {
-                    pipDelegate.enterPiP()
+                    lifecycleDelegate.enterPiP()
                 }
             )
         }
@@ -146,7 +135,7 @@ class PlayerActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        backgroundPlaybackDelegate.markEntering()
+        lifecycleDelegate.markEntering()
         setIntent(intent)
         handleIntent(intent)
     }
@@ -155,7 +144,7 @@ class PlayerActivity : ComponentActivity() {
         super.onUserLeaveHint()
         if (viewModel.playerUiOptions.enablePiP && viewModel.state.value.playback.isPlaying && !isInPictureInPictureMode) {
             try {
-                pipDelegate.enterPiP()
+                lifecycleDelegate.enterPiP()
             } catch (_: Exception) {
             }
         }
@@ -225,7 +214,7 @@ class PlayerActivity : ComponentActivity() {
         newConfig: Configuration
     ) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
-        pipDelegate.onPictureInPictureModeChanged(isInPictureInPictureMode)
+        lifecycleDelegate.onPictureInPictureModeChanged(isInPictureInPictureMode)
     }
 
     @SuppressLint("RestrictedApi")

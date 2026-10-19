@@ -171,6 +171,8 @@ class MediaSessionManager(
     fun updateMediaSession(state: MediaPlaybackState) {
         if (!state.isLoaded && state.mediaTitle.isNullOrEmpty()) {
             mediaSession.isActive = false
+            currentArtwork = null
+            currentArtworkContentUri = null
             return
         }
 
