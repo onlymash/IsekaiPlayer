@@ -1,8 +1,8 @@
 [versions]
-gradleVersions = "0.66.0"
-androidGradlePlugin = "9.4.1"
+gradleVersions = "0.67.0"
+androidGradlePlugin = "9.5.0"
 kotlin = "2.4.21"
-ksp = "2.3.12"
+ksp = "2.3.13"
 
 androidx-activity = "1.14.0-alpha03"
 androidx-adaptive = "1.4.0-alpha03"
@@ -28,7 +28,7 @@ kotlinx-collections-immutable = "0.5.2"
 
 coil = "3.6.3"
 koin = "4.2.2"
-ktor = "3.6.0"
+ktor = "3.6.1"
 okhttp = "5.5.1"
 smbj = "0.15.0"
 dav4jvm = "5.0.0"
