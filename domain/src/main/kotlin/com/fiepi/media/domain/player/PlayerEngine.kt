@@ -35,6 +35,10 @@ interface PlayerEngine {
     fun setSurface(surface: Any?)
     fun setSurfaceSize(width: Int, height: Int)
     fun load(url: String, startPositionMs: Long = 0L)
+    fun load(url: String, startPositionMs: Long, trustInsecureCertificate: Boolean) {
+        load(url, startPositionMs)
+    }
+
     fun play()
     fun pause()
     fun seekTo(positionMs: Long)

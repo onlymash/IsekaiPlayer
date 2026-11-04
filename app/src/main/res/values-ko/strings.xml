@@ -132,6 +132,8 @@
     <string name="source_editor_label_path_default">기본 경로</string>
     <string name="source_editor_label_path_smb">공유 폴더 이름</string>
     <string name="source_editor_label_https">HTTPS 사용</string>
+    <string name="source_editor_trust_insecure_certificate">자체 서명 인증서 신뢰</string>
+    <string name="source_editor_trust_insecure_certificate_warning">이 소스의 인증서 체인 검증을 사용하지 않습니다. 신뢰하는 서버에서만 사용하세요.</string>
     <string name="source_editor_label_username">사용자 이름 (선택사항)</string>
     <string name="source_editor_label_password">비밀번호 (선택사항)</string>
     <string name="source_editor_error_required">이름과 호스트는 필수 입력 항목입니다</string>

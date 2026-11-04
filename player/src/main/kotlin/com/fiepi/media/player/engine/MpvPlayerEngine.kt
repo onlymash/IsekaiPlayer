@@ -86,7 +86,8 @@ class MpvPlayerEngine(
     )
 
     private fun updateBufferedPosition() {
-        val bufferedMs = (lastTimePosMs + (lastDemuxerCacheSec * 1000.0).toLong()).coerceAtLeast(lastTimePosMs)
+        val bufferedMs =
+            (lastTimePosMs + (lastDemuxerCacheSec * 1000.0).toLong()).coerceAtLeast(lastTimePosMs)
         _events.tryEmit(EngineEvent.BufferedPositionChanged(bufferedMs))
     }
 
@@ -99,15 +100,18 @@ class MpvPlayerEngine(
                         updateBufferedPosition()
                         EngineEvent.PositionChanged(event.value)
                     }
+
                     "duration" -> {
                         fetchTrackList()
                         EngineEvent.DurationChanged(event.value)
                     }
+
                     "estimated-frame-count" -> {
                         totalFrames = event.value
                         _events.tryEmit(EngineEvent.FrameInfoChanged(currentFrame, totalFrames))
                         null
                     }
+
                     else -> null
                 }
             }
@@ -119,6 +123,7 @@ class MpvPlayerEngine(
                         updateBufferedPosition()
                         null
                     }
+
                     "speed" -> EngineEvent.PlaybackSpeedChanged(event.value.toFloat())
                     "audio-delay" -> EngineEvent.AudioDelayChanged((event.value * 1000).toLong())
                     "sub-delay" -> EngineEvent.SubtitleDelayChanged((event.value * 1000).toLong())
@@ -156,6 +161,7 @@ class MpvPlayerEngine(
                         fetchTrackList()
                         EngineEvent.FileLoaded
                     }
+
                     MpvEvent.MPV_EVENT_END_FILE -> EngineEvent.FileUnloaded
                     else -> null
                 }
@@ -260,7 +266,19 @@ class MpvPlayerEngine(
         }
     }
 
-    override fun load(url: String, startPositionMs: Long) = withEngine {
+    override fun load(url: String, startPositionMs: Long) {
+        load(url, startPositionMs, trustInsecureCertificate = false)
+    }
+
+    override fun load(
+        url: String,
+        startPositionMs: Long,
+        trustInsecureCertificate: Boolean
+    ) = withEngine {
+        if (trustInsecureCertificate) {
+            mpvController.setPropertyString("tls-verify", "no")
+        }
+
         // Reset track states
         mpvController.selectTrack("aid", "auto")
         mpvController.selectTrack("vid", "auto")
@@ -306,7 +324,9 @@ class MpvPlayerEngine(
     }
 
     private suspend fun applyUserAgent() {
-        val defaultUa = mpvConfig.value?.runtime?.cache?.userAgent?.ifBlank { AppConstants.DEFAULT_USER_AGENT } ?: AppConstants.DEFAULT_USER_AGENT
+        val defaultUa =
+            mpvConfig.value?.runtime?.cache?.userAgent?.ifBlank { AppConstants.DEFAULT_USER_AGENT }
+                ?: AppConstants.DEFAULT_USER_AGENT
         val targetUa = customUserAgent?.takeIf { it.isNotBlank() } ?: defaultUa
         mpvController.setPropertyString("user-agent", targetUa)
     }
@@ -384,7 +404,8 @@ class MpvPlayerEngine(
 
             when (type) {
                 "audio" -> {
-                    val bitrate = mpvController.getPropertyDouble("audio-bitrate")?.toLong()?.takeIf { it > 0L } ?: 0L
+                    val bitrate = mpvController.getPropertyDouble("audio-bitrate")?.toLong()
+                        ?.takeIf { it > 0L } ?: 0L
                     val channels = mpvController.getPropertyInt("audio-params/channels") ?: 0
                     val sampleRate = mpvController.getPropertyInt("audio-params/samplerate") ?: 0
                     audio.add(
@@ -431,12 +452,13 @@ class MpvPlayerEngine(
                         ?: mpvController.getPropertyDouble("video-dec-params/fps")
                         ?: 0.0
                     val videoCodec = codec ?: mpvController.getPropertyString("video-codec")
-                        ?: mpvController.getPropertyString("video-format")
-                        ?: mpvController.getPropertyString("video-params/codec")
+                    ?: mpvController.getPropertyString("video-format")
+                    ?: mpvController.getPropertyString("video-params/codec")
 
                     var bitrate = (mpvController.getPropertyDouble("video-bitrate")
                         ?: mpvController.getPropertyDouble("bitrate")
-                        ?: mpvController.getPropertyDouble("packet-video-bitrate"))?.toLong()?.takeIf { it > 0L } ?: 0L
+                        ?: mpvController.getPropertyDouble("packet-video-bitrate"))?.toLong()
+                        ?.takeIf { it > 0L } ?: 0L
 
                     if (bitrate <= 0L) {
                         val fileSize = mpvController.getPropertyDouble("file-size") ?: 0.0
@@ -499,7 +521,7 @@ class MpvPlayerEngine(
     private suspend fun updateFrameInfo() {
         val current = mpvController.getPropertyInt("estimated-frame-number")?.toLong() ?: 0L
         val total = mpvController.getPropertyInt("estimated-frame-count")?.toLong() ?: 0L
-        
+
         currentFrame = current
         totalFrames = total
         _events.emit(EngineEvent.FrameInfoChanged(currentFrame, totalFrames))

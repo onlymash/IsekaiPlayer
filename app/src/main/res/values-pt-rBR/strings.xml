@@ -132,6 +132,8 @@
     <string name="source_editor_label_path_default">Caminho inicial</string>
     <string name="source_editor_label_path_smb">Nome do compartilhamento</string>
     <string name="source_editor_label_https">Usar HTTPS</string>
+    <string name="source_editor_trust_insecure_certificate">Confiar em certificados autoassinados</string>
+    <string name="source_editor_trust_insecure_certificate_warning">A cadeia de certificados não será verificada para esta fonte. Ative apenas para servidores confiáveis.</string>
     <string name="source_editor_label_username">Nome de usuário (opcional)</string>
     <string name="source_editor_label_password">Senha (opcional)</string>
     <string name="source_editor_error_required">Nome e Host são obrigatórios</string>

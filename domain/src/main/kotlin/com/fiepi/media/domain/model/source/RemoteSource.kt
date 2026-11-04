@@ -41,6 +41,8 @@ data class RemoteSource(
     val path: String? = null,
     @SerialName("use_https")
     val useHttps: Boolean = false,
+    @SerialName("trust_insecure_certificate")
+    val trustInsecureCertificate: Boolean = false,
     @SerialName("sort_order")
     val sortOrder: Int = 0,
     @SerialName("total_space")
@@ -60,6 +62,7 @@ data class RemoteSource(
                 username == other.username &&
                 password == other.password &&
                 path == other.path &&
-                useHttps == other.useHttps
+                useHttps == other.useHttps &&
+                trustInsecureCertificate == other.trustInsecureCertificate
     }
 }

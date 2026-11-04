@@ -21,6 +21,7 @@ package com.fiepi.media.data.di
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.room3.Room
+import androidx.room3.migration.Migration
 import com.fiepi.media.data.database.AppDatabase
 import com.fiepi.media.data.repository.assets.LanguageRepositoryImpl
 import com.fiepi.media.data.repository.backup.BackupRepositoryImpl
@@ -97,6 +98,12 @@ private val databaseModule = module {
             androidContext(),
             AppDatabase::class.java,
             AppConstants.DATABASE_NAME
+        ).addMigrations(
+            Migration(1, 2) { connection ->
+                connection.prepare(
+                    "ALTER TABLE remote_sources ADD COLUMN trust_insecure_certificate INTEGER NOT NULL DEFAULT 0"
+                ).use { it.step() }
+            }
         ).fallbackToDestructiveMigration().build()
     }
     single { get<AppDatabase>().playbackHistoryDao() }

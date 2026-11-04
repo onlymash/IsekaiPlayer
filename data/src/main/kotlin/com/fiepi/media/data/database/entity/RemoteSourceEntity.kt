@@ -52,6 +52,9 @@ data class RemoteSourceEntity(
     @ColumnInfo(name = "use_https")
     val useHttps: Boolean = false,
 
+    @ColumnInfo(name = "trust_insecure_certificate", defaultValue = "0")
+    val trustInsecureCertificate: Boolean = false,
+
     @ColumnInfo(name = "sort_order")
     val sortOrder: Int = 0,
 

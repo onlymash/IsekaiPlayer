@@ -281,7 +281,11 @@ class MediaPlayerImpl(
                 if (video != null) {
                     val playUrl = mediaSourceResolver.resolveMediaUrl(currentSource, video)
                     isReady.first { it }
-                    newEngine.load(playUrl, switchPos)
+                    newEngine.load(
+                        playUrl,
+                        switchPos,
+                        currentSource.trustsInsecureWebDavCertificate()
+                    )
                     if (isPlaying) engineManager.play() else engineManager.pause()
                 }
             }
@@ -461,7 +465,11 @@ class MediaPlayerImpl(
                         val playUrl = mediaSourceResolver.resolveMediaUrl(currentSource, video)
                         val currentPos = _state.value.currentPosition
                         isReady.first { it }
-                        engineManager.load(playUrl, currentPos)
+                        engineManager.load(
+                            playUrl,
+                            currentPos,
+                            currentSource.trustsInsecureWebDavCertificate()
+                        )
                     }
                 }
             }
@@ -690,10 +698,18 @@ class MediaPlayerImpl(
 
             // Wait for engine to be ready and load
             isReady.first { it }
-            engine.load(playUrl, initialPos)
+            engine.load(playUrl, initialPos, source.trustsInsecureWebDavCertificate())
 
             play()
         }
+
+    }
+
+    private fun MediaSource?.trustsInsecureWebDavCertificate(): Boolean {
+        val remote = (this as? MediaSource.Remote)?.source ?: return false
+        return remote.type == SourceType.WebDav &&
+                remote.useHttps &&
+                remote.trustInsecureCertificate
     }
 
     override fun play() {

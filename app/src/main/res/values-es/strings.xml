@@ -132,6 +132,8 @@
     <string name="source_editor_label_path_default">Ruta inicial</string>
     <string name="source_editor_label_path_smb">Nombre del recurso compartido</string>
     <string name="source_editor_label_https">Usar HTTPS</string>
+    <string name="source_editor_trust_insecure_certificate">Confiar en certificados autofirmados</string>
+    <string name="source_editor_trust_insecure_certificate_warning">No se verificará la cadena de certificados de esta fuente. Actívalo solo para servidores de confianza.</string>
     <string name="source_editor_label_username">Usuario (opcional)</string>
     <string name="source_editor_label_password">Contraseña (opcional)</string>
     <string name="source_editor_error_required">El nombre y el host son obligatorios</string>

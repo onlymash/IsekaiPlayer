@@ -348,6 +348,33 @@ private fun SourceEditorContent(
                                 onCheckedChange = { onIntent(SourceEditorIntent.UpdateUseHttps(it)) }
                             )
                         }
+                        if (state.useHttps) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.source_editor_trust_insecure_certificate),
+                                    modifier = Modifier.weight(1f)
+                                )
+                                Switch(
+                                    checked = state.trustInsecureCertificate,
+                                    onCheckedChange = {
+                                        onIntent(
+                                            SourceEditorIntent.UpdateTrustInsecureCertificate(it)
+                                        )
+                                    }
+                                )
+                            }
+                            if (state.trustInsecureCertificate) {
+                                Text(
+                                    text = stringResource(R.string.source_editor_trust_insecure_certificate_warning),
+                                    color = MaterialTheme.colorScheme.error,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    modifier = Modifier.padding(top = 4.dp)
+                                )
+                            }
+                        }
                     }
                 }
 

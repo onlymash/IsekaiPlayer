@@ -30,6 +30,7 @@ data class SourceEditorState(
     val password: String = "",
     val path: String = "",
     val useHttps: Boolean = true,
+    val trustInsecureCertificate: Boolean = false,
     val sortOrder: Int = 0,
     val isSaving: Boolean = false,
     val isSuccess: Boolean = false,
@@ -46,5 +47,8 @@ sealed class SourceEditorIntent {
     data class UpdatePassword(val password: String) : SourceEditorIntent()
     data class UpdatePath(val path: String) : SourceEditorIntent()
     data class UpdateUseHttps(val useHttps: Boolean) : SourceEditorIntent()
+    data class UpdateTrustInsecureCertificate(val trustInsecureCertificate: Boolean) :
+        SourceEditorIntent()
+
     data object Save : SourceEditorIntent()
 }

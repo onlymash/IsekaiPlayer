@@ -132,6 +132,8 @@
     <string name="source_editor_label_path_default">初期パス</string>
     <string name="source_editor_label_path_smb">共有名</string>
     <string name="source_editor_label_https">HTTPS を使用</string>
+    <string name="source_editor_trust_insecure_certificate">自己署名証明書を信頼する</string>
+    <string name="source_editor_trust_insecure_certificate_warning">このソースでは証明書チェーンを検証しません。信頼できるサーバーでのみ有効にしてください。</string>
     <string name="source_editor_label_username">ユーザー名 (任意)</string>
     <string name="source_editor_label_password">パスワード (任意)</string>
     <string name="source_editor_error_required">名前とホストは必須項目です</string>

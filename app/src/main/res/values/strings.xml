@@ -132,6 +132,8 @@
     <string name="source_editor_label_path_default">Initial path</string>
     <string name="source_editor_label_path_smb">Share Name</string>
     <string name="source_editor_label_https">Use HTTPS</string>
+    <string name="source_editor_trust_insecure_certificate">Trust self-signed certificates</string>
+    <string name="source_editor_trust_insecure_certificate_warning">Disables certificate chain verification for this source. Only enable for servers you trust.</string>
     <string name="source_editor_label_username">Username (Optional)</string>
     <string name="source_editor_label_password">Password (Optional)</string>
     <string name="source_editor_error_required">Name and Host are required</string>

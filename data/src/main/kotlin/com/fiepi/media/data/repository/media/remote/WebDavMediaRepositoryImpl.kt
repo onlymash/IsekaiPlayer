@@ -18,6 +18,7 @@
 
 package com.fiepi.media.data.repository.media.remote
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import at.bitfire.dav4jvm.Property
 import at.bitfire.dav4jvm.ktor.DavCollection
@@ -55,6 +56,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.IOException
 import java.io.InputStream
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
+import javax.net.ssl.SSLContext
+import javax.net.ssl.X509TrustManager
 
 class WebDavMediaRepositoryImpl(
     private val source: RemoteSource
@@ -65,12 +70,25 @@ class WebDavMediaRepositoryImpl(
     private var _isConnected = false
 
     private fun createClient(): HttpClient = HttpClient(OkHttp) {
+        if (source.useHttps && source.trustInsecureCertificate) {
+            engine {
+                config {
+                    val trustManager = InsecureCertificateTrustManager
+                    val sslContext = SSLContext.getInstance("TLS").apply {
+                        init(null, arrayOf(trustManager), SecureRandom())
+                    }
+                    sslSocketFactory(sslContext.socketFactory, trustManager)
+                    hostnameVerifier { _, _ -> true }
+                }
+            }
+        }
         followRedirects = false
         install(HttpTimeout) {
             requestTimeoutMillis = AppConstants.REMOTE_TIMEOUT_MS
             connectTimeoutMillis = AppConstants.REMOTE_TIMEOUT_MS
             socketTimeoutMillis = AppConstants.REMOTE_TIMEOUT_MS
         }
+
         defaultRequest {
             header("X-OC-Mtime", "1")
         }
@@ -97,6 +115,17 @@ class WebDavMediaRepositoryImpl(
 //                level = io.ktor.client.plugins.logging.LogLevel.HEADERS
 //            }
         }
+    }
+
+    @SuppressLint("CustomX509TrustManager")
+    private object InsecureCertificateTrustManager : X509TrustManager {
+        override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) =
+            Unit
+
+        override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) =
+            Unit
+
+        override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
     }
 
     private fun getClient(): HttpClient {

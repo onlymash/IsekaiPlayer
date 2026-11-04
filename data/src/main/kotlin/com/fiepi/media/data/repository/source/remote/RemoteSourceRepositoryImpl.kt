@@ -64,6 +64,7 @@ class RemoteSourceRepositoryImpl(
         password = password,
         path = path,
         useHttps = useHttps,
+        trustInsecureCertificate = trustInsecureCertificate,
         sortOrder = sortOrder,
         totalSpace = totalSpace,
         freeSpace = freeSpace
@@ -79,6 +80,7 @@ class RemoteSourceRepositoryImpl(
         password = password,
         path = path,
         useHttps = useHttps,
+        trustInsecureCertificate = trustInsecureCertificate,
         sortOrder = sortOrder,
         totalSpace = totalSpace,
         freeSpace = freeSpace

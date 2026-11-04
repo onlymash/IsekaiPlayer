@@ -54,6 +54,7 @@ class SourceEditorViewModel(
                             password = source.password ?: "",
                             path = source.path ?: "",
                             useHttps = source.useHttps,
+                            trustInsecureCertificate = source.trustInsecureCertificate,
                             sortOrder = source.sortOrder
                         )
                     }
@@ -68,6 +69,7 @@ class SourceEditorViewModel(
             is SourceEditorIntent.UpdateProtocol -> _state.update {
                 it.copy(
                     sourceType = intent.sourceType,
+                    trustInsecureCertificate = intent.sourceType == SourceType.WebDav && it.trustInsecureCertificate,
                     errorResId = null,
                     detailedError = null
                 )
@@ -78,7 +80,16 @@ class SourceEditorViewModel(
             is SourceEditorIntent.UpdateUsername -> _state.update { it.copy(username = intent.username) }
             is SourceEditorIntent.UpdatePassword -> _state.update { it.copy(password = intent.password) }
             is SourceEditorIntent.UpdatePath -> _state.update { it.copy(path = intent.path) }
-            is SourceEditorIntent.UpdateUseHttps -> _state.update { it.copy(useHttps = intent.useHttps) }
+            is SourceEditorIntent.UpdateUseHttps -> _state.update {
+                it.copy(
+                    useHttps = intent.useHttps,
+                    trustInsecureCertificate = intent.useHttps && it.trustInsecureCertificate
+                )
+            }
+
+            is SourceEditorIntent.UpdateTrustInsecureCertificate ->
+                _state.update { it.copy(trustInsecureCertificate = intent.trustInsecureCertificate) }
+
             is SourceEditorIntent.Save -> saveSource()
         }
     }
@@ -115,6 +126,9 @@ class SourceEditorViewModel(
                     password = s.password.trim().takeIf { it.isNotEmpty() },
                     path = s.path.trim().takeIf { it.isNotEmpty() },
                     useHttps = s.useHttps,
+                    trustInsecureCertificate = s.sourceType == SourceType.WebDav &&
+                            s.useHttps &&
+                            s.trustInsecureCertificate,
                     sortOrder = finalSortOrder
                 )
                 // Validate connection before saving

@@ -38,7 +38,7 @@ import com.fiepi.media.data.database.entity.RemoteSourceEntity
         PlaylistEntity::class,
         PlaylistItemEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

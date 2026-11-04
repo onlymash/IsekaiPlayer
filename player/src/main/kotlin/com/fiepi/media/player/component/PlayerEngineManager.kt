@@ -144,8 +144,12 @@ internal class PlayerEngineManager(
 
     // --- Engine Operation Delegates ---
 
-    fun load(url: String, startPositionMs: Long = 0L) {
-        activeEngine?.load(url, startPositionMs)
+    fun load(
+        url: String,
+        startPositionMs: Long = 0L,
+        trustInsecureCertificate: Boolean = false
+    ) {
+        activeEngine?.load(url, startPositionMs, trustInsecureCertificate)
     }
 
     fun play() {

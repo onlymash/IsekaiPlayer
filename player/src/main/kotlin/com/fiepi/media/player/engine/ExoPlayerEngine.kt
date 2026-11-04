@@ -89,7 +89,11 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
 import java.util.concurrent.atomic.AtomicBoolean
+import javax.net.ssl.SSLContext
+import javax.net.ssl.X509TrustManager
 import kotlin.coroutines.resume
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -99,8 +103,8 @@ import kotlin.time.Duration.Companion.milliseconds
  */
 @OptIn(UnstableApi::class)
 class ExoPlayerEngine(
-    context: Context,
-    cache: Cache,
+    private val context: Context,
+    private val cache: Cache,
     private val getExoPlayerConfig: GetExoPlayerConfigUseCase
 ) : PlayerEngine {
 
@@ -110,6 +114,8 @@ class ExoPlayerEngine(
 
     private var currentConfig = ExoPlayerConfig()
     private var customUserAgent: String? = null
+    private var currentTrustInsecureCertificate = false
+    private val httpClients = java.util.concurrent.ConcurrentHashMap<Boolean, HttpClient>()
 
     private val renderersFactory = object : DefaultRenderersFactory(context) {
         override fun buildAudioRenderers(
@@ -145,7 +151,7 @@ class ExoPlayerEngine(
     }
 
     private val exoPlayer: ExoPlayer = ExoPlayer.Builder(context, renderersFactory)
-        .setMediaSourceFactory(createMediaSourceFactory(context, cache))
+        .setMediaSourceFactory(createMediaSourceFactory(context, cache, false))
         .build()
 
     // ExoPlayer-specific capabilities
@@ -352,9 +358,18 @@ class ExoPlayerEngine(
     }
 
     override fun load(url: String, startPositionMs: Long) {
+        load(url, startPositionMs, trustInsecureCertificate = false)
+    }
+
+    override fun load(
+        url: String,
+        startPositionMs: Long,
+        trustInsecureCertificate: Boolean
+    ) {
         if (isReleased.get()) return
         runOnMain {
             currentMediaUrl = url
+            currentTrustInsecureCertificate = trustInsecureCertificate
             externalSubtitles.clear()
             _events.tryEmit(EngineEvent.SubtitleTextUpdated(null))
             lastAudioTracks = emptyList()
@@ -392,10 +407,15 @@ class ExoPlayerEngine(
                 MediaItem.fromUri(uri)
             }
 
+            val mediaSource = createMediaSourceFactory(
+                context = context,
+                cache = cache,
+                trustInsecureCertificate = trustInsecureCertificate
+            ).createMediaSource(mediaItem)
             if (startPositionMs > 0) {
-                exoPlayer.setMediaItem(mediaItem, startPositionMs)
+                exoPlayer.setMediaSource(mediaSource, startPositionMs)
             } else {
-                exoPlayer.setMediaItem(mediaItem)
+                exoPlayer.setMediaSource(mediaSource)
             }
             exoPlayer.playWhenReady = true
             exoPlayer.prepare()
@@ -607,7 +627,12 @@ class ExoPlayerEngine(
                 .setSubtitleConfigurations(externalSubtitles)
                 .build()
 
-            exoPlayer.setMediaItem(mediaItem, currentPosition)
+            val mediaSource = createMediaSourceFactory(
+                context,
+                cache,
+                currentTrustInsecureCertificate
+            ).createMediaSource(mediaItem)
+            exoPlayer.setMediaSource(mediaSource, currentPosition)
             exoPlayer.prepare()
             if (isPlaying) exoPlayer.play()
         }
@@ -915,27 +940,45 @@ class ExoPlayerEngine(
         runOnMain {
             exoPlayer.removeListener(playerListener)
             exoPlayer.release()
+            httpClients.values.forEach(HttpClient::close)
+            httpClients.clear()
         }
     }
 
     private fun createMediaSourceFactory(
         context: Context,
-        cache: Cache
+        cache: Cache,
+        trustInsecureCertificate: Boolean
     ): DefaultMediaSourceFactory {
-        val ktorClient = HttpClient(OkHttp) {
-            install(HttpTimeout) {
-                requestTimeoutMillis = currentConfig.networkTimeout
-                connectTimeoutMillis = currentConfig.networkTimeout
-                socketTimeoutMillis = currentConfig.networkTimeout
-            }
-            followRedirects = true
-            install(Auth) {
-                providers.add(UrlUserInfoAuthProvider())
-            }
-            defaultRequest {
-                val defaultUa = currentConfig.userAgent.ifBlank { AppConstants.DEFAULT_USER_AGENT }
-                val targetUa = customUserAgent?.takeIf { it.isNotBlank() } ?: defaultUa
-                headers[HttpHeaders.UserAgent] = targetUa
+        val ktorClient = httpClients.getOrPut(trustInsecureCertificate) {
+            HttpClient(OkHttp) {
+                if (trustInsecureCertificate) {
+                    engine {
+                        config {
+                            val trustManager = InsecureCertificateTrustManager
+                            val sslContext = SSLContext.getInstance("TLS").apply {
+                                init(null, arrayOf(trustManager), SecureRandom())
+                            }
+                            sslSocketFactory(sslContext.socketFactory, trustManager)
+                            hostnameVerifier { _, _ -> true }
+                        }
+                    }
+                }
+                install(HttpTimeout) {
+                    requestTimeoutMillis = currentConfig.networkTimeout
+                    connectTimeoutMillis = currentConfig.networkTimeout
+                    socketTimeoutMillis = currentConfig.networkTimeout
+                }
+                followRedirects = true
+                install(Auth) {
+                    providers.add(UrlUserInfoAuthProvider())
+                }
+                defaultRequest {
+                    val defaultUa =
+                        currentConfig.userAgent.ifBlank { AppConstants.DEFAULT_USER_AGENT }
+                    val targetUa = customUserAgent?.takeIf { it.isNotBlank() } ?: defaultUa
+                    headers[HttpHeaders.UserAgent] = targetUa
+                }
             }
         }
 
@@ -948,5 +991,11 @@ class ExoPlayerEngine(
             .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
 
         return DefaultMediaSourceFactory(cacheDataSourceFactory)
+    }
+
+    private object InsecureCertificateTrustManager : X509TrustManager {
+        override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) = Unit
+        override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) = Unit
+        override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
     }
 }

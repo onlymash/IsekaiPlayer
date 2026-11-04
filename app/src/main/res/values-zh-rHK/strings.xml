@@ -132,6 +132,8 @@
     <string name="source_editor_label_path_default">初始路徑</string>
     <string name="source_editor_label_path_smb">共享名稱</string>
     <string name="source_editor_label_https">使用 HTTPS</string>
+    <string name="source_editor_trust_insecure_certificate">信任自簽署憑證</string>
+    <string name="source_editor_trust_insecure_certificate_warning">此資料來源將不再驗證憑證鏈。只對你信任的伺服器啟用。</string>
     <string name="source_editor_label_username">用户名 (可選)</string>
     <string name="source_editor_label_password">密碼 (可選)</string>
     <string name="source_editor_error_required">名稱和主機為必填項</string>

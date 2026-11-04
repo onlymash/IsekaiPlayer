@@ -132,6 +132,8 @@
     <string name="source_editor_label_path_default">Начальный путь</string>
     <string name="source_editor_label_path_smb">Имя сетевого ресурса (Share)</string>
     <string name="source_editor_label_https">Использовать HTTPS</string>
+    <string name="source_editor_trust_insecure_certificate">Доверять самоподписанным сертификатам</string>
+    <string name="source_editor_trust_insecure_certificate_warning">Для этого источника проверка цепочки сертификатов отключается. Включайте только для доверенных серверов.</string>
     <string name="source_editor_label_username">Имя пользователя (необязательно)</string>
     <string name="source_editor_label_password">Пароль (необязательно)</string>
     <string name="source_editor_error_required">Имя и хост обязательны для заполнения</string>
