@@ -136,11 +136,16 @@ fun ExoPlayerSurface(
         VideoScaleMode.Original -> ContentScale.None
     }
 
-    val ratioModifier = if (selectedVideoTrack != null && selectedVideoTrack.width > 0 && selectedVideoTrack.height > 0) {
-        Modifier.resizeWithContentScale(contentScale, selectedVideoTrack.width, selectedVideoTrack.height)
-    } else {
-        Modifier.fillMaxSize()
-    }
+    val ratioModifier =
+        if (selectedVideoTrack != null && selectedVideoTrack.width > 0 && selectedVideoTrack.height > 0) {
+            Modifier.resizeWithContentScale(
+                contentScale,
+                selectedVideoTrack.width,
+                selectedVideoTrack.height
+            )
+        } else {
+            Modifier.fillMaxSize()
+        }
 
     Box(
         modifier = modifier,

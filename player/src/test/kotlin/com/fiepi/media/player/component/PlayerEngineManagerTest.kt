@@ -64,38 +64,39 @@ class PlayerEngineManagerTest {
     }
 
     @Test
-    fun `switchEngineIfNeeded switches to target engine type and notifies capabilities`() = runTest {
-        var capabilitiesNotified = false
-        val manager = PlayerEngineManager(
-            playerScope = testScope,
-            engineFactory = { type ->
-                if (type == PlayerEngineType.EXO_PLAYER) mockEngineExo else mockEngineMPV
-            },
-            onEngineEvent = {},
-            onCapabilitiesChanged = { capabilitiesNotified = true },
-            bindSurfaceToNewEngine = {},
-            unbindSurfaceFromOldEngine = {}
-        )
+    fun `switchEngineIfNeeded switches to target engine type and notifies capabilities`() =
+        runTest {
+            var capabilitiesNotified = false
+            val manager = PlayerEngineManager(
+                playerScope = testScope,
+                engineFactory = { type ->
+                    if (type == PlayerEngineType.EXO_PLAYER) mockEngineExo else mockEngineMPV
+                },
+                onEngineEvent = {},
+                onCapabilitiesChanged = { capabilitiesNotified = true },
+                bindSurfaceToNewEngine = {},
+                unbindSurfaceFromOldEngine = {}
+            )
 
-        manager.getOrInitEngine(PlayerEngineType.MPV)
+            manager.getOrInitEngine(PlayerEngineType.MPV)
 
-        var prepareCalled = false
-        var loadNewEngineCalled = false
+            var prepareCalled = false
+            var loadNewEngineCalled = false
 
-        manager.switchEngineIfNeeded(
-            targetType = PlayerEngineType.EXO_PLAYER,
-            hasCurrentVideo = true,
-            onPrepareSwitchState = { prepareCalled = true },
-            onLoadNewEngineVideo = { loadNewEngineCalled = true }
-        )
+            manager.switchEngineIfNeeded(
+                targetType = PlayerEngineType.EXO_PLAYER,
+                hasCurrentVideo = true,
+                onPrepareSwitchState = { prepareCalled = true },
+                onLoadNewEngineVideo = { loadNewEngineCalled = true }
+            )
 
-        assertEquals(mockEngineExo, manager.activeEngine)
-        assertEquals(PlayerEngineType.EXO_PLAYER, manager.currentEngineType)
-        assertEquals(true, prepareCalled)
-        assertEquals(true, loadNewEngineCalled)
-        assertEquals(true, capabilitiesNotified)
-        verify { mockEngineMPV.release() }
-    }
+            assertEquals(mockEngineExo, manager.activeEngine)
+            assertEquals(PlayerEngineType.EXO_PLAYER, manager.currentEngineType)
+            assertEquals(true, prepareCalled)
+            assertEquals(true, loadNewEngineCalled)
+            assertEquals(true, capabilitiesNotified)
+            verify { mockEngineMPV.release() }
+        }
 
     @Test
     fun `releaseEngine clears active engine reference`() {

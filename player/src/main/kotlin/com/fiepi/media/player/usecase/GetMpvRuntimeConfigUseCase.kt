@@ -51,7 +51,7 @@ class GetMpvRuntimeConfigUseCase(
     ) { decoder, audio, subtitle, player, advanced ->
         val audioCodes = getLanguageCodes(LanguageType.Audio, audio.preferredAudioLanguages)
             .filter { it != "none" }
-        
+
         val subCodes = getLanguageCodes(LanguageType.Subtitle, subtitle.preferredSubtitleLanguages)
             .filter { it != "none" && it.isNotBlank() }
 

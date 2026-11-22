@@ -42,7 +42,10 @@ class MediaSourceResolverTest {
 
     @Before
     fun setup() {
-        resolver = MediaSourceResolver(mockContext, mockStreamServer, getEngineType = { PlayerEngineType.MPV })
+        resolver = MediaSourceResolver(
+            mockContext,
+            mockStreamServer,
+            getEngineType = { PlayerEngineType.MPV })
     }
 
     @Test
@@ -80,7 +83,14 @@ class MediaSourceResolverTest {
         )
 
         every { mockStreamServer.isRunning() } returns false
-        every { mockStreamServer.registerMediaSession(any(), any(), any(), any()) } returns "http://127.0.0.1:8080/stream/session_1"
+        every {
+            mockStreamServer.registerMediaSession(
+                any(),
+                any(),
+                any(),
+                any()
+            )
+        } returns "http://127.0.0.1:8080/stream/session_1"
 
         val result = resolver.resolveMediaUrl(source, file)
 

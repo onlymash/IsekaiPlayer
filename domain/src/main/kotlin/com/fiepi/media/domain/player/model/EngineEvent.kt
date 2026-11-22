@@ -34,6 +34,7 @@ sealed interface EngineEvent {
     // Playback state
     data class PlayPauseStateChanged(val isPlaying: Boolean) : EngineEvent
     data class BufferingStateChanged(val isBuffering: Boolean) : EngineEvent
+    data class SeekCompleted(val positionMs: Long) : EngineEvent
     data object PlaybackEnded : EngineEvent
 
     // Engine properties

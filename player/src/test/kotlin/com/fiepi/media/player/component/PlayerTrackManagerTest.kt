@@ -117,7 +117,12 @@ class PlayerTrackManagerTest {
 
         val mockResolver = mockk<MediaSourceResolver>(relaxed = true)
         every { mockResolver.getEngineType } returns { PlayerEngineType.MPV }
-        every { mockResolver.resolveExternalUrl(any(), any()) } returns "http://example.com/test.srt"
+        every {
+            mockResolver.resolveExternalUrl(
+                any(),
+                any()
+            )
+        } returns "http://example.com/test.srt"
         customTrackManager.addSubtitle(
             subtitle = ExternalSubtitle(url = "http://example.com/test.srt"),
             mediaSourceResolver = mockResolver,

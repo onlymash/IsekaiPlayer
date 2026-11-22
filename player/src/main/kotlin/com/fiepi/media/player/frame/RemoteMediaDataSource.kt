@@ -43,10 +43,10 @@ class RemoteMediaDataSource(
     override fun readAt(position: Long, buffer: ByteArray, offset: Int, size: Int): Int {
         val fileSize = getSize()
         if (position >= fileSize || fileSize <= 0) return -1
-        
+
         val end = (position + size - 1).coerceAtMost(fileSize - 1)
         val range = position..end
-        
+
         return try {
             // MediaDataSource is a synchronous API, so we must use runBlocking here.
             // We use a timeout to prevent hanging the retriever forever if the network fails.
@@ -55,12 +55,12 @@ class RemoteMediaDataSource(
                     mediaRepository.readRemoteRange(path, mediaSource, range)
                 }
             }
-            
+
             if (data == null) {
                 Log.w("RemoteDataSource", "Read timed out for $path at $position")
                 return -1
             }
-            
+
             data.copyInto(buffer, offset)
             data.size
         } catch (e: Exception) {

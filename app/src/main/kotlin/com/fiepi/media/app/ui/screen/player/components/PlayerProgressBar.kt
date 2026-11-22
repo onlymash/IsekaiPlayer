@@ -18,8 +18,6 @@
 
 package com.fiepi.media.app.ui.screen.player.components
 
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,13 +31,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
@@ -87,15 +86,29 @@ fun PlayerProgressBar(
         }
     }
 
+    var lastInteractedPosition by remember { mutableLongStateOf(displayPosition) }
+    var isScrubbingActive by remember { mutableStateOf(false) }
+
     Slider(
         state = sliderState,
         onValueChange = { newValue ->
-            onScrubbing(newValue.toLong())
+            sliderState.value = newValue
+            val targetMs = newValue.toLong()
+            lastInteractedPosition = targetMs
             if (sliderState.isDragging) {
-                sliderState.value = newValue
+                isScrubbingActive = true
+                onScrubbing(targetMs)
             }
         },
-        onValueChangeFinished = { onScrubbingFinished(sliderState.value.toLong()) },
+        onValueChangeFinished = {
+            if (isScrubbingActive) {
+                isScrubbingActive = false
+                onScrubbingFinished(lastInteractedPosition)
+            } else {
+                // Tap seek: directly seek to target without entering scrubbing pause state
+                onSeekTo(lastInteractedPosition)
+            }
+        },
         interactionSource = sliderInteractionSource,
         track = { stateTrack ->
             val range = stateTrack.trackRange.endInclusive - stateTrack.trackRange.start
@@ -161,17 +174,6 @@ fun PlayerProgressBar(
         modifier = modifier
             .height(48.dp)
             .onSizeChanged { sliderWidth = it.width }
-            .pointerInput(safeDuration) {
-                // Intercept Down event to achieve instant seeking on press
-                awaitEachGesture {
-                    val down = awaitFirstDown(requireUnconsumed = false)
-                    if (sliderWidth > 0) {
-                        val ratio = (down.position.x / sliderWidth).coerceIn(0f, 1f)
-                        val targetMs = (ratio * safeDuration).toLong()
-                        onSeekTo(targetMs)
-                    }
-                }
-            }
     )
 }
 

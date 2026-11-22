@@ -267,6 +267,9 @@ class ExoPlayerEngine(
             _events.tryEmit(EngineEvent.PositionChanged(newPosition.positionMs))
             val bufferedPos = exoPlayer.bufferedPosition.coerceAtLeast(0L)
             _events.tryEmit(EngineEvent.BufferedPositionChanged(bufferedPos))
+            if (reason == Player.DISCONTINUITY_REASON_SEEK) {
+                _events.tryEmit(EngineEvent.SeekCompleted(newPosition.positionMs))
+            }
         }
 
         override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {
@@ -438,7 +441,7 @@ class ExoPlayerEngine(
         }
     }
 
-    override fun seekTo(positionMs: Long) {
+    override fun seekTo(positionMs: Long, exact: Boolean) {
         if (isReleased.get()) return
         runOnMain {
             exoPlayer.seekTo(positionMs.coerceAtLeast(0L))
@@ -813,7 +816,8 @@ class ExoPlayerEngine(
                             return (fileSizeBits / durationSec).toLong()
                         }
                     }
-                } catch (_: Exception) {}
+                } catch (_: Exception) {
+                }
             }
         }
 
@@ -865,13 +869,13 @@ class ExoPlayerEngine(
                     TrackType.Subtitle -> {
                         val id = subId++
                         val isExternal = externalSubtitles.isNotEmpty() && (
-                            id <= externalSubtitles.size ||
-                                externalSubtitles.any { subConfig ->
-                                    subConfig.uri.toString() == format.id ||
-                                        subConfig.uri.toString() == format.label ||
-                                        subConfig.language == format.language
-                                }
-                            )
+                                id <= externalSubtitles.size ||
+                                        externalSubtitles.any { subConfig ->
+                                            subConfig.uri.toString() == format.id ||
+                                                    subConfig.uri.toString() == format.label ||
+                                                    subConfig.language == format.language
+                                        }
+                                )
                         subtitleTracks.add(
                             MediaTrack.Subtitle(
                                 id = id,
@@ -888,8 +892,10 @@ class ExoPlayerEngine(
                         val id = videoId++
                         val width = format.width.takeIf { it > 0 } ?: exoPlayer.videoSize.width
                         val height = format.height.takeIf { it > 0 } ?: exoPlayer.videoSize.height
-                        val fps = format.frameRate.toDouble().takeIf { it > 0.0 } ?: extractFpsFromExoPlayer()
-                        val codec = format.sampleMimeType ?: format.codecs ?: extractCodecFromExoPlayer()
+                        val fps = format.frameRate.toDouble().takeIf { it > 0.0 }
+                            ?: extractFpsFromExoPlayer()
+                        val codec =
+                            format.sampleMimeType ?: format.codecs ?: extractCodecFromExoPlayer()
                         val bitrate = format.bitrate.toLong().takeIf { it > 0 }
                             ?: format.peakBitrate.toLong().takeIf { it > 0 }
                             ?: extractBitrateFromExoPlayer(currentMediaUrl, durationMs)
@@ -994,8 +1000,12 @@ class ExoPlayerEngine(
     }
 
     private object InsecureCertificateTrustManager : X509TrustManager {
-        override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) = Unit
-        override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) = Unit
+        override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) =
+            Unit
+
+        override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) =
+            Unit
+
         override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
     }
 }

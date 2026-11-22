@@ -162,6 +162,10 @@ class MpvPlayerEngine(
                         EngineEvent.FileLoaded
                     }
 
+                    MpvEvent.MPV_EVENT_PLAYBACK_RESTART -> {
+                        EngineEvent.SeekCompleted(lastTimePosMs)
+                    }
+
                     MpvEvent.MPV_EVENT_END_FILE -> EngineEvent.FileUnloaded
                     else -> null
                 }
@@ -302,8 +306,8 @@ class MpvPlayerEngine(
         mpvController.pause(true)
     }
 
-    override fun seekTo(positionMs: Long) = withEngine {
-        mpvController.seekTo(positionMs)
+    override fun seekTo(positionMs: Long, exact: Boolean) = withEngine {
+        mpvController.seekTo(positionMs, exact)
     }
 
     override fun setVolume(volume: Double) = withEngine {

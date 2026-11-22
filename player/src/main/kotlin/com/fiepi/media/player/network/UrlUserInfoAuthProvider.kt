@@ -40,7 +40,10 @@ class UrlUserInfoAuthProvider : AuthProvider {
         return AuthScheme.Basic.equals(auth.authScheme, ignoreCase = true)
     }
 
-    override suspend fun addRequestHeaders(request: HttpRequestBuilder, authHeader: HttpAuthHeader?) {
+    override suspend fun addRequestHeaders(
+        request: HttpRequestBuilder,
+        authHeader: HttpAuthHeader?
+    ) {
         val user = request.url.user
         val password = request.url.password
 

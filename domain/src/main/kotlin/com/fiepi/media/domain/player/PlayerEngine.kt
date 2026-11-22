@@ -41,7 +41,7 @@ interface PlayerEngine {
 
     fun play()
     fun pause()
-    fun seekTo(positionMs: Long)
+    fun seekTo(positionMs: Long, exact: Boolean = true)
     fun setVolume(volume: Double)
     fun setMute(muted: Boolean)
     fun setSpeed(speed: Double)

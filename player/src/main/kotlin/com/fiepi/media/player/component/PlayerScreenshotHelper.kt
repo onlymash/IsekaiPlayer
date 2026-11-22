@@ -46,14 +46,16 @@ internal class PlayerScreenshotHelper(
     ): File? {
         if (!isLoaded) return null
 
-        val picturesDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        val picturesDir =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
         val playerDir = File(picturesDir, AppConstants.APP_NAME)
         if (!playerDir.exists()) {
             playerDir.mkdirs()
         }
 
         val timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"))
-        val prefix = if (engineType == PlayerEngineType.EXO_PLAYER) "exo-screenshot" else "mpv-screenshot"
+        val prefix =
+            if (engineType == PlayerEngineType.EXO_PLAYER) "exo-screenshot" else "mpv-screenshot"
         val fileName = "${prefix}_${timestamp}.${format.extension}"
         val file = File(playerDir, fileName)
 

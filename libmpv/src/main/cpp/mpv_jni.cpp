@@ -141,6 +141,12 @@ void *event_thread_func(void *arg) {
                 // 收到观察的属性变更（如 time-pos, duration）
                 sendPropertyUpdateToJava(env, ctx, (mpv_event_property *) mp_event->data);
                 break;
+            case MPV_EVENT_SEEK:
+            case MPV_EVENT_PLAYBACK_RESTART:
+                // 重置 time-pos 节流基准，保证 seek 后的第一个真实进度必定分发至上层
+                if (ctx) ctx->last_sent_time_pos = -1.0;
+                env->CallVoidMethod(jInstance, JniHelpers::method_event, (jint) mp_event->event_id);
+                break;
             default:
                 // 转发其他通用事件 ID（如播放结束、文件加载完成等）
                 env->CallVoidMethod(jInstance, JniHelpers::method_event, (jint) mp_event->event_id);

@@ -324,6 +324,20 @@ class MediaPlayerImpl(
                 }
             }
 
+            is EngineEvent.SeekCompleted -> {
+                val current = _state.value
+                if (current.isLoaded && current.isSeeking) {
+                    _state.update {
+                        it.copy(
+                            isSeeking = false,
+                            targetSeekPosition = null,
+                            scrubbingPosition = null,
+                            currentPosition = event.positionMs
+                        )
+                    }
+                }
+            }
+
             is EngineEvent.DurationChanged -> {
                 // Duration filtering: prevents duration leftover from previous item from affecting loading state of new item
                 if (_state.value.isLoaded) {
@@ -792,13 +806,13 @@ class MediaPlayerImpl(
         val now = System.currentTimeMillis()
         if (now - lastScrubbingSeekTime >= 150L) {
             lastScrubbingSeekTime = now
-            engineManager.seekTo(positionMs)
+            engineManager.seekTo(positionMs, exact = false)
         }
     }
 
     override fun onScrubbingFinished(positionMs: Long) {
         _state.update { it.copy(scrubbingPosition = null) }
-        seekTo(positionMs)
+        performInternalSeek(positionMs)
         if (wasPlayingBeforeScrubbing) play() else pause()
     }
 

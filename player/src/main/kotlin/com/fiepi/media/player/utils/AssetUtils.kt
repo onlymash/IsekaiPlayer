@@ -29,7 +29,11 @@ import java.io.InputStream
 import java.io.OutputStream
 
 object AssetUtils {
-    private fun copyAssetFile(assetManager: AssetManager, filename: String, outFile: File): Boolean {
+    private fun copyAssetFile(
+        assetManager: AssetManager,
+        filename: String,
+        outFile: File
+    ): Boolean {
         var ins: InputStream? = null
         var out: OutputStream? = null
         try {
@@ -86,7 +90,7 @@ object AssetUtils {
     fun copyAssets(context: Context) {
         val configDir = context.filesDir.path
         val versionFile = File("$configDir/assets_version")
-        
+
         val packageInfo = try {
             context.packageManager.getPackageInfo(context.packageName, 0)
         } catch (_: Exception) {
@@ -135,7 +139,10 @@ object AssetUtils {
                 ins.read()
                 return path
             }
-        } catch(_: Exception) { } finally { ins?.close() }
+        } catch (_: Exception) {
+        } finally {
+            ins?.close()
+        }
         return null
     }
 }

@@ -56,11 +56,13 @@ internal class MediaSourceResolver(
                 name = "Local Storage",
                 rootPath = "/"
             )
+
             SourceType.External -> MediaSource.External()
             SourceType.Stream -> MediaSource.External(
                 id = MediaSource.NETWORK_STREAM_ID,
                 name = "Network Stream"
             )
+
             else -> null
         }
     }
@@ -73,11 +75,12 @@ internal class MediaSourceResolver(
         currentSource: MediaSource?,
         getMediaSource: suspend (String, String?) -> MediaSource?
     ): Pair<MediaSource, String>? {
-        val targetSource = if (currentSource != null && (currentSource.id == video.sourceId || currentSource.type == video.sourceType)) {
-            currentSource
-        } else {
-            resolveMediaSource(video, getMediaSource)
-        } ?: return null
+        val targetSource =
+            if (currentSource != null && (currentSource.id == video.sourceId || currentSource.type == video.sourceType)) {
+                currentSource
+            } else {
+                resolveMediaSource(video, getMediaSource)
+            } ?: return null
 
         val playUrl = resolveMediaUrl(targetSource, video)
         return Pair(targetSource, playUrl)
@@ -115,6 +118,7 @@ internal class MediaSourceResolver(
                     else -> file.path
                 }
             }
+
             else -> resolveExternalUrl(file)
         }
     }
@@ -122,7 +126,10 @@ internal class MediaSourceResolver(
     /**
      * Resolves external Uri scheme for MPV native handle via openFileDescriptor when applicable.
      */
-    fun resolveExternalUrl(file: MediaFile, engineType: PlayerEngineType = getEngineType()): String {
+    fun resolveExternalUrl(
+        file: MediaFile,
+        engineType: PlayerEngineType = getEngineType()
+    ): String {
         val scheme = file.scheme
         if (engineType == PlayerEngineType.MPV && (scheme == UriScheme.Content || scheme == UriScheme.File)) {
             try {

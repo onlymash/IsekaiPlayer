@@ -160,8 +160,8 @@ internal class PlayerEngineManager(
         activeEngine?.pause()
     }
 
-    fun seekTo(positionMs: Long) {
-        activeEngine?.seekTo(positionMs)
+    fun seekTo(positionMs: Long, exact: Boolean = true) {
+        activeEngine?.seekTo(positionMs, exact)
     }
 
     fun setSpeed(speed: Double) {

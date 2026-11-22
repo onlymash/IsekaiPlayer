@@ -248,13 +248,12 @@ class MpvController(
         }
     }
 
-    suspend fun seekTo(positionMs: Long) = withContext(Dispatchers.Default) {
+    suspend fun seekTo(positionMs: Long, exact: Boolean = true) = withContext(Dispatchers.Default) {
         lifecycleLock.withLock {
             if (isInitialized.get()) {
-                val targetSec = positionMs / 1000.0
-                mpvLib.setPropertyDouble("time-pos", targetSec)
-                // Use absolute+keyframes mode for instant seeking
-                //mpvLib.command("seek", targetSec.toString(), "absolute+keyframes")
+                val targetSec = String.format(java.util.Locale.US, "%.3f", positionMs / 1000.0)
+                val mode = if (exact) "absolute+exact" else "absolute+keyframes"
+                mpvLib.command("seek", targetSec, mode)
             } else {
                 logW("seekTo ignored: not initialized")
             }

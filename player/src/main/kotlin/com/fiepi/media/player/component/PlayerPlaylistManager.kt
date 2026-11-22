@@ -31,7 +31,11 @@ internal class PlayerPlaylistManager {
     var shufflePointer: Int = -1
         private set
 
-    fun updateShuffleQueueIfNeeded(playlistSize: Int, currentIndex: Int, forceReshuffle: Boolean = false) {
+    fun updateShuffleQueueIfNeeded(
+        playlistSize: Int,
+        currentIndex: Int,
+        forceReshuffle: Boolean = false
+    ) {
         if (playlistSize == 0) {
             shuffledIndices = emptyList()
             shufflePointer = -1
@@ -39,7 +43,10 @@ internal class PlayerPlaylistManager {
         }
 
         val currentIdx = currentIndex.coerceIn(0, playlistSize - 1)
-        if (forceReshuffle || shuffledIndices.size != playlistSize || !shuffledIndices.contains(currentIdx)) {
+        if (forceReshuffle || shuffledIndices.size != playlistSize || !shuffledIndices.contains(
+                currentIdx
+            )
+        ) {
             val remaining = (0 until playlistSize).filter { it != currentIdx }.shuffled()
             shuffledIndices = listOf(currentIdx) + remaining
             shufflePointer = 0
@@ -57,7 +64,11 @@ internal class PlayerPlaylistManager {
                 var nextPointer = shufflePointer + 1
                 if (nextPointer >= shuffledIndices.size) {
                     if (loopMode == LoopMode.ShuffleRepeat) {
-                        updateShuffleQueueIfNeeded(playlistSize, currentIndex, forceReshuffle = true)
+                        updateShuffleQueueIfNeeded(
+                            playlistSize,
+                            currentIndex,
+                            forceReshuffle = true
+                        )
                     }
                     nextPointer = 0
                 }
